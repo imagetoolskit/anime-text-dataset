@@ -1,0 +1,19 @@
+# Local working data — never committed
+/data/
+/exports/
+/logs/
+*.db
+*.db-wal
+*.db-shm
+.env
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# OS / editor
+.DS_Store
+Thumbs.db

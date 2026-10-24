@@ -1,0 +1,38 @@
+SPDX-License-Identifier: CC-BY-4.0
+
+Large Anime Text Dataset — licensing notice
+
+Copyright (c) 2026 Muhammad Muqeet. Attribution for reuse:
+"Muhammad Muqeet, Large Anime Text Dataset" with a link to
+https://animearray.site or this repository, and contact
+muqeet@animearray.site / muqeet@anitroves.com.
+
+The dataset-level expression of this project (record structure, schemas,
+generated descriptions, grounded QA pairs, instruction-tuning examples,
+RAG chunking, merge log, tooling, and documentation) is licensed under the
+Creative Commons Attribution 4.0 International license.
+
+Canonical license text: https://creativecommons.org/licenses/by/4.0/legalcode
+Human-readable summary:  https://creativecommons.org/licenses/by/4.0/
+
+THIRD-PARTY CONTENT
+
+This dataset aggregates factual metadata collected from third-party sources.
+Reuse of those portions remains subject to the respective source terms,
+recorded per record in exports/provenance.jsonl and summarized in
+exports/sources.jsonl. No upstream plot synopsis, character biography or
+episode summary is included in any release artifact; those third-party texts
+are removed rather than paraphrased. See LICENSE_AUDIT.md for the per-artifact
+inventory and the limits of this license.
+
+Source terms, in brief:
+
+  - Wikidata:   CC0-1.0 (public domain) — https://creativecommons.org/publicdomain/zero/1.0/
+  - Kitsu:      public API; terms grant no redistribution — https://kitsu.io
+  - AniList:    © respective rights holders; public API without auth
+  - Shikimori:  license unspecified — recorded as license-uncertain
+  - ANN:        copyrighted; limited factual fields, license-uncertain
+
+No license or permission is asserted for content whose status was not
+verified. If any included source content is not lawfully reusable, contact
+the maintainers and it will be removed on request.

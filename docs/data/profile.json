@@ -1,0 +1,1297 @@
+{
+  "generated_at": "2026-10-24T12:57:41Z",
+  "version": "2.0.0",
+  "anime": {
+    "count": 35767,
+    "splits": {
+      "train": 32190,
+      "val": 1788,
+      "test": 1789
+    },
+    "years": {
+      "min": 0,
+      "max": 2033,
+      "total_distinct": 115,
+      "top_years": [
+        {
+          "value": 2021,
+          "count": 1579
+        },
+        {
+          "value": 2019,
+          "count": 1552
+        },
+        {
+          "value": 2017,
+          "count": 1499
+        },
+        {
+          "value": 2018,
+          "count": 1489
+        },
+        {
+          "value": 2023,
+          "count": 1475
+        },
+        {
+          "value": 2016,
+          "count": 1472
+        },
+        {
+          "value": 2020,
+          "count": 1471
+        },
+        {
+          "value": 2022,
+          "count": 1467
+        },
+        {
+          "value": 2024,
+          "count": 1338
+        },
+        {
+          "value": 2014,
+          "count": 1295
+        },
+        {
+          "value": 2015,
+          "count": 1295
+        },
+        {
+          "value": 2025,
+          "count": 1181
+        },
+        {
+          "value": 2013,
+          "count": 1147
+        },
+        {
+          "value": 2012,
+          "count": 1139
+        },
+        {
+          "value": 2011,
+          "count": 1033
+        }
+      ]
+    },
+    "types": [
+      {
+        "value": "tv",
+        "count": 9013
+      },
+      {
+        "value": "movie",
+        "count": 6415
+      },
+      {
+        "value": "ona",
+        "count": 6209
+      },
+      {
+        "value": "short",
+        "count": 5436
+      },
+      {
+        "value": "ova",
+        "count": 4797
+      },
+      {
+        "value": "special",
+        "count": 3291
+      },
+      {
+        "value": "tv_special",
+        "count": 209
+      },
+      {
+        "value": "pv",
+        "count": 179
+      },
+      {
+        "value": "cm",
+        "count": 175
+      }
+    ],
+    "statuses": [
+      {
+        "value": "finished",
+        "count": 14705
+      },
+      {
+        "value": "FINISHED",
+        "count": 11820
+      },
+      {
+        "value": "released",
+        "count": 6810
+      },
+      {
+        "value": "NOT_YET_RELEASED",
+        "count": 406
+      },
+      {
+        "value": "tba",
+        "count": 300
+      },
+      {
+        "value": "RELEASING",
+        "count": 206
+      },
+      {
+        "value": "currently airing",
+        "count": 188
+      },
+      {
+        "value": "anons",
+        "count": 129
+      },
+      {
+        "value": "releasing",
+        "count": 104
+      },
+      {
+        "value": "unreleased",
+        "count": 63
+      },
+      {
+        "value": "not yet aired",
+        "count": 51
+      },
+      {
+        "value": "CANCELLED",
+        "count": 16
+      }
+    ],
+    "seasons": [
+      {
+        "value": "fall",
+        "count": 2095
+      },
+      {
+        "value": "spring",
+        "count": 2067
+      },
+      {
+        "value": "FALL",
+        "count": 1851
+      },
+      {
+        "value": "summer",
+        "count": 1806
+      },
+      {
+        "value": "SPRING",
+        "count": 1771
+      },
+      {
+        "value": "winter",
+        "count": 1631
+      }
+    ],
+    "source_materials": [
+      {
+        "value": "MANGA",
+        "count": 3011
+      },
+      {
+        "value": "original",
+        "count": 2498
+      },
+      {
+        "value": "ORIGINAL",
+        "count": 1749
+      },
+      {
+        "value": "OTHER",
+        "count": 849
+      },
+      {
+        "value": "LIGHT_NOVEL",
+        "count": 762
+      },
+      {
+        "value": "manga",
+        "count": 711
+      },
+      {
+        "value": "other",
+        "count": 661
+      },
+      {
+        "value": "visual_novel",
+        "count": 562
+      },
+      {
+        "value": "VIDEO_GAME",
+        "count": 426
+      },
+      {
+        "value": "VISUAL_NOVEL",
+        "count": 277
+      },
+      {
+        "value": "video_game",
+        "count": 213
+      },
+      {
+        "value": "light_novel",
+        "count": 59
+      }
+    ],
+    "quality_tiers": {
+      "A": 20272,
+      "B": 14526,
+      "C": 969
+    },
+    "license_tiers": {
+      "unresolved": 23467,
+      "permission_required": 8229,
+      "cc_by_sa": 3102,
+      "cc0_only": 969
+    },
+    "confidence": {
+      "1.0": 31033,
+      "0.8": 3765,
+      "low": 969
+    },
+    "mean_score": {
+      "count": 29565,
+      "min": 0.0,
+      "q1": 0.0,
+      "median": 47.0,
+      "q3": 63.0,
+      "max": 91.0,
+      "mean": 36.211
+    },
+    "popularity": {
+      "count": 27756,
+      "min": 8.0,
+      "q1": 317.75,
+      "median": 2015.5,
+      "q3": 16132.25,
+      "max": 1062429.0,
+      "mean": 14538.6963
+    },
+    "favourites": {
+      "count": 19676,
+      "min": 0.0,
+      "q1": 2.0,
+      "median": 12.0,
+      "q3": 73.0,
+      "max": 109594.0,
+      "mean": 398.6161
+    },
+    "episodes": {
+      "count": 34084,
+      "min": 0.0,
+      "q1": 1.0,
+      "median": 1.0,
+      "q3": 12.0,
+      "max": 3057.0,
+      "mean": 13.1655
+    },
+    "duration_min": {
+      "count": 30974,
+      "min": 0.0,
+      "q1": 4.0,
+      "median": 13.0,
+      "q3": 24.0,
+      "max": 168.0,
+      "mean": 19.3232
+    },
+    "title_len_chars": {
+      "count": 35767,
+      "min": 1,
+      "q1": 14.0,
+      "median": 22.0,
+      "q3": 33.0,
+      "max": 233,
+      "mean": 25.3164
+    },
+    "episodes_coverage_pct": 94.41,
+    "mean_score_coverage_pct": 59.56,
+    "missing_field_counts": {
+      "duration_min": 5438,
+      "episodes": 2001,
+      "genres": 18491,
+      "mean_score": 14463,
+      "status": 969,
+      "studios": 21771,
+      "title_english": 10879,
+      "title_japanese": 2123,
+      "type": 43,
+      "year": 1883
+    },
+    "genres": [
+      {
+        "value": "Comedy",
+        "count": 5791
+      },
+      {
+        "value": "Fantasy",
+        "count": 4953
+      },
+      {
+        "value": "Action",
+        "count": 4388
+      },
+      {
+        "value": "Kids",
+        "count": 3802
+      },
+      {
+        "value": "Adventure",
+        "count": 3622
+      },
+      {
+        "value": "Drama",
+        "count": 2747
+      },
+      {
+        "value": "Sci-Fi",
+        "count": 2329
+      },
+      {
+        "value": "Romance",
+        "count": 2170
+      },
+      {
+        "value": "Slice of Life",
+        "count": 2137
+      },
+      {
+        "value": "Hentai",
+        "count": 1629
+      },
+      {
+        "value": "Supernatural",
+        "count": 1542
+      },
+      {
+        "value": "Shounen",
+        "count": 1336
+      },
+      {
+        "value": "School",
+        "count": 1108
+      },
+      {
+        "value": "Mystery",
+        "count": 909
+      },
+      {
+        "value": "Mecha",
+        "count": 904
+      },
+      {
+        "value": "Historical",
+        "count": 838
+      },
+      {
+        "value": "Music",
+        "count": 672
+      },
+      {
+        "value": "Sports",
+        "count": 640
+      },
+      {
+        "value": "Psychological",
+        "count": 617
+      },
+      {
+        "value": "Seinen",
+        "count": 582
+      },
+      {
+        "value": "Ecchi",
+        "count": 568
+      },
+      {
+        "value": "Military",
+        "count": 422
+      },
+      {
+        "value": "Super Power",
+        "count": 382
+      },
+      {
+        "value": "Martial Arts",
+        "count": 352
+      },
+      {
+        "value": "Horror",
+        "count": 350
+      },
+      {
+        "value": "Mahou Shoujo",
+        "count": 341
+      },
+      {
+        "value": "Space",
+        "count": 336
+      },
+      {
+        "value": "Parody",
+        "count": 327
+      },
+      {
+        "value": "Thriller",
+        "count": 259
+      },
+      {
+        "value": "Shoujo",
+        "count": 256
+      }
+    ],
+    "themes": [
+      {
+        "value": "Male Protagonist",
+        "count": 3634
+      },
+      {
+        "value": "Female Protagonist",
+        "count": 3172
+      },
+      {
+        "value": "School",
+        "count": 2237
+      },
+      {
+        "value": "Heterosexual",
+        "count": 1721
+      },
+      {
+        "value": "Primarily Female Cast",
+        "count": 1654
+      },
+      {
+        "value": "Shounen",
+        "count": 1528
+      },
+      {
+        "value": "Magic",
+        "count": 1385
+      },
+      {
+        "value": "Ensemble Cast",
+        "count": 1372
+      },
+      {
+        "value": "Tragedy",
+        "count": 1360
+      },
+      {
+        "value": "Primarily Adult Cast",
+        "count": 1263
+      },
+      {
+        "value": "Nudity",
+        "count": 1137
+      },
+      {
+        "value": "Primarily Teen Cast",
+        "count": 1102
+      },
+      {
+        "value": "Kuudere",
+        "count": 1055
+      },
+      {
+        "value": "Super Power",
+        "count": 1048
+      },
+      {
+        "value": "Urban Fantasy",
+        "count": 1045
+      },
+      {
+        "value": "LGBTQ+ Themes",
+        "count": 1035
+      },
+      {
+        "value": "Urban",
+        "count": 1023
+      },
+      {
+        "value": "CGI",
+        "count": 967
+      },
+      {
+        "value": "Episodic",
+        "count": 953
+      },
+      {
+        "value": "Primarily Male Cast",
+        "count": 929
+      },
+      {
+        "value": "Female Harem",
+        "count": 927
+      },
+      {
+        "value": "Fellatio",
+        "count": 916
+      },
+      {
+        "value": "Swordplay",
+        "count": 878
+      },
+      {
+        "value": "Animals",
+        "count": 862
+      },
+      {
+        "value": "Coming of Age",
+        "count": 845
+      },
+      {
+        "value": "Seinen",
+        "count": 829
+      },
+      {
+        "value": "Nakadashi",
+        "count": 828
+      },
+      {
+        "value": "Demons",
+        "count": 813
+      },
+      {
+        "value": "Yuri",
+        "count": 806
+      },
+      {
+        "value": "Kids",
+        "count": 788
+      }
+    ],
+    "studios": [
+      {
+        "value": "Toei Animation",
+        "count": 905
+      },
+      {
+        "value": "Sunrise",
+        "count": 706
+      },
+      {
+        "value": "NHK",
+        "count": 679
+      },
+      {
+        "value": "TMS Entertainment",
+        "count": 522
+      },
+      {
+        "value": "Production I.G",
+        "count": 508
+      },
+      {
+        "value": "Aniplex",
+        "count": 470
+      },
+      {
+        "value": "Funimation",
+        "count": 465
+      },
+      {
+        "value": "Shanghai Animation Film Studio",
+        "count": 407
+      },
+      {
+        "value": "Sentai Filmworks",
+        "count": 403
+      },
+      {
+        "value": "Studio Pierrot",
+        "count": 360
+      },
+      {
+        "value": "A-1 Pictures",
+        "count": 352
+      },
+      {
+        "value": "TV Tokyo",
+        "count": 343
+      },
+      {
+        "value": "OLM",
+        "count": 341
+      },
+      {
+        "value": "Movic",
+        "count": 314
+      },
+      {
+        "value": "KADOKAWA",
+        "count": 306
+      },
+      {
+        "value": "AT-X",
+        "count": 282
+      },
+      {
+        "value": "Pony Canyon",
+        "count": 276
+      },
+      {
+        "value": "Tencent Penguin Pictures",
+        "count": 273
+      },
+      {
+        "value": "J.C.STAFF",
+        "count": 267
+      },
+      {
+        "value": "Pink Pineapple",
+        "count": 264
+      },
+      {
+        "value": "MADHOUSE",
+        "count": 260
+      },
+      {
+        "value": "Kodansha",
+        "count": 260
+      },
+      {
+        "value": "J.C.Staff",
+        "count": 254
+      },
+      {
+        "value": "Shin-Ei Animation",
+        "count": 244
+      },
+      {
+        "value": "Madhouse",
+        "count": 238
+      }
+    ],
+    "genres_per_anime_mean": 1.329
+  },
+  "qa": {
+    "count": 243748,
+    "question_len_chars": {
+      "count": 243748,
+      "min": 15,
+      "q1": 43.0,
+      "median": 52.0,
+      "q3": 64.0,
+      "max": 271,
+      "mean": 55.4233
+    },
+    "answer_len_chars": {
+      "count": 243748,
+      "min": 18,
+      "q1": 51.0,
+      "median": 64.0,
+      "q3": 85.0,
+      "max": 602,
+      "mean": 72.8288
+    },
+    "types": [
+      {
+        "value": "episode_count",
+        "count": 28905
+      },
+      {
+        "value": "air_date",
+        "count": 28874
+      },
+      {
+        "value": "japanese_title",
+        "count": 28756
+      },
+      {
+        "value": "alt_titles",
+        "count": 25888
+      },
+      {
+        "value": "runtime",
+        "count": 25504
+      },
+      {
+        "value": "score",
+        "count": 16881
+      },
+      {
+        "value": "english_title",
+        "count": 14317
+      },
+      {
+        "value": "favourites",
+        "count": 13472
+      },
+      {
+        "value": "genres",
+        "count": 13337
+      },
+      {
+        "value": "studio",
+        "count": 10196
+      },
+      {
+        "value": "themes",
+        "count": 6761
+      },
+      {
+        "value": "franchise",
+        "count": 5055
+      },
+      {
+        "value": "director",
+        "count": 4886
+      },
+      {
+        "value": "source",
+        "count": 4229
+      },
+      {
+        "value": "composer",
+        "count": 3414
+      },
+      {
+        "value": "writer",
+        "count": 3320
+      },
+      {
+        "value": "relationship",
+        "count": 1987
+      },
+      {
+        "value": "relationship_reverse",
+        "count": 1953
+      },
+      {
+        "value": "multi_hop_episodes",
+        "count": 1899
+      },
+      {
+        "value": "multi_hop_studio",
+        "count": 1672
+      },
+      {
+        "value": "episode_title",
+        "count": 1309
+      },
+      {
+        "value": "unknown_studio",
+        "count": 732
+      },
+      {
+        "value": "unknown_score",
+        "count": 369
+      },
+      {
+        "value": "unknown_episodes",
+        "count": 32
+      }
+    ],
+    "contains_grounded_fields_pct": 100.0
+  },
+  "instructions": {
+    "count": 184764,
+    "itypes": [
+      {
+        "value": "record_summarization",
+        "count": 35767
+      },
+      {
+        "value": "metadata_extraction",
+        "count": 34992
+      },
+      {
+        "value": "json_repair",
+        "count": 34614
+      },
+      {
+        "value": "title_normalization",
+        "count": 34428
+      },
+      {
+        "value": "staff_credits",
+        "count": 11127
+      },
+      {
+        "value": "comparison",
+        "count": 8445
+      },
+      {
+        "value": "entity_resolution",
+        "count": 8422
+      },
+      {
+        "value": "franchise_grouping",
+        "count": 6353
+      },
+      {
+        "value": "relation_extraction",
+        "count": 6047
+      },
+      {
+        "value": "abstention",
+        "count": 2299
+      },
+      {
+        "value": "episode_list",
+        "count": 2270
+      }
+    ],
+    "purposes": [
+      {
+        "value": "Teach faithful prose summaries of a structured record.",
+        "count": 35767
+      },
+      {
+        "value": "Teach copying structured fields into JSON without inventing values.",
+        "count": 34992
+      },
+      {
+        "value": "Teach syntax repair without changing values.",
+        "count": 34614
+      },
+      {
+        "value": "Teach canonical title selection and alias handling.",
+        "count": 34428
+      },
+      {
+        "value": "Teach credit extraction grouped by role.",
+        "count": 11127
+      },
+      {
+        "value": "Teach numeric comparison grounded in both records.",
+        "count": 8445
+      },
+      {
+        "value": "Teach matching a described work to one candidate title.",
+        "count": 8422
+      },
+      {
+        "value": "Teach chronological ordering inside a franchise.",
+        "count": 6353
+      },
+      {
+        "value": "Teach relationship extraction from prose.",
+        "count": 6047
+      },
+      {
+        "value": "Teach null output when a field is genuinely absent.",
+        "count": 2299
+      },
+      {
+        "value": "Teach ordered episode-list extraction.",
+        "count": 2270
+      }
+    ],
+    "instruction_len_chars": {
+      "count": 184764,
+      "min": 91,
+      "q1": 123.0,
+      "median": 130.0,
+      "q3": 175.0,
+      "max": 185,
+      "mean": 145.3965
+    },
+    "input_len_chars": {
+      "count": 184764,
+      "min": 15,
+      "q1": 88.0,
+      "median": 138.0,
+      "q3": 241.0,
+      "max": 4571,
+      "mean": 198.4457
+    },
+    "output_len_chars": {
+      "count": 184764,
+      "min": 14,
+      "q1": 83.0,
+      "median": 115.0,
+      "q3": 181.0,
+      "max": 5147,
+      "mean": 169.7382
+    },
+    "validated_pct": 100.0
+  },
+  "rag": {
+    "count": 109042,
+    "chunk_len_chars": {
+      "count": 109042,
+      "min": 30,
+      "q1": 103.0,
+      "median": 159.0,
+      "q3": 351.0,
+      "max": 3040,
+      "mean": 248.9797
+    },
+    "kinds": [
+      {
+        "value": "record_summary",
+        "count": 35617
+      },
+      {
+        "value": "title_aliases",
+        "count": 32732
+      },
+      {
+        "value": "staff",
+        "count": 15806
+      },
+      {
+        "value": "relations",
+        "count": 15251
+      },
+      {
+        "value": "characters",
+        "count": 6591
+      },
+      {
+        "value": "episodes",
+        "count": 3045
+      }
+    ],
+    "with_source_refs_pct": 100.0
+  },
+  "descriptions": {
+    "count": 35767,
+    "kinds": [
+      {
+        "value": "record_summary",
+        "count": 35767
+      }
+    ],
+    "text_len_chars": {
+      "count": 35767,
+      "min": 19,
+      "q1": 105.0,
+      "median": 128.0,
+      "q3": 250.0,
+      "max": 521,
+      "mean": 177.7914
+    }
+  },
+  "characters": {
+    "count": 143682,
+    "roles": [
+      {
+        "value": "[\"Supporting\"]",
+        "count": 123974
+      },
+      {
+        "value": "[\"Main\"]",
+        "count": 19708
+      }
+    ],
+    "description_len_chars": null,
+    "name_len_chars": {
+      "count": 143682,
+      "min": 1,
+      "q1": 7.0,
+      "median": 11.0,
+      "q3": 14.0,
+      "max": 54,
+      "mean": 10.8967
+    }
+  },
+  "episodes": {
+    "count": 108368,
+    "length_min": {
+      "count": 101015,
+      "min": 0.0,
+      "q1": 22.0,
+      "median": 24.0,
+      "q3": 24.0,
+      "max": 180.0,
+      "mean": 21.786
+    }
+  },
+  "alt_titles": {
+    "count": 263367,
+    "kinds": [
+      {
+        "value": "translation",
+        "count": 77940
+      },
+      {
+        "value": "synonym",
+        "count": 60041
+      },
+      {
+        "value": "abbreviation",
+        "count": 44354
+      },
+      {
+        "value": "english",
+        "count": 23755
+      },
+      {
+        "value": "romaji",
+        "count": 20274
+      },
+      {
+        "value": "native",
+        "count": 20200
+      },
+      {
+        "value": "russian",
+        "count": 16803
+      }
+    ],
+    "langs": [
+      {
+        "value": "ja_jp",
+        "count": 38486
+      },
+      {
+        "value": "en_jp",
+        "count": 36954
+      },
+      {
+        "value": "english",
+        "count": 23755
+      },
+      {
+        "value": "romaji",
+        "count": 20274
+      },
+      {
+        "value": "native",
+        "count": 20200
+      },
+      {
+        "value": "ru",
+        "count": 16803
+      },
+      {
+        "value": "en_us",
+        "count": 2500
+      }
+    ]
+  },
+  "relationships": {
+    "count": 24934,
+    "relations": [
+      {
+        "value": "SEQUEL",
+        "count": 2650
+      },
+      {
+        "value": "PREQUEL",
+        "count": 2359
+      },
+      {
+        "value": "Sequel",
+        "count": 1956
+      },
+      {
+        "value": "ALTERNATIVE",
+        "count": 1767
+      },
+      {
+        "value": "CHARACTER",
+        "count": 1755
+      },
+      {
+        "value": "SIDE_STORY",
+        "count": 1677
+      },
+      {
+        "value": "Prequel",
+        "count": 1670
+      },
+      {
+        "value": "PARENT",
+        "count": 1553
+      },
+      {
+        "value": "Side Story",
+        "count": 1429
+      },
+      {
+        "value": "Other",
+        "count": 1386
+      },
+      {
+        "value": "OTHER",
+        "count": 1247
+      },
+      {
+        "value": "Adaptation",
+        "count": 1206
+      },
+      {
+        "value": "Alternative Setting",
+        "count": 835
+      },
+      {
+        "value": "Alternative Version",
+        "count": 820
+      },
+      {
+        "value": "Parent Story",
+        "count": 786
+      },
+      {
+        "value": "Summary",
+        "count": 533
+      },
+      {
+        "value": "Spin-off",
+        "count": 363
+      },
+      {
+        "value": "Character",
+        "count": 336
+      },
+      {
+        "value": "SUMMARY",
+        "count": 234
+      },
+      {
+        "value": "SPIN_OFF",
+        "count": 224
+      }
+    ]
+  },
+  "entity_links": {
+    "count": 77681,
+    "link_methods": [
+      {
+        "value": "mal_id",
+        "count": 51969
+      },
+      {
+        "value": "title_year",
+        "count": 10082
+      },
+      {
+        "value": "shikimori_primary",
+        "count": 7034
+      },
+      {
+        "value": "anilist_primary",
+        "count": 4426
+      },
+      {
+        "value": "kitsu_primary",
+        "count": 3173
+      },
+      {
+        "value": "wikidata_primary",
+        "count": 997
+      }
+    ]
+  },
+  "provenance": {
+    "count": 64864,
+    "sources": [
+      {
+        "value": "anilist",
+        "count": 39969
+      },
+      {
+        "value": "shikimori",
+        "count": 15817
+      },
+      {
+        "value": "kitsu",
+        "count": 8876
+      },
+      {
+        "value": "wikidata",
+        "count": 202
+      }
+    ],
+    "with_license_note_pct": 100.0
+  },
+  "studios": {
+    "count": 2340
+  },
+  "exports": {
+    "file_count": 76,
+    "bytes_total": 1224000761,
+    "files": {
+      "alt_titles.jsonl": 48854326,
+      "alt_titles.jsonl.sha256": 83,
+      "alt_titles.parquet": 3751117,
+      "alt_titles.parquet.sha256": 85,
+      "anime.csv": 7822314,
+      "anime.csv.sha256": 76,
+      "anime.jsonl": 43722686,
+      "anime.jsonl.sha256": 78,
+      "anime.parquet": 7653944,
+      "anime.parquet.sha256": 80,
+      "anime_dataset.sqlite": 470876160,
+      "anime_dataset.sqlite.sha256": 87,
+      "characters.jsonl": 39009108,
+      "characters.jsonl.sha256": 83,
+      "characters.parquet": 4651647,
+      "characters.parquet.sha256": 85,
+      "checksums.json": 5871,
+      "checksums.json.sha256": 82,
+      "dedup_merge_log.jsonl": 8945326,
+      "dedup_merge_log.jsonl.sha256": 88,
+      "descriptions.jsonl": 13637457,
+      "descriptions.jsonl.sha256": 85,
+      "descriptions.parquet": 2192735,
+      "descriptions.parquet.sha256": 87,
+      "entity_links.jsonl": 15729470,
+      "entity_links.jsonl.sha256": 85,
+      "episodes.jsonl": 21832256,
+      "episodes.jsonl.sha256": 81,
+      "episodes.parquet": 2827277,
+      "episodes.parquet.sha256": 83,
+      "franchises.jsonl": 3318947,
+      "franchises.jsonl.sha256": 83,
+      "genres.jsonl": 932,
+      "genres.jsonl.sha256": 79,
+      "instructions.jsonl": 162830802,
+      "instructions.jsonl.sha256": 85,
+      "instructions.parquet": 26255504,
+      "instructions.parquet.sha256": 87,
+      "license_commercial_clear.csv": 65151,
+      "license_commercial_clear.csv.sha256": 95,
+      "license_manifest.json": 5909,
+      "license_manifest.json.sha256": 88,
+      "license_tier_cc0_only.csv": 6793,
+      "license_tier_cc0_only.csv.sha256": 92,
+      "license_tier_cc_by_sa.csv": 21724,
+      "license_tier_cc_by_sa.csv.sha256": 92,
+      "license_tier_permission_required.csv": 54994,
+      "license_tier_permission_required.csv.sha256": 103,
+      "license_tier_unresolved.csv": 155792,
+      "license_tier_unresolved.csv.sha256": 94,
+      "license_tiers.jsonl": 11763066,
+      "license_tiers.jsonl.sha256": 86,
+      "provenance.jsonl": 20193652,
+      "provenance.jsonl.sha256": 83,
+      "qa.jsonl": 81587260,
+      "qa.jsonl.sha256": 75,
+      "qa.parquet": 12023847,
+      "qa.parquet.sha256": 77,
+      "rag_chunks.jsonl": 83654832,
+      "rag_chunks.jsonl.sha256": 83,
+      "rag_chunks.parquet": 14264819,
+      "rag_chunks.parquet.sha256": 85,
+      "relationships.jsonl": 4868522,
+      "relationships.jsonl.sha256": 86,
+      "relationships.parquet": 270360,
+      "relationships.parquet.sha256": 88,
+      "sources.jsonl": 2200,
+      "sources.jsonl.sha256": 80,
+      "staff.jsonl": 104871037,
+      "staff.jsonl.sha256": 78,
+      "staff.parquet": 6072591,
+      "staff.parquet.sha256": 80,
+      "studios.jsonl": 186856,
+      "studios.jsonl.sha256": 80,
+      "themes.jsonl": 10271,
+      "themes.jsonl.sha256": 79
+    }
+  },
+  "catalog": {
+    "genres": 42,
+    "themes": 422
+  }
+}

@@ -1,0 +1,31 @@
+﻿cff-version: 1.2.0
+message: >-
+  If you use this dataset, please cite it with the exact counts from
+  reports/summary.json and the version below.
+title: Large Anime Text Dataset
+version: 2.0.0
+authors:
+  - family-names: Muqeet
+    given-names: Muhammad
+    email: muqeet@animearray.site
+type: dataset
+date-released: 2026-10-24
+license: CC-BY-4.0
+keywords:
+  - anime
+  - dataset
+  - metadata
+  - qa
+  - rag
+  - llm
+  - nlp
+preferred-citation:
+  type: dataset
+  title: Large Anime Text Dataset
+  authors:
+    - family-names: Muqeet
+      given-names: Muhammad
+      email: muqeet@animearray.site
+  version: 2.0.0
+  date-released: 2026-10-24
+  license: CC-BY-4.0

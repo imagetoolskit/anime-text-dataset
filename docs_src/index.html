@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Large Anime Text Dataset | {{n:unique_titles}} Anime Works for LLM Fine-Tuning, RAG &amp; Machine Learning Research</title>
+  <meta name="description" content="Large Anime Text Dataset: {{n:unique_titles}} unique anime works, {{n:qa_pairs}} grounded QA pairs, {{n:instructions}} instruction examples, and {{n:rag_chunks}} RAG chunks in JSONL, SQLite, Parquet and CSV. Built for LLM fine-tuning, LoRA/QLoRA, DPO, embeddings, classification and retrieval-augmented generation.">
+  <meta name="keywords" content="anime dataset, LLM fine-tuning dataset, anime QA dataset, anime teaching data, RAG dataset, instruction tuning, LoRA anime model, anime machine learning, text-only anime dataset, NLP anime, entity linking dataset">
+  <meta name="author" content="Muhammad Muqeet">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#f7f4ee">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="dataset">
+  <meta property="og:title" content="Large Anime Text Dataset — {{n:unique_titles}} Anime Works for LLM Training">
+  <meta property="og:description" content="Text-only anime dataset for fine-tuning, RAG, QA, entity linking and recommendation. JSONL + SQLite + Parquet + CSV with leak-free 90/5/5 splits.">
+  <meta property="og:site_name" content="Large Anime Text Dataset">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Large Anime Text Dataset — {{n:unique_titles}} Anime Works">
+  <meta name="twitter:description" content="{{n:qa_pairs}} QA pairs, {{n:instructions}} instructions, {{n:rag_chunks}} RAG chunks for LLM fine-tuning. JSONL/SQLite/Parquet/CSV with leak-free 90/5/5 splits.">
+
+  <!-- Structured data: Dataset. Counts come from reports/summary.json; URLs are
+       added when the release is published, so no unverified link ships here. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    "name": "Large Anime Text Dataset",
+    "version": "{{v:version}}",
+    "description": "A text-only dataset of {{n:unique_titles}} unique anime works with {{n:characters}} characters, {{n:staff}} staff records, {{n:episodes}} episodes, {{n:qa_pairs}} grounded question-answer pairs, {{n:instructions}} instruction-tuning examples and {{n:rag_chunks}} RAG chunks, exported as JSONL, SQLite, Parquet and CSV. Original code, structure and generated text are CC-BY-4.0; source-provided metadata keeps its own terms (see LICENSE_AUDIT.md).",
+    "keywords": ["anime", "LLM fine-tuning", "QA dataset", "instruction tuning", "RAG", "entity linking", "recommendation", "natural language processing"],
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "inLanguage": "en",
+    "creator": {"@type": "Person", "name": "Muhammad Muqeet"}
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,650;9..144,750&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;650&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <div class="inner">
+    <a class="brand" href="index.html">
+      <span class="cube" aria-hidden="true">
+        <i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i>
+      </span>
+      <span>Anime Text Dataset<small>docs</small></span>
+    </a>
+    <ul>
+      <li><a class="link on" href="index.html">Overview</a></li>
+      <li><a class="link" href="explore.html">Explore</a></li>
+      <li><a class="link" href="training.html">Training</a></li>
+      <li><a class="link" href="commands.html">Commands</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <!-- ===================== HERO ===================== -->
+  <header class="wrap hero scene">
+    <div class="hero-grid">
+      <div>
+        <div class="badge-row">
+        </div>
+        <h1>{{n:unique_titles}} anime works.
+        <span class="accent">Ready for language models.</span></h1>
+        <p class="lede">A text-only anime corpus engineered for LLM fine-tuning — instruction pairs, grounded QA, RAG chunks, entity links and metadata — exported to JSONL, SQLite, Parquet and CSV with leak-free 90/5/5 splits.</p>
+        <div class="cta">
+          <a class="btn primary" href="#quickstart">Run it in minutes</a>
+          <a class="btn accent" href="training.html">Train a model</a>
+          <a class="btn" href="explore.html">Explore the data</a>
+          <a class="btn" href="commands.html">Command reference</a>
+        </div>
+        <p style="margin:0;color:var(--ink-soft);font-size:13.5px">
+          Primary language: en (ja/romaji titles labeled)&nbsp;·&nbsp;
+          License: code &amp; generated text <a href="../LICENSE" style="color:var(--teal)">CC-BY-4.0</a>; source metadata per tier
+        </p>
+      </div>
+      <div class="float-stack" aria-hidden="true">
+        <div class="fcard c3">
+          <div class="num" data-count="{{r:qa_pairs}}">0</div>
+          <div class="lbl">QA pairs</div>
+        </div>
+        <div class="fcard c1">
+          <div class="num" data-count="{{r:unique_titles}}">0</div>
+          <div class="lbl">Unique anime</div>
+        </div>
+        <div class="fcard c2">
+          <div class="num"><span data-count="{{r:instructions}}">0</span></div>
+          <div class="lbl">Instruction examples</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== NUMBERS ===================== -->
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Headline numbers</span>What the release contains</h2>
+    <p class="sub">All figures are exact for release {{v:version}} and reflected in every export and the checksum manifest.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Metric</th><th>Value</th><th>Artifact</th></tr></thead>
+        <tbody>
+          <tr><td>Unique anime works with a title</td><td class="num"><strong>{{n:unique_titles}}</strong></td><td><code>anime.jsonl</code></td></tr>
+          <tr><td>Characters</td><td class="num">{{n:characters}}</td><td><code>characters.jsonl</code></td></tr>
+          <tr><td>Staff / voice-actor rows</td><td class="num">{{n:staff}}</td><td><code>staff.jsonl</code></td></tr>
+          <tr><td>Studios</td><td class="num">{{n:studios}}</td><td><code>studios.jsonl</code></td></tr>
+          <tr><td>Genre / theme vocabulary</td><td class="num">{{n:genres}} / {{n:themes}}</td><td><code>genres.jsonl · themes.jsonl</code></td></tr>
+          <tr><td>Episodes linked to anime</td><td class="num">{{n:episodes}}</td><td><code>episodes.jsonl</code></td></tr>
+          <tr><td>Relationship edges (sequel/prequel/…)</td><td class="num">{{n:relationships}}</td><td><code>relationships.jsonl</code></td></tr>
+          <tr><td>Alternative titles</td><td class="num">{{n:alt_titles}}</td><td><code>alt_titles.jsonl</code></td></tr>
+          <tr><td>Question / answer pairs</td><td class="num">{{n:qa_pairs}}</td><td><code>qa.jsonl</code></td></tr>
+          <tr><td>Instruction-tuning examples</td><td class="num">{{n:instructions}}</td><td><code>instructions.jsonl</code></td></tr>
+          <tr><td>RAG chunks with source refs</td><td class="num">{{n:rag_chunks}}</td><td><code>rag_chunks.jsonl</code></td></tr>
+          <tr><td>Entity-link records</td><td class="num">{{n:entity_links}}</td><td><code>entity_links.jsonl</code></td></tr>
+          <tr><td>Split train / val / test</td><td class="num">{{n:split_train}} / {{n:split_val}} / {{n:split_test}}</td><td><code>split</code> field on every row</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===================== WHAT'S INSIDE ===================== -->
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">What's inside</span>A structured, text-only corpus</h2>
+    <p class="sub">Each anime work expands into many related records, so you can train everything from a chat assistant to a retrieval system from one consistent schema.</p>
+    <div class="cards">
+      <article class="card"><span class="tag">Identity</span><h3>Titles &amp; metadata</h3><p>Canonical, English and Japanese titles plus {{n:alt_titles}} alternative titles; type, status, episode counts, air dates, season, year, scores, popularity, favourites, source material and age rating per work.</p></article>
+      <article class="card"><span class="tag">Narrative</span><h3>Episodes &amp; relations</h3><p>{{n:episodes_compact}} episodes with titles and dates; {{n:relationships}} relationship edges (sequel, prequel, side story, adaptation) and {{n:franchises}} franchise clusters built from them.</p></article>
+      <article class="card"><span class="tag">People</span><h3>Cast &amp; crew</h3><p>{{n:characters}} characters and {{n:staff}} staff rows with roles — the raw material for character Q&amp;A, dialogue-style data, and voice-actor modelling.</p></article>
+      <article class="card"><span class="tag">Text</span><h3>Record summaries</h3><p>{{n:descriptions}} project-written summaries, assembled from each work's own structured fields, for summarisation, retrieval and domain pretraining.</p></article>
+      <article class="card"><span class="tag">Training</span><h3>QA &amp; instructions</h3><p>{{n:qa_pairs}} grounded QA pairs and {{n:instructions}} instruction examples — chat-style, ready to shard for SFT, LoRA/QLoRA and DPO.</p></article>
+      <article class="card"><span class="tag">Retrieval</span><h3>RAG chunks</h3><p>{{n:rag_chunks}} semantic chunks, each with source references, sized for embedding models and retrieval-augmented generation.</p></article>
+      <article class="card"><span class="tag">Knowledge graph</span><h3>Entity links</h3><p>{{n:entity_links}} records mapping every internal anime ID to external source IDs with method and confidence — for entity linking and KG construction.</p></article>
+      <article class="card"><span class="tag">Provenance</span><h3>Sources &amp; confidence</h3><p>Every record carries its source, remote ID, link method, confidence, and quality tier A/B/C so you can filter by how reliable a record is.</p></article>
+    </div>
+  </section>
+
+  <!-- ===================== ACCESS METHODS ===================== -->
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Get it</span>Eight ways to access, clone, or train</h2>
+    <p class="sub">The same data, eight gateways. Pick the one that matches what you build.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Method</th><th>What you get</th><th>How</th></tr></thead>
+        <tbody>
+          <tr><td class="num">1</td><td><strong>Clone the repository</strong></td><td>code, schemas, docs, pipeline</td><td><code>git clone &lt;repo-url&gt;</code></td></tr>
+          <tr><td class="num">2</td><td><strong>GitHub Releases</strong></td><td>the full <code>exports/</code> tree</td><td>Releases page or <code>gh release download</code></td></tr>
+          <tr><td class="num">3</td><td><strong>Stream JSONL in Python</strong></td><td>train-ready rows, no full load</td><td><code>open("exports/qa.jsonl", encoding="utf-8")</code></td></tr>
+          <tr><td class="num">4</td><td><strong>Hugging Face <code>datasets</code></strong></td><td>sharded, streamable Dataset</td><td><code>load_dataset("json", data_files=...)</code></td></tr>
+          <tr><td class="num">5</td><td><strong>SQLite database</strong></td><td>joins and referential queries</td><td><code>sqlite3 exports/anime_dataset.sqlite</code></td></tr>
+          <tr><td class="num">6</td><td><strong>Parquet + DuckDB / pandas</strong></td><td>fast analytics</td><td><code>duckdb -c "select ..."</code></td></tr>
+          <tr><td class="num">7</td><td><strong>CSV</strong></td><td>spreadsheet-friendly flat view</td><td>open <code>exports/anime.csv</code></td></tr>
+          <tr><td class="num">8</td><td><strong>Training recipes</strong></td><td>fine-tuned models</td><td><a href="training.html" style="color:var(--teal)">training.html</a> + <code>examples/</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===================== SOURCES ===================== -->
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Sources</span>Built from five public catalogues</h2>
+    <p class="sub">Factual metadata aggregated from publicly documented catalogues, with per-record provenance and per-source license status.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Source</th><th>Works</th><th>Detail</th><th>License status</th></tr></thead>
+        <tbody>
+          <tr><td><strong>AniList</strong></td><td class="num">{{n:src_anilist}}</td><td>{{n:raw_anilist_media_full}} full-depth records</td><td>public API; content © rights holders — tier <code>permission_required</code></td></tr>
+          <tr><td><strong>Kitsu</strong></td><td class="num">{{n:src_kitsu}}</td><td>{{n:episodes}} episodes</td><td>public API, no redistribution grant — tier <code>permission_required</code></td></tr>
+          <tr><td><strong>Shikimori</strong></td><td class="num">{{n:src_shikimori}}</td><td>{{n:raw_shikimori_detail}} detail records</td><td>no licence located — tier <code>unresolved</code></td></tr>
+          <tr><td><strong>Wikidata</strong></td><td class="num">{{n:src_wikidata}}</td><td>items &amp; labels</td><td><span class="pill ok">CC0-1.0</span> — tier <code>cc0_only</code></td></tr>
+          <tr><td><strong>ANN encyclopedia</strong></td><td class="num">—</td><td>{{n:raw_ann_page}} sample pages, raw storage only</td><td>not linked into exports</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <strong>License note:</strong> original code, structure and generated text are <a href="../LICENSE" style="color:var(--teal)">CC-BY-4.0</a>. Every anime row carries one <code>license_tier</code> — <code>cc0_only</code>, <code>permission_required</code> or <code>unresolved</code> — set by its strictest contributing source. <code>exports/license_manifest.json</code> states what each tier permits; <code>exports/license_commercial_clear.csv</code> lists the rows with no permission request outstanding. Tiers describe this dataset's provenance obligation, not the copyright status of the underlying works.
+    </div>
+  </section>
+
+  <!-- ===================== SPLITS ===================== -->
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Splits</span>Leak-free train / validation / test</h2>
+    <div class="grid-2">
+      <div class="card"><h3>90 / 5 / 5 by work, not by row</h3><p>Split assignment happens <strong>per anime work</strong>. Every character, QA pair, chunk, and relationship of a work lands in the same bucket — no information leakage between training and test. Seed 42, auditable via the <code>split</code> field on every exported record.</p></div>
+      <div class="card"><h3>Your filter is one line</h3><pre><code>import json
+train = [q for q in
+  map(json.loads,
+      open("exports/qa.jsonl",
+           encoding="utf-8"))
+  if q["split"] == "train"]</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ===================== QUICKSTART ===================== -->
+  <section class="wrap reveal" id="quickstart">
+    <h2><span class="eyebrow">Quick start</span>Run it from any terminal</h2>
+    <p class="sub">These commands work in Windows CMD, PowerShell, Git Bash and WSL. Replace <code>python</code> with <code>python3</code> where needed.</p>
+    <div class="grid-2">
+      <div>
+        <h3 style="font-family:var(--font-display);font-weight:700">Clone &amp; install</h3>
+        <pre><button class="copybtn" type="button">copy</button>git clone &lt;repo-url&gt; &amp;&amp; cd anime-text-dataset
+python -m venv .venv
+.venv\Scripts\activate      <span class="cm"># Windows</span>
+<span class="cm"># source .venv/bin/activate  # Bash/WSL/macOS</span>
+pip install -r requirements.txt</pre>
+      </div>
+      <div>
+        <h3 style="font-family:var(--font-display);font-weight:700">Verify the data</h3>
+        <pre><button class="copybtn" type="button">copy</button>python -m src.cli validate
+python -m src.cli checksums</pre>
+      </div>
+    </div>
+    <h3 style="font-family:var(--font-display);font-weight:700;margin:26px 0 10px">Inspect without training</h3>
+    <pre><button class="copybtn" type="button">copy</button><span class="hl"># count rows</span>  -  PowerShell
+(Get-Content exports\anime.jsonl | Measure-Object -Line).Lines
+<span class="hl"># count rows</span>  -  Bash/WSL
+wc -l exports/anime.jsonl
+<span class="hl"># SQL anime query, no install needed</span>
+python -c "import sqlite3; con=sqlite3.connect('exports/anime_dataset.sqlite'); [print(r) for r in con.execute('select year,count(*) from anime group by year order by 2 desc limit 5')]"</pre>
+    <p class="callout"><a href="commands.html" style="color:var(--teal)">Open the full command reference</a> for every flag, environment variable, and the exact commands to explore JSONL, SQLite, and Parquet.</p>
+  </section>
+
+  <!-- ===================== PIPELINE COMMANDS ===================== -->
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Reproducible build</span>Every part of the release is one command</h2>
+    <p class="sub">A single deterministic driver (<code>python -m src.cli</code>) regenerates every table from source payloads. Each phase is resumable and checkpointed.</p>
+    <div class="timeline">
+      <div class="tl-row"><span class="phase">P0</span><span class="cmd">python -m src.cli discover</span><span class="out">ids per source</span></div>
+      <div class="tl-row"><span class="phase">P1</span><span class="cmd">python -m src.cli dedup</span><span class="out">{{n:unique_titles}} canonical works</span></div>
+      <div class="tl-row"><span class="phase">P2</span><span class="cmd">python -m src.cli enrich</span><span class="out">depth-tier detail</span></div>
+      <div class="tl-row"><span class="phase">P3</span><span class="cmd">python -m src.cli entities → normalize</span><span class="out">characters · staff · studios · episodes, deduped</span></div>
+      <div class="tl-row"><span class="phase">P4</span><span class="cmd">python -m src.cli relationships</span><span class="out">{{n:relationships}} edges</span></div>
+      <div class="tl-row"><span class="phase">P5</span><span class="cmd">python -m src.cli descriptions</span><span class="out">{{n:descriptions}} texts</span></div>
+      <div class="tl-row"><span class="phase">P6</span><span class="cmd">python -m src.cli qa</span><span class="out">{{n:qa_pairs}} pairs</span></div>
+      <div class="tl-row"><span class="phase">P7</span><span class="cmd">python -m src.cli instructions</span><span class="out">{{n:instructions}} examples</span></div>
+      <div class="tl-row"><span class="phase">P8</span><span class="cmd">python -m src.cli franchise</span><span class="out">franchise clusters</span></div>
+      <div class="tl-row"><span class="phase">P9</span><span class="cmd">python -m src.cli rag</span><span class="out">{{n:rag_chunks}} chunks</span></div>
+      <div class="tl-row"><span class="phase">P10</span><span class="cmd">python -m src.cli split</span><span class="out">90/5/5 per work</span></div>
+      <div class="tl-row"><span class="phase">P11</span><span class="cmd">scripts/license_tiers.py → python -m src.cli export</span><span class="out">tier + split joined into every row</span></div>
+      <div class="tl-row"><span class="phase">QA</span><span class="cmd">python -m src.cli validate · checksums · report</span><span class="out">21 checks + report</span></div>
+    </div>
+  </section>
+
+  <!-- ===================== TRAINING ===================== -->
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Train</span>Nine recipes, one guide</h2>
+    <p class="sub">From a first LoRA fine-tune to full domain pretraining and retrieval embeddings — with runnable code and honest hardware guidance.</p>
+    <div class="cards">
+      <article class="card"><span class="tag">SFT</span><h3>Instruction fine-tuning</h3><p>Teach a chat model to answer anime questions with <code>qa.jsonl</code> + <code>instructions.jsonl</code>.</p></article>
+      <article class="card"><span class="tag">Efficient</span><h3>LoRA / QLoRA</h3><p>Fine-tune a 7–13B model on a single 8–16GB GPU with <code>peft</code> adapters.</p></article>
+      <article class="card"><span class="tag">Preference</span><h3>DPO</h3><p>Train the model to prefer grounded answers over hallucinated ones.</p></article>
+      <article class="card"><span class="tag">Retrieval</span><h3>RAG &amp; embeddings</h3><p>Index <code>rag_chunks.jsonl</code> with FAISS and fine-tune readers and embedders.</p></article>
+      <article class="card"><span class="tag">Pretrain</span><h3>Domain continued pretraining</h3><p>Make a base model fluent in anime facts using <code>descriptions.jsonl</code>.</p></article>
+      <article class="card"><span class="tag">Structured</span><h3>Classification &amp; KG</h3><p>Genre classifiers, score rankers, entity linking and relation prediction.</p></article>
+    </div>
+    <p style="margin-top:20px"><a class="btn accent" href="training.html">Read the full training guide</a></p>
+  </section>
+
+  <!-- ===================== FORMATS ===================== -->
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Formats</span>One release, every shape</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Format</th><th>Files</th><th>Best for</th></tr></thead>
+        <tbody>
+          <tr><td><strong>JSONL</strong></td><td class="num">15 tables</td><td>streaming into trainers and pipelines</td></tr>
+          <tr><td><strong>SQLite</strong></td><td class="num"><code>anime_dataset.sqlite</code></td><td>joins, referential queries, small servers</td></tr>
+          <tr><td><strong>Parquet</strong></td><td class="num">3 files</td><td>analytics (DuckDB, pandas, Spark)</td></tr>
+          <tr><td><strong>CSV</strong></td><td class="num"><code>anime.csv</code></td><td>spreadsheets and quick inspection</td></tr>
+          <tr><td><strong>Checksums</strong></td><td class="num">per-file <code>.sha256</code> + manifest</td><td>integrity verification</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap cols">
+    <div>
+      <div><strong>Large Anime Text Dataset</strong> · release 2.0.0 · <a href="../CHANGELOG.md">changelog</a></div>
+      <div style="margin-top:6px">Original &amp; derived content: <a href="../LICENSE">CC-BY-4.0</a> · Source content: per-source terms (see <a href="LICENSE_NOTES.md">license notes</a>).</div>
+      <div style="margin-top:6px">Developer: Muhammad Muqeet · <a href="mailto:muqeet@animearray.site">muqeet@animearray.site</a> · <a href="mailto:muqeet@anitroves.com">muqeet@anitroves.com</a></div>
+    </div>
+    <div>
+      <a href="../reports/final_report.md">Final report</a> &nbsp;·&nbsp;
+      <a href="../DATASET_CARD.md">Dataset card</a> &nbsp;·&nbsp;
+      <a href="training.html">Training guide</a> &nbsp;·&nbsp;
+      <a href="commands.html">Commands</a> &nbsp;·&nbsp;
+      <a href="explore.html">Explore</a> &nbsp;·&nbsp;
+      <a href="../ACKNOWLEDGMENTS.md">Acknowledgments</a>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
+
+

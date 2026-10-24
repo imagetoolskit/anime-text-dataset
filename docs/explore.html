@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Explore the Data | Large Anime Text Dataset — live statistical profile</title>
+  <meta name="description" content="Interactive data explorer for the Large Anime Text Dataset: coverage rates, year/type/status distributions, genres, themes, studios, numeric ranges for scores, popularity, episodes, QA pairs, instructions and RAG chunks, plus the full export file manifest.">
+  <meta name="keywords" content="anime dataset explorer, dataset statistics, genre distribution anime, anime year histogram, QA pair statistics, instruction tuning dataset stats, RAG chunk statistics, dataset coverage">
+  <meta name="author" content="Muhammad Muqeet">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#f7f4ee">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Explore the Data | Large Anime Text Dataset">
+  <meta property="og:description" content="Live statistical profile: coverage, distributions, genres, QA lengths and the export manifest.">
+  <meta property="og:site_name" content="Large Anime Text Dataset">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Explore the Data | Large Anime Text Dataset">
+  <meta name="twitter:description" content="Coverage, distributions and the export manifest for 35,766 anime works.">
+
+  <!-- Structured data: TechArticle -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "name": "Explore the Large Anime Text Dataset",
+    "about": ["dataset statistics", "anime", "LLM fine-tuning", "RAG", "data profile", "coverage"],
+    "encodingFormat": "text/html",
+    "license": "https://creativecommons.org/licenses/by/4.0/"
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,650;9..144,750&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;650&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .stat-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 34px 0 6px; }
+    .stat { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; box-shadow: 0 4px 14px rgba(20,27,35,0.05); }
+    .stat .num { font-family: var(--font-display); font-weight: 750; font-size: 30px; line-height: 1.1; }
+    .stat .lbl { font-size: 11px; letter-spacing: 1.3px; text-transform: uppercase; color: var(--ink-soft); margin-top: 3px; }
+    .bar { height: 8px; background: var(--paper-2); border-radius: 999px; margin: 6px 0 14px; overflow: hidden; }
+    .bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--teal), #3aa08f); border-radius: 999px; }
+    .distrow { display: grid; grid-template-columns: minmax(120px, 200px) 1fr auto; gap: 14px; align-items: center; font-size: 14px; }
+    .distrow .bar { margin: 0; }
+    .distrow .v { text-align: right; font-family: var(--font-mono); font-size: 13px; color: var(--ink-soft); }
+    .kv { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+    .kv .d { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; font-size: 14px; display: flex; justify-content: space-between; gap: 10px; }
+    .kv .d b { font-family: var(--font-mono); font-weight: 600; text-align: right; }
+    h3.sec { font-family: var(--font-display); font-weight: 700; font-size: 20px; margin: 30px 0 12px; }
+    .muted { color: var(--ink-soft); font-size: 13px; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="inner">
+    <a class="brand" href="index.html">
+      <span class="cube" aria-hidden="true">
+        <i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i>
+      </span>
+      <span>Anime Text Dataset<small>docs</small></span>
+    </a>
+    <ul>
+      <li><a class="link" href="index.html">Overview</a></li>
+      <li><a class="link on" href="explore.html">Explore</a></li>
+      <li><a class="link" href="training.html">Training</a></li>
+      <li><a class="link" href="commands.html">Commands</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <!-- ===================== HERO ===================== -->
+  <header class="wrap hero">
+    <div class="badge-row">
+    </div>
+    <h1>Explore the data.<br><span class="accent">Every number, one page.</span></h1>
+    <p class="lede">A live statistical profile generated from the actual exports - coverage rates, distributions, numeric ranges and the full file manifest. Regenerate with <code>python scripts/data_profile.py --out docs/data/profile.json</code>.</p>
+    <div class="stat-strip" id="stats">
+      <div class="stat"><div class="num" data-fill="anime.count">—</div><div class="lbl">Anime works</div></div>
+      <div class="stat"><div class="num" data-fill="qa.count">—</div><div class="lbl">QA pairs</div></div>
+      <div class="stat"><div class="num" data-fill="instructions.count">—</div><div class="lbl">Instruction examples</div></div>
+      <div class="stat"><div class="num" data-fill="rag.count">—</div><div class="lbl">RAG chunks</div></div>
+      <div class="stat"><div class="num" data-fill="characters.count">—</div><div class="lbl">Characters</div></div>
+      <div class="stat"><div class="num" data-fill="episodes.count">—</div><div class="lbl">Episodes</div></div>
+    </div>
+    <p class="muted" id="gennote">Profile <span id="genvalue">—</span>. Data is read straight from <code>exports/</code>.</p>
+  </header>
+
+  <!-- ===================== OVERVIEW / COVERAGE ===================== -->
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Overview</span>Coverage &amp; quality signals</h2>
+    <div class="kv" id="kv">
+      <div class="d"><span>Works with an episode count</span><b data-fill="anime.episodes_coverage_pct">—</b></div>
+      <div class="d"><span>Works with mean score</span><b data-fill="anime.mean_score_coverage_pct">—</b></div>
+      <div class="d"><span>QA pairs grounded in record fields</span><b data-fill="qa.contains_grounded_fields_pct">—</b></div>
+      <div class="d"><span>Instruction examples validated</span><b data-fill="instructions.validated_pct">—</b></div>
+      <div class="d"><span>Provenance rows carry license notes</span><b data-fill="provenance.with_license_note_pct">—</b></div>
+      <div class="d"><span>Year range</span><b><span data-fill="anime.years.min">—</span>–<span data-fill="anime.years.max">—</span></b></div>
+    </div>
+    <h3 class="sec">Quality tiers &amp; confidence</h3>
+    <div class="kv" id="tiers"></div>
+    <h3 class="sec">Split proportions</h3>
+    <div class="distrow" id="splits"></div>
+  </section>
+
+  <!-- ===================== TYPES / FORMAT ===================== -->
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Shape</span>What kind of works</h2>
+    <div class="grid-2">
+      <div>
+        <h3 class="sec">Media types</h3>
+        <div id="types"></div>
+      </div>
+      <div>
+        <h3 class="sec">Status</h3>
+        <div id="statuses"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== YEARS ===================== -->
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Time</span>Works by release year</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Year</th><th>Works</th></tr></thead>
+        <tbody id="years"></tbody>
+      </table>
+    </div>
+    <p class="muted">Top 15 years. The dataset spans every age of the medium, weighted toward recent productions.</p>
+  </section>
+
+  <!-- ===================== GENRES / THEMES ===================== -->
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Tags</span>Genres &amp; themes</h2>
+    <div class="grid-2">
+      <div>
+        <h3 class="sec">Top genres</h3>
+        <div id="genres"></div>
+      </div>
+      <div>
+        <h3 class="sec">Top themes</h3>
+        <div id="themes"></div>
+      </div>
+    </div>
+    <h3 class="sec">Top studios</h3>
+    <div id="studios"></div>
+  </section>
+
+  <!-- ===================== NUMERIC RANGES ===================== -->
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Ranges</span>Numeric distributions</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Metric</th><th>Count</th><th>Min</th><th>Q1</th><th>Median</th><th>Q3</th><th>Max</th><th>Mean</th></tr></thead>
+        <tbody id="ranges"></tbody>
+      </table>
+    </div>
+    <p class="muted">Quartiles are inclusive. Scores are 0–100 unless a source disclosed otherwise.</p>
+  </section>
+
+  <!-- ===================== QA / INSTRUCTION/ RAG ===================== -->
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Trainables</span>QA, instructions &amp; RAG anatomy</h2>
+    <h3 class="sec">QA pair types (top 10)</h3>
+    <div id="qtypes"></div>
+    <h3 class="sec">Instruction shapes</h3>
+    <div class="grid-2">
+      <div id="itypes"></div>
+      <div id="purposes"></div>
+    </div>
+    <h3 class="sec">Character roles</h3>
+    <div id="roles"></div>
+  </section>
+
+  <!-- ===================== FILES ===================== -->
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Manifest</span>Exported files</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>File</th><th>Size</th></tr></thead>
+        <tbody id="files"></tbody>
+      </table>
+    </div>
+    <p class="muted" id="filesum"></p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap cols">
+    <div>
+      <div><strong>Large Anime Text Dataset</strong> · release 2.0.0 · <a href="../CHANGELOG.md">changelog</a></div>
+      <div style="margin-top:6px">Original &amp; derived content: <a href="../LICENSE">CC-BY-4.0</a> · Source content: per-source terms (see <a href="LICENSE_NOTES.md">license notes</a>).</div>
+      <div style="margin-top:6px">Developer: Muhammad Muqeet · <a href="mailto:muqeet@animearray.site">muqeet@animearray.site</a> · <a href="mailto:muqeet@anitroves.com">muqeet@anitroves.com</a></div>
+    </div>
+    <div>
+      <a href="../reports/final_report.md">Final report</a> &nbsp;·&nbsp;
+      <a href="../DATASET_CARD.md">Dataset card</a> &nbsp;·&nbsp;
+      <a href="training.html">Training guide</a> &nbsp;·&nbsp;
+      <a href="commands.html">Commands</a> &nbsp;·&nbsp;
+      <a href="../ACKNOWLEDGMENTS.md">Acknowledgments</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  var P = {
+    anime: { count: 35766, episodes_coverage_pct: null, mean_score_coverage_pct: null,
+      years: { min: null, max: null }, types: [], statuses: [], splits: {},
+      quality_tiers: {}, confidence: {}, top_years: [], genres: [], themes: [], studios: [],
+      mean_score: null, popularity: null, favourites: null, episodes: null, duration_min: null },
+    qa: { count: 291816, contains_grounded_fields_pct: 0, types: [] },
+    instructions: { count: 211569, validated_pct: 0, itypes: [], purposes: [] },
+    rag: { count: 154640 },
+    descriptions: { count: 35766 },
+    characters: { count: 215926, roles: [], name_len_chars: null },
+    episodes: { count: 108359 },
+    alt_titles: { count: 130224 }, relationships: { count: 26719 },
+    entity_links: { count: 77681 }, provenance: { count: 131635, with_license_note_pct: 0 },
+    exports: { file_count: 0, bytes_total: 0, files: {} }
+  };
+
+  function num(v){ return v === null || v === undefined || Number.isNaN(+v) ? "—" : (+v).toLocaleString(); }
+  function fmtBytes(b){ if(!b) return "—"; var u=["B","KB","MB","GB"], i=0; while(b>=1024&&i<u.length-1){b/=1024;i++;} return b.toFixed(1)+" "+u[i]; }
+  function fill(el, path){ var c = thisP(path); if(c!==undefined) el.textContent = num(c); }
+  function thisP(path){ return path.split(".").reduce(function(o,k){ return o ? o[k] : undefined; }, P); }
+
+  function dist(list, id, maxN){
+    var el = document.getElementById(id); if(!el || !list || !list.length) return;
+    var n = Math.min(list.length, maxN), mx = list[0].count, out = "";
+    for(var i=0;i<n;i++){ var v=list[i]; out += '<div class="distrow" style="margin-bottom:10px"><span>'+v.value+"</span><div class=\"bar\"><i style=\"width:"+((v.count/mx)*100).toFixed(1)+"%\"></i></div><span class=\"v\">"+num(v.count)+"</span></div>"; }
+    el.innerHTML = out;
+  }
+  function rows(id, list, map, head){ var el=document.getElementById(id); if(!el) return; el.innerHTML = list.map(map).join(""); }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    fetch("data/profile.json").then(function(r){ if(!r.ok) throw 0; return r.json(); }).then(function(json){
+      // merge cleanly
+      (function deep(t,s){ for(var k in s){ if(s[k]&&typeof s[k]==="object"&&!Array.isArray(s[k])){ t[k]=(t[k]&&typeof t[k]==="object")?t[k]:{}; deep(t[k],s[k]); } else { t[k]=s[k]; } } })(P, json);
+      render();
+      document.getElementById("genvalue").textContent = json.generated_at ? json.generated_at.replace("T"," ").replace(/Z$/," UTC") : "—";
+    })["catch"](function(){ render(); document.getElementById("genvalue").textContent = "embedded snapshot"; });
+  });
+
+  function render(){
+    var els = document.querySelectorAll("[data-fill]");
+    for(var i=0;i<els.length;i++){ fill(els[i], els[i].getAttribute("data-fill")); }
+    // tiers
+    var t = document.getElementById("tiers");
+    Object.keys(P.anime.quality_tiers).forEach(function(k){
+      t.insertAdjacentHTML("beforeend", '<div class="d"><span>Quality tier '+k+"</span><b>"+num(P.anime.quality_tiers[k])+"</b></div>");
+    });
+    Object.keys(P.anime.confidence).forEach(function(k){
+      t.insertAdjacentHTML("beforeend", '<div class="d"><span>Confidence '+k+"</span><b>"+num(P.anime.confidence[k])+"</b></div>");
+    });
+    // splits
+    var s = P.anime.splits, mx = Math.max.apply(null, Object.keys(s).map(function(k){return s[k];}));
+    document.getElementById("splits").innerHTML = Object.keys(s).map(function(k){
+      return '<div class="distrow"><span>'+k+' split</span><div class="bar"><i style="width:'+((s[k]/mx)*100).toFixed(1)+'%"></i></div><span class="v">'+num(s[k])+"</span></div>";
+    }).join("");
+    // top lists
+    dist(P.anime.types, "types", 12); dist(P.anime.statuses, "statuses", 8);
+    dist(P.anime.genres, "genres", 15); dist(P.anime.themes, "themes", 15);
+    dist(P.anime.studios, "studios", 10); dist(P.qa.types, "qtypes", 12);
+    dist(P.instructions.itypes, "itypes", 12); dist(P.instructions.purposes, "purposes", 10);
+    dist(P.characters.roles, "roles", 8);
+    // years table
+    var yt = document.getElementById("years");
+    (P.anime.years.top_years || []).forEach(function(y){
+      yt.insertAdjacentHTML("beforeend", "<tr><td>"+y.value+"</td><td class=\"num\">"+num(y.count)+"</td></tr>");
+    });
+    // ranges table
+    var defs = [["Mean score (0–100)", "anime.mean_score"], ["Popularity", "anime.popularity"], ["Favourites", "anime.favourites"], ["Episodes per work", "anime.episodes"], ["Runtime minutes", "anime.duration_min"], ["Title length (chars)", "anime.title_len_chars"], ["QA question length", "qa.question_len_chars"], ["QA answer length", "qa.answer_len_chars"], ["Instruction length", "instructions.instruction_len_chars"], ["Output length", "instructions.output_len_chars"], ["RAG chunk length", "rag.chunk_len_chars"], ["Description length", "descriptions.text_len_chars"], ["Character name length", "characters.name_len_chars"]];
+    var rt = document.getElementById("ranges");
+    defs.forEach(function(d){
+      var o = thisP(d[1]);
+      if(!o) return;
+      rt.insertAdjacentHTML("beforeend", "<tr><td><strong>"+d[0]+"</strong></td><td class=\"num\">"+num(o.count)+"</td><td class=\"num\">"+num(o.min)+"</td><td class=\"num\">"+num(o.q1)+"</td><td class=\"num\">"+num(o.median)+"</td><td class=\"num\">"+num(o.q3)+"</td><td class=\"num\">"+num(o.max)+"</td><td class=\"num\">"+num(o.mean)+"</td></tr>");
+    });
+    // files
+    var ft = document.getElementById("files"), n=0, bytes=0;
+    Object.keys(P.exports.files).forEach(function(f){
+      if(f.endsWith(".sha256")) return;
+      n++; bytes += P.exports.files[f];
+      ft.insertAdjacentHTML("beforeend", "<tr><td><code>"+f+"</code></td><td class=\"num\">"+fmtBytes(P.exports.files[f])+"</td></tr>");
+    });
+    document.getElementById("filesum").textContent = n+" files, "+fmtBytes(bytes)+" total (excluding .sha256 sidecars).";
+  }
+</script>
+<script src="script.js"></script>
+</body>
+</html>
+
+

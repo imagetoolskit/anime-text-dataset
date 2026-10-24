@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Terminal &amp; CLI Command Reference | Large Anime Text Dataset</title>
+  <meta name="description" content="Every terminal command for the Large Anime Text Dataset: install, validate, checksums, explore JSONL/SQLite/Parquet, and train models. Works in Windows CMD, PowerShell, Git Bash and WSL.">
+  <meta name="keywords" content="anime dataset commands, CLI reference, terminal commands, python -m src.cli, validate dataset, SQLite query, DuckDB, checksum verify, train LLM anime">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#f7f4ee">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Terminal &amp; CLI Command Reference — Anime Text Dataset">
+  <meta property="og:description" content="Install, explore, validate, train, verify and publish. Cross-platform commands for CMD, PowerShell, Git Bash and WSL.">
+  <meta name="twitter:card" content="summary">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "Terminal and CLI Command Reference",
+    "about": ["CLI", "terminal", "bash", "PowerShell", "SQLite", "DuckDB"],
+    "inLanguage": "en"
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,650;9..144,750&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;650&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <div class="inner">
+    <a class="brand" href="index.html">
+      <span class="cube" aria-hidden="true"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i></span>
+      <span>Anime Text Dataset<small>commands</small></span>
+    </a>
+    <ul>
+      <li><a class="link" href="index.html">Overview</a></li>
+      <li><a class="link" href="explore.html">Explore</a></li>
+      <li><a class="link" href="training.html">Training</a></li>
+      <li><a class="link on" href="commands.html">Commands</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <header class="wrap hero">
+    <h1 style="max-width:20ch">Terminal &amp; CLI <span class="accent" style="font-style:italic;color:var(--accent-ink)">command reference</span></h1>
+    <p class="lede">Every command works in <strong>Windows CMD</strong>, <strong>PowerShell</strong>, and <strong>Git Bash / WSL</strong> unless noted. Replace <code>python</code> with <code>python3</code> where needed. The complete written guide is <a href="COMMANDS.md" style="color:var(--teal)">docs/COMMANDS.md</a>.</p>
+  </header>
+
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Setup</span>Clone, install, verify</h2>
+    <pre><button class="copybtn" type="button">copy</button>git clone &lt;repo-url&gt; &amp;&amp; cd anime-text-dataset
+python -m venv .venv
+.venv\Scripts\activate        <span class="cm"># Windows CMD/PowerShell</span>
+<span class="cm"># source .venv/bin/activate  # Git Bash / WSL / macOS</span>
+pip install -r requirements.txt
+python -m src.cli validate    <span class="cm"># repository checks</span>
+python -m src.cli checksums   <span class="cm"># SHA-256 manifest</span></pre>
+  </section>
+
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Access</span>Ways to access, clone, or train</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Method</th><th>What you get</th></tr></thead>
+        <tbody>
+          <tr><td class="num">1</td><td><strong>Clone the repository</strong></td><td>code, schemas, docs, pipeline</td></tr>
+          <tr><td class="num">2</td><td><strong>GitHub Releases</strong> (<code>gh release download</code>)</td><td>the full <code>exports/</code> tree</td></tr>
+          <tr><td class="num">3</td><td><strong>Stream JSONL in Python</strong></td><td>train-ready rows, no full load</td></tr>
+          <tr><td class="num">4</td><td><strong>Hugging Face <code>datasets</code></strong></td><td>sharded, streamable HF Dataset</td></tr>
+          <tr><td class="num">5</td><td><strong>SQLite database</strong></td><td>joins and referential queries</td></tr>
+          <tr><td class="num">6</td><td><strong>Parquet + DuckDB / pandas</strong></td><td>fast analytics</td></tr>
+          <tr><td class="num">7</td><td><strong>CSV</strong></td><td>spreadsheet-friendly flat view</td></tr>
+          <tr><td class="num">8</td><td><strong>Training recipes</strong></td><td>fine-tuned models (<a href="training.html" style="color:var(--teal)">training page</a>)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Explore</span>Read the data from any shell</h2>
+    <div class="grid-2">
+      <div>
+        <pre><button class="copybtn" type="button">copy</button><span class="cm"># count rows — PowerShell</span>
+(Get-Content exports\anime.jsonl | Measure-Object -Line).Lines
+<span class="cm"># count rows — Bash / WSL / macOS</span>
+wc -l exports/anime.jsonl
+<span class="cm"># first record — PowerShell</span>
+Get-Content exports\anime.jsonl -TotalCount 1</pre>
+      </div>
+      <div>
+        <pre><button class="copybtn" type="button">copy</button><span class="cm"># SQLite — Python stdlib, no install</span>
+python -c "import sqlite3; con=sqlite3.connect('exports/anime_dataset.sqlite'); [print(r) for r in con.execute('select year,count(*) from anime group by year order by 2 desc limit 5')]"
+<span class="cm"># DuckDB over Parquet (pip install duckdb)</span>
+duckdb -c "select year, count(*) from read_parquet('exports/anime.parquet') group by year order by 1 desc limit 5;"</pre>
+      </div>
+    </div>
+    <pre style="margin-top:14px"><button class="copybtn" type="button">copy</button><span class="cm"># one-line Python stream (no deps)</span>
+python -c "import json; A=[json.loads(l) for l in open('exports/anime.jsonl',encoding='utf-8')]; print(len(A), sum(1 for a in A if a['year']==2020))"</pre>
+  </section>
+
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Pipeline</span>The <code>src.cli</code> driver</h2>
+    <p class="sub">One module regenerates every release artifact. Each phase is resumable.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Command</th><th>Produces</th></tr></thead>
+        <tbody>
+          <tr><td><code>python -m src.cli discover</code></td><td>IDs per source</td></tr>
+          <tr><td><code>python -m src.cli dedup</code></td><td>{{n:unique_titles}} canonical works</td></tr>
+          <tr><td><code>python -m src.cli enrich</code></td><td>depth-tier detail (episodes, roles, relations)</td></tr>
+          <tr><td><code>python -m src.cli entities</code></td><td>characters · staff · studios · episodes</td></tr>
+          <tr><td><code>python -m src.cli normalize</code></td><td>duplicate works merged, enums canonicalized, values repaired, entities deduped</td></tr>
+          <tr><td><code>python -m src.cli relationships</code></td><td>{{n:relationships}} relationship edges</td></tr>
+          <tr><td><code>python -m src.cli descriptions</code></td><td>{{n:descriptions}} descriptive texts</td></tr>
+          <tr><td><code>python -m src.cli qa</code></td><td>{{n:qa_pairs}} QA pairs</td></tr>
+          <tr><td><code>python -m src.cli instructions</code></td><td>{{n:instructions}} instruction examples</td></tr>
+          <tr><td><code>python -m src.cli franchise</code></td><td>franchise clusters</td></tr>
+          <tr><td><code>python -m src.cli rag</code></td><td>{{n:rag_chunks}} RAG chunks</td></tr>
+          <tr><td><code>python -m src.cli split</code></td><td>90/5/5 splits per work</td></tr>
+          <tr><td><code>scripts/license_tiers.py</code></td><td>per-anime license tier, manifest and subset id lists</td></tr>
+          <tr><td><code>python -m src.cli export</code></td><td>JSONL + SQLite + Parquet + CSV, with <code>split</code> and <code>license_tier</code> joined</td></tr>
+          <tr><td><code>python -m src.cli validate</code></td><td>21 quality checks over the exported files</td></tr>
+          <tr><td><code>python -m src.cli checksums</code></td><td>SHA-256 for every export</td></tr>
+          <tr><td><code>python -m src.cli report</code></td><td><code>reports/final_report.md</code> + <code>summary.json</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Train</span>Training entry points</h2>
+    <p class="sub">Full install lines and code for all nine recipes live in <a href="training.html" style="color:var(--teal)">the training page</a>.</p>
+    <pre><button class="copybtn" type="button">copy</button>pip install -r examples/training-requirements.txt
+
+python examples/finetune_lora.py \
+  --model mistralai/Mistral-7B-v0.1 \
+  --data exports/instructions.jsonl \
+  --split train --epochs 2 --output runs/anime-lora</pre>
+  </section>
+
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Preview</span>Serve the site locally</h2>
+    <pre><button class="copybtn" type="button">copy</button>python -m http.server 8000 --directory docs
+<span class="cm"># open http://localhost:8000</span></pre>
+  </section>
+
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Troubleshoot</span>Common issues</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Symptom</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td><code>database is locked</code></td><td>run pipeline phases in sequence; no parallel writers</td></tr>
+          <tr><td><code>Unknown command: X</code></td><td>run <code>python -m src.cli</code> to list valid commands</td></tr>
+          <tr><td><code>UnicodeEncodeError</code> in Windows</td><td><code>$env:PYTHONIOENCODING='utf-8'</code> (PowerShell) or <code>chcp 65001</code> (cmd)</td></tr>
+          <tr><td>Checksum mismatch</td><td>re-download the release asset or <code>python -m src.cli export</code></td></tr>
+          <tr><td>Memory spike on large JSONL</td><td>stream line-by-line (see explore examples above)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:22px"><a class="btn primary" href="COMMANDS.md">Open the full written reference</a> &nbsp; <a class="btn accent" href="training.html">Next: training guide</a></p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap cols">
+    <div><strong>Anime Text Dataset</strong> · <a href="index.html">overview</a> · <a href="training.html">training</a> · original content <a href="../LICENSE">CC-BY-4.0</a>.<br>Developer: Muhammad Muqeet · <a href="mailto:muqeet@animearray.site">muqeet@animearray.site</a> · <a href="mailto:muqeet@anitroves.com">muqeet@anitroves.com</a></div>
+    <div><a href="../README.md">README</a> · <a href="../reports/final_report.md">Final report</a></div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
+

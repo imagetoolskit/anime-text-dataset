@@ -1,0 +1,52 @@
+{
+  "seed": 42,
+  "min_anime_titles": 20000,
+  "target_anime_titles": 50000,
+  "max_runtime_hours": 12,
+  "max_source_runtime_hours": {
+    "anilist": 5,
+    "kitsu": 3,
+    "shikimori": 2,
+    "wikidata": 0.5,
+    "ann": 1,
+    "enrich_anilist": 1.0,
+    "enrich_shikimori": 1.0,
+    "enrich_roles": 1.0,
+    "enrich_related": 1.0,
+    "enrich_episodes": 1.5,
+    "refill_shikimori": 1.0,
+    "refill_anilist": 0.6,
+    "refill_kitsu": 0.25
+  },
+  "checkpoint_interval": 50,
+  "splits": { "train": 0.9, "val": 0.05, "test": 0.05 },
+  "anilist": {
+    "url": "https://graphql.anilist.co",
+    "per_minute": 28,
+    "max_id": 220000,
+    "light_batch": 50,
+    "full_batch": 15
+  },
+  "kitsu": {
+    "url": "https://kitsu.io/api/edge",
+    "per_second": 4,
+    "page_limit": 20
+  },
+  "shikimori": {
+    "url": "https://shikimori.io/api",
+    "per_second": 4,
+    "page_limit": 50
+  },
+  "wikidata": {
+    "url": "https://query.wikidata.org/sparql",
+    "per_second": 1
+  },
+  "ann": {
+    "base": "https://www.animenewsnetwork.com/encyclopedia/anime.php",
+    "per_second": 1.0,
+    "sample_size": 2000,
+    "max_id": 41000
+  },
+  "qa_pairs_per_anime": { "min": 6, "max": 14 },
+  "rag_chunk_max_chars": 1800
+}

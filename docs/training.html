@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>How to Train LLMs on the Anime Text Dataset | SFT, LoRA, QLoRA, DPO, RAG, Embeddings &amp; Classification</title>
+  <meta name="description" content="Complete guide to training language models on the Large Anime Text Dataset: instruction fine-tuning (SFT), LoRA/QLoRA, DPO preference tuning, RAG fine-tuning, domain continual pretraining, embedding training, classification, entity linking, and evaluation — with runnable Python code and hardware guidance.">
+  <meta name="keywords" content="anime LLM fine-tuning, LoRA anime model, QLoRA tutorial, DPO training, transformer fine-tune, RAG fine-tuning, sentence transformer anime, anime classification model, entity linking, SFT anime assistant">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#f7f4ee">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to Train LLMs on the Anime Text Dataset">
+  <meta property="og:description" content="Nine recipes: SFT, LoRA/QLoRA, DPO, RAG, continued pretraining, embeddings, classification, entity linking, evaluation. Runnable code included.">
+  <meta name="twitter:card" content="summary">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "How to Train LLMs on the Large Anime Text Dataset",
+    "about": ["fine-tuning", "LoRA", "QLoRA", "DPO", "RAG", "embeddings", "classification", "entity linking"],
+    "inLanguage": "en"
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,650;9..144,750&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;650&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <div class="inner">
+    <a class="brand" href="index.html">
+      <span class="cube" aria-hidden="true"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i></span>
+      <span>Anime Text Dataset<small>training</small></span>
+    </a>
+    <ul>
+      <li><a class="link" href="index.html">Overview</a></li>
+      <li><a class="link" href="explore.html">Explore</a></li>
+      <li><a class="link on" href="training.html">Training</a></li>
+      <li><a class="link" href="commands.html">Commands</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <header class="wrap hero">
+    <h1 style="max-width:18ch">Every way to <span class="accent" style="font-style:italic;color:var(--accent-ink)">train a model</span> on this dataset</h1>
+    <p class="lede">Nine proven recipes with runnable code. The full guide with setup, hardware guidance, and evaluation sits in <a href="TRAINING.md" style="color:var(--teal)">docs/TRAINING.md</a> — this page is the interactive summary.</p>
+  </header>
+
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Choose your input</span>Which file do you need?</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Training input</th><th>Rows</th><th>Best used for</th></tr></thead>
+        <tbody>
+          <tr><td><code>qa.jsonl</code></td><td class="num">291,816</td><td>SFT, RAG readers, preference tuning</td></tr>
+          <tr><td><code>instructions.jsonl</code></td><td class="num">211,569</td><td>SFT, LoRA/QLoRA, chat models</td></tr>
+          <tr><td><code>descriptions.jsonl</code></td><td class="num">35,766</td><td>domain continual pretraining</td></tr>
+          <tr><td><code>rag_chunks.jsonl</code></td><td class="num">154,640</td><td>retrieval, embeddings, RAG</td></tr>
+          <tr><td><code>anime.jsonl</code></td><td class="num">35,766</td><td>classification, ranking, KG</td></tr>
+          <tr><td><code>relationships.jsonl</code></td><td class="num">26,719</td><td>relation extraction, KG</td></tr>
+          <tr><td><code>entity_links.jsonl</code></td><td class="num">77,681</td><td>entity linking</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <strong>Always filter by <code>split</code>.</strong> Every record carries <code>train</code>/<code>val</code>/<code>test</code>, assigned per anime work. Never train on <code>val</code> or <code>test</code> rows — they exist to measure you honestly.
+    </div>
+  </section>
+
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Setup</span>Environment &amp; hardware</h2>
+    <pre><button class="copybtn" type="button">copy</button>python -m venv .venv
+source .venv/bin/activate      <span class="cm"># bash / zsh</span>
+.venv\Scripts\activate         <span class="cm"># Windows PowerShell / CMD</span>
+pip install -r requirements.txt
+pip install -r examples/training-requirements.txt</pre>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Model size</th><th>Method</th><th>Minimum GPU</th></tr></thead>
+        <tbody>
+          <tr><td>0.5B–3B</td><td>full fine-tune</td><td class="num">16 GB</td></tr>
+          <tr><td>3B–7B</td><td>LoRA</td><td class="num">8–16 GB</td></tr>
+          <tr><td>7B–13B</td><td>QLoRA 4-bit</td><td class="num">8–12 GB</td></tr>
+          <tr><td>13B–70B</td><td>QLoRA 4-bit</td><td class="num">24–48 GB</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="callout"><strong>Rule of thumb:</strong> LoRA/QLoRA gives ~90% of full fine-tuning's benefit at ~10% of the cost. This 35,766-work corpus fine-tunes fast.</p>
+  </section>
+
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Recipe 1</span>Instruction fine-tuning (SFT)</h2>
+    <p class="sub">Teach a chat model to answer anime questions using <code>qa.jsonl</code>.</p>
+    <pre><button class="copybtn" type="button">copy</button>from transformers import AutoTokenizer, AutoModelForCausalLM, Trainer, \
+    TrainingArguments, DataCollatorForLanguageModeling
+from datasets import Dataset
+import json
+
+tok = AutoTokenizer.from_pretrained("HuggingFaceTB/SmolLM2-1.7B-Instruct")
+tok.pad_token = tok.eos_token
+
+rows = []
+for line in open("exports/qa.jsonl", encoding="utf-8"):
+    d = json.loads(line)
+    if d.get("split") != "train":
+        continue
+    chat = [{"role": "user", "content": d["question"]},
+            {"role": "assistant", "content": d["answer"]}]
+    rows.append({"text": tok.apply_chat_template(chat, tokenize=False)})
+ds = Dataset.from_list(rows[:50_000])
+
+def tok_fn(b): return tok(b["text"], truncation=True, max_length=1024)
+ds = ds.map(tok_fn, batched=True, remove_columns=["text"])
+
+model = AutoModelForCausalLM.from_pretrained("HuggingFaceTB/SmolLM2-1.7B-Instruct")
+args = TrainingArguments(output_dir="runs/sft-qa", per_device_train_batch_size=4,
+                         num_train_epochs=2, learning_rate=2e-5, report_to="none")
+Trainer(model=model, args=args, train_dataset=ds,
+        data_collator=DataCollatorForLanguageModeling(tok, mlm=False)).train()</pre>
+  </section>
+
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Recipe 2</span>LoRA / QLoRA (small GPUs)</h2>
+    <p class="sub">Fine-tune a 7–13B model on 8–16GB VRAM with <code>peft</code> adapters.</p>
+    <pre><button class="copybtn" type="button">copy</button>from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+from peft import LoraConfig, get_peft_model
+from trl import SFTTrainer, SFTConfig
+
+MODEL = "mistralai/Mistral-7B-v0.1"
+tok = AutoTokenizer.from_pretrained(MODEL); tok.pad_token = tok.eos_token
+
+quant = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4",
+                           bnb_4bit_compute_dtype="float16")   <span class="cm"># QLoRA</span>
+model = AutoModelForCausalLM.from_pretrained(MODEL, quantization_config=quant,
+                                             device_map="auto")
+model = get_peft_model(model, LoraConfig(r=16, lora_alpha=32,
+        target_modules=["q_proj","k_proj","v_proj","o_proj"], lora_dropout=0.05,
+        task_type="CAUSAL_LM"))
+model.print_trainable_parameters()   <span class="cm"># ~0.5-2% of total</span>
+
+cfg = SFTConfig(output_dir="runs/lora-anime", per_device_train_batch_size=2,
+                num_train_epochs=1, learning_rate=2e-4, report_to="none")
+SFTTrainer(model=model, args=cfg, train_dataset=ds, processing_class=tok).train()
+model.save_pretrained("runs/lora-anime/final")   <span class="cm"># adapters only</span></pre>
+  </section>
+
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Recipe 3</span>Preference tuning (DPO)</h2>
+    <p class="sub">Train the model to prefer the grounded answer over a weak one.</p>
+    <pre><button class="copybtn" type="button">copy</button>from trl import DPOTrainer, DPOConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from datasets import Dataset
+import json
+
+pairs = []
+for line in open("exports/qa.jsonl", encoding="utf-8"):
+    d = json.loads(line)
+    if d.get("split") != "train":
+        continue
+    pairs.append({
+      "prompt":   [{"role": "user", "content": d["question"]}],
+      "chosen":   [{"role": "assistant", "content": d["answer"]}],
+      "rejected": [{"role": "assistant", "content": "I don't know."}],
+    })
+    if len(pairs) &gt;= 20_000: break
+
+# Frozen reference: a second copy of the SFT model, never trained.
+model = AutoModelForCausalLM.from_pretrained("runs/lora-anime/merged")
+ref   = AutoModelForCausalLM.from_pretrained("runs/lora-anime/merged")
+tok   = AutoTokenizer.from_pretrained("runs/lora-anime/merged")
+
+cfg = DPOConfig(output_dir="runs/dpo-anime", beta=0.1,
+                per_device_train_batch_size=1, learning_rate=1e-5,
+                max_length=1024, report_to="none")
+DPOTrainer(model=model, ref_model=ref, args=cfg,
+           train_dataset=Dataset.from_list(pairs), processing_class=tok).train()</pre>
+    <p class="callout"><strong>Order matters:</strong> SFT first (Recipe 1/2), DPO on top. Logging real base-model generations as <em>rejected</em> gives the best separation.</p>
+  </section>
+
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Recipe 4</span>RAG &amp; retrieval</h2>
+    <p class="sub">Index <code>rag_chunks.jsonl</code> with FAISS, then fine-tune a reader on retrieved context.</p>
+    <pre><button class="copybtn" type="button">copy</button>import json, faiss, numpy as np
+from sentence_transformers import SentenceTransformer
+
+embed = SentenceTransformer("all-MiniLM-L6-v2")
+texts  = [json.loads(l)["text"] for l in open("exports/rag_chunks.jsonl", encoding="utf-8")]
+vecs   = embed.encode(texts, batch_size=64, show_progress_bar=True)
+
+idx    = faiss.IndexFlatIP(vecs.shape[1]); idx.add(np.asarray(vecs, dtype=np.float32))
+faiss.write_index(idx, "runs/rag.index")     <span class="cm"># + save texts for reuse</span>
+
+<span class="cm"># fine-tune a reader with retrieved context prepended to each QA prompt</span></pre>
+  </section>
+
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Recipe 5</span>Domain continued pretraining</h2>
+    <p class="sub">Make a base model fluent in anime facts using <code>descriptions.jsonl</code>.</p>
+    <pre><button class="copybtn" type="button">copy</button>from transformers import AutoTokenizer, AutoModelForCausalLM, Trainer, \
+    TrainingArguments, DataCollatorForLanguageModeling
+from datasets import Dataset
+import json
+
+tok = AutoTokenizer.from_pretrained("microsoft/phi-2"); tok.pad_token = tok.eos_token
+texts = [json.loads(l)["text"] for l in open("exports/descriptions.jsonl", encoding="utf-8")
+         if json.loads(l).get("split") == "train"]
+ds  = Dataset.from_list([{"text": t} for t in texts if t])
+ds  = ds.map(lambda b: tok(b["text"], truncation=True, max_length=2048), batched=True,
+             remove_columns=["text"])
+
+Trainer(model=AutoModelForCausalLM.from_pretrained("microsoft/phi-2"),
+        args=TrainingArguments(output_dir="runs/pretrain-anime",
+                               per_device_train_batch_size=4, num_train_epochs=1,
+                               learning_rate=1e-5, report_to="none"),
+        train_dataset=ds,
+        data_collator=DataCollatorForLanguageModeling(tok, mlm=False)).train()</pre>
+  </section>
+
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Recipe 6</span>Embedding training</h2>
+    <p class="sub">Train a domain embedder for anime retrieval with QA pairs as (anchor, positive).</p>
+    <pre><button class="copybtn" type="button">copy</button>from sentence_transformers import SentenceTransformer, InputExample, losses
+from torch.utils.data import DataLoader
+import json
+
+model = SentenceTransformer("all-MiniLM-L6-v2")
+examples = []
+for line in open("exports/qa.jsonl", encoding="utf-8"):
+    d = json.loads(line)
+    if d.get("split") == "train":
+        examples.append(InputExample(texts=[d["question"], d["answer"]]))
+
+model.fit(train_objectives=[(DataLoader(examples, batch_size=64, shuffle=True),
+                             losses.MultipleNegativesRankingLoss(model))],
+          epochs=3, warmup_steps=500, output_path="runs/anime-embedder")</pre>
+  </section>
+
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Recipe 7</span>Classification &amp; ranking</h2>
+    <p class="sub">Multi-label genre classifier trained directly on <code>anime.jsonl</code>.</p>
+    <pre><button class="copybtn" type="button">copy</button>from transformers import AutoTokenizer, AutoModelForSequenceClassification, \
+    Trainer, TrainingArguments
+from datasets import Dataset
+import json
+
+GENRES = ["Action","Drama","Sci-Fi","Comedy","Romance","Fantasy","Horror",
+          "Slice of Life","Mecha","Sports"]   <span class="cm"># extend from genres.jsonl</span>
+tok = AutoTokenizer.from_pretrained("distilbert-base-uncased")
+rows = []
+for line in open("exports/anime.jsonl", encoding="utf-8"):
+    d = json.loads(line)
+    if d.get("split") != "train":
+        continue
+    rows.append({"title": d["title_canonical"],
+                 "labels": [1.0 if g in (d.get("genres") or []) else 0.0 for g in GENRES]})
+ds = Dataset.from_list(rows)
+ds = ds.map(lambda b: {"labels": b["labels"],
+                       **tok(b["title"], truncation=True, padding="max_length", max_length=64)},
+            batched=True)
+
+model = AutoModelForSequenceClassification.from_pretrained(
+    "distilbert-base-uncased", num_labels=len(GENRES), problem_type="multi_label_classification")
+Trainer(model=model,
+        args=TrainingArguments(output_dir="runs/genre-clf", num_train_epochs=3,
+                               per_device_train_batch_size=32, learning_rate=3e-5,
+                               report_to="none"),
+        train_dataset=ds).train()</pre>
+  </section>
+
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Recipes 8–9</span>Entity linking &amp; evaluation</h2>
+    <div class="grid-2">
+      <div class="card"><h3>Entity linking</h3><p>Use <code>entity_links.jsonl</code> to train a retriever that maps a source string to a canonical <code>anime_id</code>; score top-k accuracy on <code>test</code> rows. Use <code>relationships.jsonl</code> to train a typed relation classifier over description pairs.</p></div>
+      <div class="card"><h3>Evaluation</h3><p>Evaluate only on <code>split == "test"</code>. ROUGE/BLEURT for generation, Recall@k/MRR for retrieval, macro-F1 for classification, Spearman ρ for ranking. Full metrics table in <a href="TRAINING.md" style="color:var(--teal)">TRAINING.md</a>.</p></div>
+    </div>
+  </section>
+
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Licensing</span>Filter by tier before you publish</h2>
+    <p class="sub">Every exported row carries a <code>license_tier</code>, so no join is needed to keep a training run inside one obligation.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Tier</th><th>Contributing source</th><th>What it permits</th></tr></thead>
+        <tbody>
+          <tr><td><code>cc0_only</code></td><td>Wikidata</td><td>Reuse freely; attribution is courtesy.</td></tr>
+          <tr><td><code>permission_required</code></td><td>AniList, Kitsu</td><td>API use is granted, redistribution is not — obtain written permission first.</td></tr>
+          <tr><td><code>unresolved</code></td><td>Shikimori</td><td>No permission basis located. Do not redistribute.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <pre style="margin-top:14px"><button class="copybtn" type="button">copy</button><span class="cm"># train only on rows whose provenance is cleanest</span>
+import json
+CLEAN = {"cc0_only"}
+rows = (json.loads(l) for l in open("exports/instructions.jsonl", encoding="utf-8"))
+train = [r for r in rows if r["split"] == "train" and r["license_tier"] in CLEAN]</pre>
+    <p style="margin-top:16px">The tier describes this dataset's provenance obligation, not the copyright status of the underlying work. Full definitions, counts and known gaps: <a href="../exports/license_manifest.json" style="color:var(--teal)">license_manifest.json</a> and <a href="LICENSE_NOTES.md" style="color:var(--teal)">LICENSE_NOTES.md</a>.</p>
+    <p style="margin-top:10px">No upstream prose ships. Plot synopses, character biographies and episode summaries are third-party expression, so they are dropped from every export rather than paraphrased. What remains is factual metadata, short names, and text generated by this project. The artifact-by-artifact audit, including what the maintainer does not claim, is in <a href="../LICENSE_AUDIT.md" style="color:var(--teal)">LICENSE_AUDIT.md</a>.</p>
+  </section>
+
+  <section class="wrap reveal">
+    <h2><span class="eyebrow">Memory</span>Efficiency cheat sheet</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Technique</th><th>VRAM saving</th></tr></thead>
+        <tbody>
+          <tr><td>Gradient accumulation</td><td>batches larger than VRAM</td></tr>
+          <tr><td><code>gradient_checkpointing=True</code></td><td>~30–50%</td></tr>
+          <tr><td>fp16 / bf16</td><td>~50%</td></tr>
+          <tr><td>QLoRA 4-bit</td><td>~4× vs full</td></tr>
+          <tr><td>Truncate to 1024 tokens</td><td>large constant</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:22px"><a class="btn primary" href="TRAINING.md">Open the full guide (4000+ words, all code)</a> &nbsp; <a class="btn" href="commands.html">Command reference</a></p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap cols">
+    <div><strong>Anime Text Dataset</strong> · <a href="index.html">overview</a> · <a href="commands.html">commands</a> · source content per-source terms; original content <a href="../LICENSE">CC-BY-4.0</a>.<br>Developer: Muhammad Muqeet · <a href="mailto:muqeet@animearray.site">muqeet@animearray.site</a> · <a href="mailto:muqeet@anitroves.com">muqeet@anitroves.com</a></div>
+    <div><a href="../README.md">README</a> · <a href="../DATASET_CARD.md">Dataset card</a></div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
+

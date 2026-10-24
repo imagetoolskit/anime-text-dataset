@@ -1,0 +1,34 @@
+Large Anime Text Dataset
+========================
+
+Developer & maintainer: Muhammad Muqeet
+Contact: muqeet@animearray.site, muqeet@anitroves.com
+
+This product/package contains aggregated data sourced from the following
+providers. Underlying source content remains subject to each provider's
+terms as recorded in this repository's exports/sources.jsonl and
+exports/provenance.jsonl.
+
+  - AniList           (https://anilist.co)
+  - Kitsu             (https://kitsu.io)            — public API, no redistribution grant
+  - Shikimori         (https://shikimori.one)
+  - Wikidata          (https://wikidata.org)        — CC0-1.0
+  - Anime News
+    Network           (https://www.animenewsnetwork.com/encyclopedia/)
+
+License and use:
+  - Original code, documentation, selection/arrangement and project-generated
+    text are licensed under Creative Commons Attribution 4.0 International
+    (CC-BY-4.0).
+  - Source-provided content is governed by each provider's terms; see
+    docs/LICENSE_NOTES.md before redistributing source-derived fields.
+  - No upstream plot synopsis, character biography or episode summary is
+    included. Those third-party texts are removed from every export rather
+    than paraphrased. LICENSE_AUDIT.md records this per artifact.
+
+Attribution, per-entity provenance and license notes are embedded in:
+  exports/provenance.jsonl   (per-entity source, license note, URL)
+  exports/sources.jsonl      (per-source terms, retrieval date/method)
+
+See ACKNOWLEDGMENTS.md for human-readable attribution and LICENSE_AUDIT.md
+for the artifact-by-artifact rights inventory.
