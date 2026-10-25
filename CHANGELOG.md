@@ -3,7 +3,7 @@
 All notable changes to this dataset project are recorded here. Large data
 files ship as release assets, not through Git history.
 
-## [2.0.0] — 2026-10-24
+## [2.0.0] — 2026-10-25
 
 Correctness, consistency and licensing release. Every derived table was rebuilt
 from a deeper enrichment pass; several data-integrity defects were fixed.
@@ -88,7 +88,7 @@ from a deeper enrichment pass; several data-integrity defects were fixed.
 - `scripts/sync_docs.py` regenerates the count tables in `README.md`,
   `DATASET_CARD.md`, `docs/TRAINING.md` and the `{{n:…}}` tokens in the HTML
   pages from `reports/summary.json`; `--check` fails when they are stale.
-- Test suite expanded to unit tests plus an end-to-end fixture build (13 tests),
+- Test suite expanded to unit tests plus an end-to-end fixture build, covering
   covering normalization, tier coverage, RAG kinds, relation filtering and the
   checksums manifest.
 
@@ -105,6 +105,9 @@ from a deeper enrichment pass; several data-integrity defects were fixed.
   freezing the numbers.
 - The CLI answers `-h` / `--help`; one-off probe scripts moved out of `tests/`
   into `tools/dev/` with a warning README.
+- `config/.env.example` is now true: `src/config.py` applies the documented
+  `ATDS_*` environment overrides, loads `.env` from the repository root, and
+  coerces values to the type of the setting they replace.
 
 **Documentation**
 

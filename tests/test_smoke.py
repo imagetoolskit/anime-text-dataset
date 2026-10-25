@@ -157,3 +157,55 @@ def test_cli_help_lists_every_command():
     assert main([]) == 2
     for command in COMMANDS:
         assert command in HELP
+
+
+# --- licensing model -------------------------------------------------------
+
+def test_license_tiers_use_three_tier_model():
+    import license_tiers
+
+    assert license_tiers.PRECEDENCE == [
+        "unresolved", "permission_required", "cc0_only"]
+    assert set(license_tiers.TIER_DEFINITIONS) == set(license_tiers.PRECEDENCE)
+    assert license_tiers.SOURCE_TIER == {
+        "anilist": "permission_required",
+        "kitsu": "permission_required",
+        "shikimori": "unresolved",
+        "ann": "unresolved",
+        "wikidata": "cc0_only",
+    }
+    # Kitsu publishes no CC-BY-SA data grant; only API terms.
+    assert "cc_by_sa" not in license_tiers.SOURCE_TIER.values()
+    # Commercial-clear means no permission request is outstanding.
+    assert license_tiers.TIER_DEFINITIONS["cc0_only"]["commercial_use"] == "allowed"
+
+
+# --- configuration ---------------------------------------------------------
+
+
+def test_config_env_overrides_are_typed(monkeypatch):
+    from src import config
+
+    monkeypatch.setenv("ATDS_SEED", "7")
+    monkeypatch.setenv("ATDS_SHIKIMORI_RPS", "2.5")
+    monkeypatch.setenv("ATDS_MAX_RUNTIME_KITSU", "0.25")
+    cfg = config.load()
+    assert cfg["seed"] == 7
+    assert cfg["shikimori"]["per_second"] == 2.5
+    assert cfg["max_source_runtime_hours"]["kitsu"] == 0.25
+    assert cfg["kitsu"]["per_second"] == 4
+
+
+def test_dotenv_does_not_override_real_environment(tmp_path, monkeypatch):
+    from src import config
+
+    env_file = tmp_path / ".env"
+    env_file.write_text("ATDS_SEED=99\n# comment\n\nATDS_ANN_RPS=0.5\n",
+                        encoding="utf-8")
+    monkeypatch.setenv("ATDS_SEED", "5")
+    monkeypatch.delenv("ATDS_ANN_RPS", raising=False)
+    config._load_dotenv(env_file)
+    import os
+    assert os.environ["ATDS_SEED"] == "5"
+    assert os.environ["ATDS_ANN_RPS"] == "0.5"
+    monkeypatch.delenv("ATDS_ANN_RPS", raising=False)

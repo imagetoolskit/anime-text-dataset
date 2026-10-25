@@ -58,7 +58,9 @@ def build_card(repo_id: str) -> str:
     ])
     url = f"https://huggingface.co/datasets/{repo_id}"
     return f"""---
-license: cc-by-4.0
+license: other
+license_name: cc-by-4.0-original-material
+license_link: https://creativecommons.org/licenses/by/4.0/
 language:
   - en
 tags:
@@ -102,10 +104,12 @@ rag = load_dataset("json", data_files="rag_chunks.jsonl")
 
 ## License & attribution
 
-Original and derived content is CC-BY-4.0 (Muhammad Muqeet). Source-provided
-factual metadata remains subject to provider terms; see `NOTICE`,
-`sources.jsonl`, `provenance.jsonl` and `docs/LICENSE_NOTES.md` before
-redistribution. No upstream synopsis or biography prose is included.
+Original code, documentation, selection/arrangement and project-generated text
+are CC-BY-4.0 (Muhammad Muqeet). Source-provided factual metadata remains
+subject to provider terms; see `NOTICE`, `sources.jsonl`, `provenance.jsonl` and
+`docs/LICENSE_NOTES.md` before redistribution. Every anime row carries a
+`license_tier` (`cc0_only`, `permission_required`, `unresolved`) defined in
+`license_manifest.json`. No upstream synopsis or biography prose is included.
 
 ## Citation
 

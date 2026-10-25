@@ -9,7 +9,7 @@ authors:
     given-names: Muhammad
     email: muqeet@animearray.site
 type: dataset
-date-released: 2026-10-24
+date-released: 2026-10-25
 license: CC-BY-4.0
 keywords:
   - anime
@@ -27,5 +27,5 @@ preferred-citation:
       given-names: Muhammad
       email: muqeet@animearray.site
   version: 2.0.0
-  date-released: 2026-10-24
+  date-released: 2026-10-25
   license: CC-BY-4.0

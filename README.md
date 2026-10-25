@@ -39,16 +39,16 @@
 | Metric | Value |
 | --- | --- |
 | Unique anime works with at least one title | **35,766** |
-| Characters | 215,926 |
-| Staff credits | 414,772 |
-| Episodes | 108,359 |
-| Alternative titles | 130,224 |
-| Relationship edges | 26,719 |
-| Franchise clusters | 29,257 |
+| Characters | 283,477 |
+| Staff credits | 535,642 |
+| Episodes | 276,763 |
+| Alternative titles | 135,425 |
+| Relationship edges | 39,226 |
+| Franchise clusters | 23,980 |
 | Record summaries | 35,766 |
-| Question/answer pairs | 291,816 |
-| Instruction-tuning examples | 211,569 |
-| RAG chunks | 154,640 |
+| Question/answer pairs | 305,175 |
+| Instruction-tuning examples | 235,395 |
+| RAG chunks | 179,792 |
 | Split: train / val / test | 32,189 / 1,788 / 1,789 |
 
 Coverage of the anime table (share of rows carrying a value):
@@ -57,13 +57,13 @@ Coverage of the anime table (share of rows carrying a value):
 | --- | ---: |
 | Year | 95% |
 | Episode count | 94% |
-| Per-episode records | 18% |
-| Studios | 62% |
-| Genres | 74% |
-| Characters | 38% |
+| Per-episode records | 60% |
+| Studios | 63% |
+| Genres | 77% |
+| Characters | 50% |
 | Voice actors | 33% |
-| Staff credits | 53% |
-| Relationships | 33% |
+| Staff credits | 65% |
+| Relationships | 50% |
 <!-- counts:end -->
 
 Every export ships with SHA-256 checksums, and `python -m src.cli validate` runs

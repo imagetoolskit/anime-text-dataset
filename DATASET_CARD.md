@@ -5,7 +5,7 @@
 **Primary language:** en (titles and localized names also span ja/romaji/ru and others, labelled per field)
 **Text-only:** yes — no images, video, audio, subtitles, lyrics, or artwork
 **Collection date:** see `exports/sources.jsonl` (`retrieval_date` per source); the
-collection was refreshed on 2026-10-24
+collection was refreshed on 2026-10-25
 **Data cutoff:** the retrieval date of each source, recorded per source
 **Statement:** factual metadata corpus with per-record provenance, confidence and a
 redistribution tier.
@@ -20,10 +20,10 @@ redistribution tier.
 | Field | Value |
 | --- | --- |
 | Unique anime works | **35,766** |
-| Characters / staff credits | 215,926 / 414,772 |
-| Episodes | 108,359 |
-| QA pairs / instructions / RAG chunks | 291,816 / 211,569 / 154,640 |
-| Alternative titles / relationship edges | 130,224 / 26,719 |
+| Characters / staff credits | 283,477 / 535,642 |
+| Episodes | 276,763 |
+| QA pairs / instructions / RAG chunks | 305,175 / 235,395 / 179,792 |
+| Alternative titles / relationship edges | 135,425 / 39,226 |
 | Descriptions | 35,766 |
 | License tiers | 35,766 |
 | Split | train 32,189 / val 1,788 / test 1,789 |

@@ -320,9 +320,11 @@ def check_qa_field_resolution(conn, sample: int = 5000) -> bool:
             sql = FIELD_SQL.get(f)
             if sql is None:
                 continue
-            if multi_hop:
+            if multi_hop and f != "relationships":
                 # A multi-hop row asks about the *related* work, so resolve the
-                # field through any linked anime rather than the subject.
+                # hop target through any linked anime rather than the subject.
+                # `relationships` is the navigation field and belongs to the
+                # subject, so it is checked against the subject below.
                 present = conn.execute(
                     "select exists (select 1 from relationships rl "
                     "join anime a on a.anime_id = rl.other_anime_id "

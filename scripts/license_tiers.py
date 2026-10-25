@@ -71,14 +71,11 @@ TIER_DEFINITIONS = {
 
 
 def get_sources(exports: Path | None = None) -> list[dict]:
-    """Source registry: from the export when it exists, else straight from the
-    shared in-memory definition, so tiering works before `export` has run."""
-    path = (exports or (ROOT / "exports")) / "sources.jsonl"
-    if path.exists():
-        rows = [json.loads(line) for line in
-                path.read_text(encoding="utf-8").splitlines() if line.strip()]
-        if rows:
-            return rows
+    """Source registry, taken from the code that also writes sources.jsonl.
+
+    Reading the previous export here would carry a one-release lag: tiering runs
+    before export, so a stale file could label rows with superseded terms.
+    """
     from src.pipeline.export import source_status
     return source_status()
 

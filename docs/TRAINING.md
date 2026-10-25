@@ -33,16 +33,16 @@
 <!-- counts:start -->
 | Training input | File | Rows | Best used for |
 | --- | --- | ---: | --- |
-| QA pairs (incl. deliberate abstentions) | `exports/qa.jsonl` | 291,816 | SFT, RAG readers, preference tuning |
-| Instruction examples | `exports/instructions.jsonl` | 211,569 | SFT, LoRA/QLoRA, chat models |
+| QA pairs (incl. deliberate abstentions) | `exports/qa.jsonl` | 305,175 | SFT, RAG readers, preference tuning |
+| Instruction examples | `exports/instructions.jsonl` | 235,395 | SFT, LoRA/QLoRA, chat models |
 | Grounded descriptive text | `exports/descriptions.jsonl` | 35,766 | continual pretraining |
-| RAG chunks + `source_refs` | `exports/rag_chunks.jsonl` | 154,640 | retrieval, embeddings, RAG |
+| RAG chunks + `source_refs` | `exports/rag_chunks.jsonl` | 179,792 | retrieval, embeddings, RAG |
 | Canonical records | `exports/anime.jsonl` | 35,766 | classification, ranking, KG |
-| Characters | `exports/characters.jsonl` | 215,926 | character extraction, KG |
-| Staff credits | `exports/staff.jsonl` | 414,772 | crew extraction, KG |
-| Episodes | `exports/episodes.jsonl` | 108,359 | episode QA (Kitsu-linked works only) |
-| Relation edges | `exports/relationships.jsonl` | 26,719 | relation extraction, KG |
-| Alternative titles | `exports/alt_titles.jsonl` | 130,224 | title normalization, alias resolution |
+| Characters | `exports/characters.jsonl` | 283,477 | character extraction, KG |
+| Staff credits | `exports/staff.jsonl` | 535,642 | crew extraction, KG |
+| Episodes | `exports/episodes.jsonl` | 276,763 | episode QA (Kitsu-linked works only) |
+| Relation edges | `exports/relationships.jsonl` | 39,226 | relation extraction, KG |
+| Alternative titles | `exports/alt_titles.jsonl` | 135,425 | title normalization, alias resolution |
 | Per-anime license tiers | `exports/license_tiers.jsonl` | 35,766 | filtering before publication |
 | Split field on every record | every table | — | leakage-free train/val/test |
 <!-- counts:end -->

@@ -16,11 +16,11 @@
     "anilist:media_light": 22617,
     "ann:page": 789,
     "kitsu:anime": 22494,
-    "kitsu:episodes": 111427,
+    "kitsu:episodes": 280137,
     "shikimori:anime": 24009,
-    "shikimori:detail": 22683,
-    "shikimori:related": 5441,
-    "shikimori:roles": 5597,
+    "shikimori:detail": 23602,
+    "shikimori:related": 23580,
+    "shikimori:roles": 23580,
     "wikidata:item": 8561
   },
   "splits": {
@@ -29,24 +29,24 @@
     "val": 1788
   },
   "entities": {
-    "characters": 215926,
-    "staff": 414772,
-    "episodes": 108359,
-    "relationships": 26719,
+    "characters": 283477,
+    "staff": 535642,
+    "episodes": 276763,
+    "relationships": 39226,
     "descriptions": 35766,
-    "qa_pairs": 291816,
-    "instructions": 211569,
-    "rag_chunks": 154640,
-    "alt_titles": 130224,
-    "anime_genres": 71271,
+    "qa_pairs": 305175,
+    "instructions": 235395,
+    "rag_chunks": 179792,
+    "alt_titles": 135425,
+    "anime_genres": 74870,
     "anime_themes": 139413,
-    "anime_studios": 57125,
+    "anime_studios": 59628,
     "splits": 35766,
-    "provenance": 131635,
+    "provenance": 153892,
     "license_tiers": 35766,
-    "franchises": 29257,
+    "franchises": 23980,
     "franchise_rows": 35766,
-    "studios": 2895,
+    "studios": 2966,
     "genres": 43,
     "themes": 422
   },
@@ -68,16 +68,16 @@
       "share": 0.942
     },
     "episodes (count)": {
-      "anime": 33773,
-      "share": 0.9443
+      "anime": 33778,
+      "share": 0.9444
     },
     "duration_min": {
-      "anime": 31034,
-      "share": 0.8677
+      "anime": 31520,
+      "share": 0.8813
     },
     "mean_score": {
-      "anime": 21338,
-      "share": 0.5966
+      "anime": 21351,
+      "share": 0.597
     },
     "popularity": {
       "anime": 27755,
@@ -100,112 +100,112 @@
       "share": 0.9409
     },
     "studios": {
-      "anime": 22022,
-      "share": 0.6157
+      "anime": 22688,
+      "share": 0.6343
     },
     "genres": {
-      "anime": 26603,
-      "share": 0.7438
+      "anime": 27629,
+      "share": 0.7725
     },
     "themes": {
       "anime": 17464,
       "share": 0.4883
     },
     "alt titles": {
-      "anime": 32437,
-      "share": 0.9069
+      "anime": 32518,
+      "share": 0.9092
     },
     "characters": {
-      "anime": 13715,
-      "share": 0.3835
+      "anime": 17939,
+      "share": 0.5016
     },
     "character roles": {
-      "anime": 13715,
-      "share": 0.3835
+      "anime": 17939,
+      "share": 0.5016
     },
     "voice actors": {
       "anime": 11709,
       "share": 0.3274
     },
     "staff credits": {
-      "anime": 19119,
-      "share": 0.5346
+      "anime": 23285,
+      "share": 0.651
     },
     "episode list": {
-      "anime": 6472,
-      "share": 0.181
+      "anime": 21604,
+      "share": 0.604
     },
     "episode titles": {
-      "anime": 2348,
-      "share": 0.0656
+      "anime": 3535,
+      "share": 0.0988
     },
     "relationships": {
-      "anime": 11943,
-      "share": 0.3339
+      "anime": 17948,
+      "share": 0.5018
     }
   },
   "qa_types": {
-    "type": 26430,
-    "air_date": 24755,
-    "episode_count": 24614,
-    "japanese_title": 24321,
-    "alt_titles": 22038,
-    "runtime": 21931,
-    "genres": 18022,
-    "studio": 13948,
-    "score": 13641,
-    "source": 12080,
-    "english_title": 11583,
-    "favourites": 10384,
-    "themes": 10259,
-    "director": 7311,
-    "character_role": 7250,
-    "characters": 7211,
-    "relationship": 5388,
-    "relationship_reverse": 5364,
-    "multi_hop_episodes": 5158,
-    "multi_hop_studio": 4904,
-    "composer": 4507,
-    "franchise": 4506,
-    "writer": 4218,
-    "episode_title": 1171,
-    "unknown_studio": 404,
-    "unknown_score": 366,
-    "unknown_episodes": 52
+    "type": 25141,
+    "air_date": 23329,
+    "episode_count": 23246,
+    "japanese_title": 22976,
+    "runtime": 21107,
+    "alt_titles": 20943,
+    "genres": 17795,
+    "studio": 13581,
+    "score": 12619,
+    "source": 11780,
+    "english_title": 11015,
+    "favourites": 10183,
+    "themes": 10054,
+    "character_role": 9850,
+    "characters": 9730,
+    "director": 9277,
+    "franchise": 8333,
+    "relationship": 8151,
+    "relationship_reverse": 8080,
+    "multi_hop_episodes": 7988,
+    "multi_hop_studio": 6681,
+    "composer": 5483,
+    "writer": 5285,
+    "episode_title": 1744,
+    "unknown_score": 389,
+    "unknown_studio": 361,
+    "unknown_episodes": 47,
+    "voice_actor": 7
   },
   "instruction_types": {
     "record_summarization": 35766,
     "metadata_extraction": 34991,
     "json_repair": 34530,
     "title_normalization": 34430,
-    "staff_credits": 19118,
-    "character_extraction": 13673,
-    "relation_extraction": 11943,
-    "comparison": 8710,
+    "staff_credits": 23284,
+    "relation_extraction": 17948,
+    "character_extraction": 17917,
+    "franchise_grouping": 11876,
+    "comparison": 11434,
     "entity_resolution": 8413,
-    "franchise_grouping": 6249,
-    "episode_list": 2270,
-    "abstention": 1476
+    "episode_list": 3405,
+    "abstention": 1401
   },
   "descriptions": {
     "record_summary": 35766
   },
   "rag_kinds": {
-    "record_summary": 35606,
-    "title_aliases": 33306,
-    "characters": 27077,
-    "staff": 24446,
-    "relations": 19451,
+    "record_summary": 35609,
+    "characters": 34737,
+    "title_aliases": 33465,
+    "staff": 31096,
+    "relations": 28809,
     "voice_cast": 11709,
-    "episodes": 3045
+    "episodes": 4367
   },
   "license_tiers": {
     "unresolved": 23467,
-    "permission_required": 8229,
-    "cc_by_sa": 3101,
+    "permission_required": 11330,
     "cc0_only": 969
   },
-  "episode_list_share": 0.181,
+  "episode_list_share": 0.604,
   "validation": {
     "min_anime_titles": "pass",
     "unique_source_remote_ids": "pass",
@@ -230,5 +230,5 @@
     "export_schema": "pass"
   },
   "failed_checks": [],
-  "generated_at": "2026-10-24T14:32:06+00:00"
+  "generated_at": "2026-10-25T16:36:16+00:00"
 }
