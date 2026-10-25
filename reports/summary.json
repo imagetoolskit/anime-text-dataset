@@ -1,5 +1,5 @@
 {
-  "version": "2.0.0",
+  "version": "2.1.0",
   "unique_titles": 35766,
   "total_anime_rows": 35766,
   "min_gate_met": true,
@@ -33,10 +33,10 @@
     "staff": 535642,
     "episodes": 276763,
     "relationships": 39226,
-    "descriptions": 35766,
-    "qa_pairs": 305175,
+    "descriptions": 63396,
+    "qa_pairs": 317907,
     "instructions": 235395,
-    "rag_chunks": 179792,
+    "rag_chunks": 206906,
     "alt_titles": 135425,
     "anime_genres": 74870,
     "anime_themes": 139413,
@@ -145,34 +145,35 @@
     }
   },
   "qa_types": {
-    "type": 25141,
-    "air_date": 23329,
-    "episode_count": 23246,
-    "japanese_title": 22976,
-    "runtime": 21107,
-    "alt_titles": 20943,
-    "genres": 17795,
-    "studio": 13581,
-    "score": 12619,
-    "source": 11780,
-    "english_title": 11015,
-    "favourites": 10183,
-    "themes": 10054,
-    "character_role": 9850,
-    "characters": 9730,
-    "director": 9277,
-    "franchise": 8333,
-    "relationship": 8151,
-    "relationship_reverse": 8080,
-    "multi_hop_episodes": 7988,
-    "multi_hop_studio": 6681,
-    "composer": 5483,
-    "writer": 5285,
-    "episode_title": 1744,
-    "unknown_score": 389,
-    "unknown_studio": 361,
-    "unknown_episodes": 47,
-    "voice_actor": 7
+    "type": 24430,
+    "air_date": 22797,
+    "episode_count": 22779,
+    "japanese_title": 22452,
+    "synopsis": 21521,
+    "runtime": 20705,
+    "alt_titles": 20300,
+    "genres": 17347,
+    "studio": 13204,
+    "score": 12436,
+    "source": 11449,
+    "english_title": 10438,
+    "favourites": 9735,
+    "themes": 9586,
+    "characters": 9428,
+    "character_role": 9265,
+    "director": 8989,
+    "franchise": 8131,
+    "relationship_reverse": 8027,
+    "relationship": 7956,
+    "multi_hop_episodes": 7749,
+    "multi_hop_studio": 6310,
+    "composer": 5268,
+    "writer": 5173,
+    "episode_title": 1691,
+    "unknown_score": 368,
+    "unknown_studio": 325,
+    "unknown_episodes": 42,
+    "voice_actor": 6
   },
   "instruction_types": {
     "record_summarization": 35766,
@@ -189,7 +190,8 @@
     "abstention": 1401
   },
   "descriptions": {
-    "record_summary": 35766
+    "record_summary": 35766,
+    "source_synopsis": 27630
   },
   "rag_kinds": {
     "record_summary": 35609,
@@ -197,6 +199,7 @@
     "title_aliases": 33465,
     "staff": 31096,
     "relations": 28809,
+    "source_synopsis": 27114,
     "voice_cast": 11709,
     "episodes": 4367
   },
@@ -227,8 +230,9 @@
     "license_tier_coverage": "pass",
     "provenance_coverage": "pass",
     "required_title_fields": "pass",
+    "prose_attribution": "pass",
     "export_schema": "pass"
   },
   "failed_checks": [],
-  "generated_at": "2026-10-25T16:36:16+00:00"
+  "generated_at": "2026-10-25T18:24:51+00:00"
 }

@@ -51,7 +51,7 @@ def build_card(repo_id: str) -> str:
         f"| **Episodes** | {e['episodes']:,} |",
         f"| **Alternative titles** | {e['alt_titles']:,} |",
         f"| **Relationship edges** | {e['relationships']:,} |",
-        f"| **Record summaries** | {e['descriptions']:,} |",
+        f"| **Description rows (summaries + synopses)** | {e['descriptions']:,} |",
         f"| **Question/answer pairs** | {e['qa_pairs']:,} |",
         f"| **Instruction examples** | {e['instructions']:,} |",
         f"| **RAG chunks** | {e['rag_chunks']:,} |",
@@ -109,7 +109,13 @@ are CC-BY-4.0 (Muhammad Muqeet). Source-provided factual metadata remains
 subject to provider terms; see `NOTICE`, `sources.jsonl`, `provenance.jsonl` and
 `docs/LICENSE_NOTES.md` before redistribution. Every anime row carries a
 `license_tier` (`cc0_only`, `permission_required`, `unresolved`) defined in
-`license_manifest.json`. No upstream synopsis or biography prose is included.
+`license_manifest.json`.
+
+Upstream synopses, character biographies, episode summaries and tag definitions
+are retained with attribution. They are excluded from the CC-BY-4.0 grant and
+remain subject to the named source's terms; every prose row carries
+`prose_source` and `prose_license`, and `attribution.json` lists each owner and
+terms URL. Attribution is not permission.
 
 ## Citation
 

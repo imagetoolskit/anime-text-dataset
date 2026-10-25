@@ -3,6 +3,63 @@
 All notable changes to this dataset project are recorded here. Large data
 files ship as release assets, not through Git history.
 
+## [2.1.0] — 2026-10-25
+
+Attribution release. Upstream prose that 2.0.0 removed is restored, labelled at
+field level, and explicitly excluded from the project's CC-BY-4.0 grant.
+
+**Prose restored with attribution**
+
+- `anime.synopsis` (27,630), `characters.description` (84,329),
+  `episodes.synopsis` (44,465), `themes.description` (422) ship again in JSONL,
+  CSV, Parquet and the SQLite release copy.
+- `descriptions` now holds 35,766 `record_summary` rows plus 27,630
+  `source_synopsis` rows.
+- QA rebuilt to 317,907 pairs, including 21,521 `synopsis` pairs.
+- RAG rebuilt to 206,906 chunks, including 27,114 `source_synopsis` chunks.
+- Every prose row carries `prose_source` and `prose_license`.
+- All 27,630 synopses have a verified source label (Kitsu 20,715, AniList 5,157,
+  Shikimori 1,758). The 952 previously unlabelled rows were resolved from raw
+  payload evidence: 539 exact prefix matches, 412 at ≥0.95 similarity, and one
+  Shikimori whitespace-normalised match. Zero unlabelled synopses remain.
+
+**Licensing**
+
+- `exports/attribution.json` added: per-source owner, terms URL, data licence,
+  redistribution status, attribution text and prose fields, plus an `unknown`
+  bucket.
+- `exports/sources.jsonl` gained `owner`, `terms_url`, `data_license`,
+  `redistribution`, `attribution_text` and `prose_fields`.
+- `license_manifest.json` gained a `prose_attribution` block and replaced
+  `upstream_prose = "removed"` with `"retained_with_attribution"`.
+- Tier assignment now folds in prose sources, so a `cc0_only` row cannot ship
+  non-CC0 prose. Tiers: 23,467 `unresolved`, 11,330 `permission_required`,
+  969 `cc0_only` (2.7%).
+- Source terms verified on 2026-10-25: AniList, Kitsu, Wikidata and MyAnimeList
+  terms pages resolve; Shikimori's page resolves but is a 2012 user agreement
+  with no data-reuse grant, so it remains `unresolved`; no ANN terms page was
+  located.
+
+**Validation**
+
+- New `prose_attribution` check: exported prose must carry a source and licence,
+  `cc0_only` rows may not carry non-CC0 prose, and the SQLite release copy must
+  match the working database's prose row counts.
+- `export_schema` now verifies that prose survives export instead of failing
+  when it appears.
+- `rag_chunk_quality` accepts real sentence-final punctuation (`!`, `?`, quotes)
+  instead of only a trailing period.
+- 22 checks, all passing.
+
+**Documentation and tests**
+
+- `LICENSE`, `NOTICE`, `LICENSE_AUDIT.md`, `DATASET_CARD.md`, `README.md`,
+  `docs_src/*.html` and `scripts/upload_hf.py` rewritten to state the real
+  boundary: project-authored material is CC-BY-4.0; upstream prose is retained,
+  attributed and not relicensed.
+- End-to-end test now asserts attribution on every prose row instead of asserting
+  that prose is absent.
+
 ## [2.0.0] — 2026-10-25
 
 Correctness, consistency and licensing release. Every derived table was rebuilt
@@ -66,7 +123,8 @@ from a deeper enrichment pass; several data-integrity defects were fixed.
   and an explicit statement that a tier is not legal clearance.
 - Per-tier id lists plus `license_commercial_clear.csv` regenerated from the new
   tiers.
-- **Upstream prose removed from every export.** `anime.synopsis`,
+- **Upstream prose removed from every export (superseded in 2.1.0).**
+  `anime.synopsis`,
   `anime.synopsis_source`, `characters.description`, `episodes.synopsis`,
   `themes.description` and `genres.description` are dropped from JSONL/CSV/
   Parquet and nulled in the SQLite release copy; `source_synopsis` descriptions,
@@ -74,7 +132,8 @@ from a deeper enrichment pass; several data-integrity defects were fixed.
   because it would still be a derivative work.
 - New `LICENSE_AUDIT.md` lists every artifact, its origin and its rights status,
   and states what the maintainer does not claim.
-- `export_schema` validation now fails on any reappearing prose field.
+- `export_schema` validation now fails on any reappearing prose field
+  (superseded in 2.1.0: it now verifies prose survives with attribution).
 - `license_manifest.json` gained a `content_policy` block.
 
 **Validation and reporting**

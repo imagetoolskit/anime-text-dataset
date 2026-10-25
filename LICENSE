@@ -2,37 +2,73 @@ SPDX-License-Identifier: CC-BY-4.0
 
 Large Anime Text Dataset — licensing notice
 
-Copyright (c) 2026 Muhammad Muqeet. Attribution for reuse:
-"Muhammad Muqeet, Large Anime Text Dataset" with a link to
+Copyright (c) 2026 Muhammad Muqeet. Attribution for reuse of project-authored
+material: "Muhammad Muqeet, Large Anime Text Dataset" with a link to
 https://animearray.site or this repository, and contact
 muqeet@animearray.site / muqeet@anitroves.com.
 
-The dataset-level expression of this project (record structure, schemas,
-generated descriptions, grounded QA pairs, instruction-tuning examples,
-RAG chunking, merge log, tooling, and documentation) is licensed under the
-Creative Commons Attribution 4.0 International license.
+SCOPE OF THIS LICENSE
+
+The Creative Commons Attribution 4.0 International license covers only material
+authored by this project:
+
+  - record structure, schemas, and field selection;
+  - generated record summaries (`descriptions.kind = 'record_summary'`);
+  - grounded QA pairs and instruction-tuning examples built from structured
+    fields;
+  - RAG chunking and derived text assembled from structured fields;
+  - merge log, tooling, tests, and documentation.
 
 Canonical license text: https://creativecommons.org/licenses/by/4.0/legalcode
 Human-readable summary:  https://creativecommons.org/licenses/by/4.0/
 
-THIRD-PARTY CONTENT
+UPSTREAM PROSE IS NOT COVERED
 
-This dataset aggregates factual metadata collected from third-party sources.
-Reuse of those portions remains subject to the respective source terms,
-recorded per record in exports/provenance.jsonl and summarized in
-exports/sources.jsonl. No upstream plot synopsis, character biography or
-episode summary is included in any release artifact; those third-party texts
-are removed rather than paraphrased. See LICENSE_AUDIT.md for the per-artifact
-inventory and the limits of this license.
+This dataset also retains upstream prose: plot synopses, character biographies,
+episode summaries, and tag definitions. That text is third-party expression.
+It is **excluded from the CC-BY-4.0 grant above** and remains subject to the
+terms of the source that published it. Attribution identifies the owner; it is
+not permission to redistribute.
 
-Source terms, in brief:
+Every retained prose row carries its source and redistribution status:
 
-  - Wikidata:   CC0-1.0 (public domain) — https://creativecommons.org/publicdomain/zero/1.0/
-  - Kitsu:      public API; terms grant no redistribution — https://kitsu.io
-  - AniList:    © respective rights holders; public API without auth
-  - Shikimori:  license unspecified — recorded as license-uncertain
-  - ANN:        copyrighted; limited factual fields, license-uncertain
+  - `prose_source` — registry id (`anilist`, `kitsu`, `shikimori`, `unknown`)
+  - `prose_license` — `permission_required`, `unresolved`, or `allowed`
 
-No license or permission is asserted for content whose status was not
-verified. If any included source content is not lawfully reusable, contact
-the maintainers and it will be removed on request.
+Per-source ownership, terms and status are in `exports/attribution.json`,
+`exports/sources.jsonl`, and the `prose_attribution` block of
+`exports/license_manifest.json`. The artifact-by-artifact inventory is in
+`LICENSE_AUDIT.md`.
+
+SOURCE OWNERS AND TERMS
+
+  - AniList (https://anilist.co) — owner: AniList. Terms:
+    https://anilist.co/terms. No redistribution grant; permission required.
+  - Kitsu (https://kitsu.io) — owner: Kitsu. Terms: https://kitsu.io/terms.
+    No data-redistribution grant located; permission required.
+  - Shikimori (https://shikimori.io) — owner: Shikimori. Terms:
+    https://shikimori.io/terms. General user agreement, no data-reuse grant;
+    status unresolved.
+  - Wikidata (https://www.wikidata.org) — owner: Wikimedia Foundation and
+    Wikidata contributors. Terms:
+    https://www.wikidata.org/wiki/Wikidata:Licensing. CC0-1.0.
+  - Anime News Network (https://www.animenewsnetwork.com) — owner: Anime News
+    Network. Copyrighted; no terms page located. Sample pages are retained in
+    raw storage but linked to zero exported rows.
+  - MyAnimeList / Jikan (https://myanimelist.net) — owner: MyAnimeList. Terms:
+    https://myanimelist.net/about/terms_of_use. Not collected; network-blocked
+    from the collection environment.
+
+COMMERCIAL USE
+
+Only rows tiered `cc0_only` (969 of 35,766, 2.7%) have no upstream permission
+request outstanding. Rows tiered `permission_required` or `unresolved` carry
+obligations this project cannot discharge on your behalf. The dataset as a
+whole must not be sold or offered commercially without permission from the
+named source owners.
+
+NO WARRANTY OF REUSE RIGHTS
+
+No license or permission is asserted for content whose status was not verified.
+If any included source content is not lawfully reusable, contact the maintainers
+and it will be removed on request.

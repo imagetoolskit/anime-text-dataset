@@ -113,7 +113,7 @@ def build_block(summary: dict, kind: str) -> str:
             f"| Alternative titles | {m['alt_titles']} |",
             f"| Relationship edges | {m['relationships']} |",
             f"| Franchise clusters | {m['franchises']} |",
-            f"| Record summaries | {m['descriptions']} |",
+            f"| Descriptions (summaries + synopses) | {m['descriptions']} |",
             f"| Question/answer pairs | {m['qa_pairs']} |",
             f"| Instruction-tuning examples | {m['instructions']} |",
             f"| RAG chunks | {m['rag_chunks']} |",
@@ -147,7 +147,7 @@ def build_block(summary: dict, kind: str) -> str:
             f"{m['instructions']} / {m['rag_chunks']} |",
             f"| Alternative titles / relationship edges | {m['alt_titles']} / "
             f"{m['relationships']} |",
-            f"| Descriptions | {m['descriptions']} |",
+            f"| Descriptions (summaries + attributed synopses) | {m['descriptions']} |",
             f"| License tiers | {m['license_tiers']} |",
             f"| Split | train {m['split_train']} / val {m['split_val']} / "
             f"test {m['split_test']} |",
@@ -161,7 +161,7 @@ def build_block(summary: dict, kind: str) -> str:
             "| --- | --- | ---: | --- |",
             f"| QA pairs (incl. deliberate abstentions) | `exports/qa.jsonl` | {m['qa_pairs']} | SFT, RAG readers, preference tuning |",
             f"| Instruction examples | `exports/instructions.jsonl` | {m['instructions']} | SFT, LoRA/QLoRA, chat models |",
-            f"| Grounded descriptive text | `exports/descriptions.jsonl` | {m['descriptions']} | continual pretraining |",
+            f"| Descriptions (summaries + attributed synopses) | `exports/descriptions.jsonl` | {m['descriptions']} | continual pretraining |",
             f"| RAG chunks + `source_refs` | `exports/rag_chunks.jsonl` | {m['rag_chunks']} | retrieval, embeddings, RAG |",
             f"| Canonical records | `exports/anime.jsonl` | {m['unique_titles']} | classification, ranking, KG |",
             f"| Characters | `exports/characters.jsonl` | {m['characters']} | character extraction, KG |",

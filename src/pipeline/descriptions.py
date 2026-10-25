@@ -1,19 +1,21 @@
-"""Record-grounded descriptions.
+"""Descriptions, both project-authored and upstream.
 
-Only one kind is produced:
+Two kinds are stored:
 
 ``record_summary``
     A short prose summary assembled only from structured fields already in the
     database (type, year, studio, episode count, genres, themes, cast, staff,
-    source material). No plot detail is invented, and the text says so in its
-    provenance field.
+    source material). No plot detail is invented. This text is project-authored
+    and covered by the repository's CC-BY-4.0 grant.
 
-Upstream synopses are deliberately **not** stored or exported. They are
-third-party prose whose redistribution is not granted by any of the source
-terms; shipping a close paraphrase would carry the same problem. The generated
-summary is original text, licensed with the rest of the project.
+``source_synopsis``
+    The upstream synopsis exactly as retrieved, with its source recorded in the
+    ``source`` column. This is third-party expression: it is retained for
+    completeness and is **excluded** from the project's CC-BY grant. The
+    applicable owner and terms are listed in ``exports/attribution.json``.
 
-Three sentence orderings are used so the corpus does not read as one template.
+Three sentence orderings are used for the generated summaries so the corpus
+does not read as one template.
 """
 
 import json
@@ -111,9 +113,20 @@ def build_description(row, genres, themes, studios, directors, cast) -> str | No
 
 def run() -> int:
     conn = connect()
-    # Remove every non-generated description, including `source_synopsis` rows
-    # written by earlier releases. The release ships only project-authored text.
-    conn.execute("DELETE FROM descriptions WHERE synthetic=0 OR kind<>'record_summary'")
+    from .attribution import normalize_source
+    from .normalize import ensure_column
+
+    ensure_column(conn, "descriptions", "source", "TEXT")
+    ensure_column(conn, "themes", "description_source", "TEXT")
+    # Theme descriptions are inserted from AniList tags in `entities.py`.
+    # Backfill the source for rows that predate the column.
+    conn.execute(
+        "UPDATE themes SET description_source='anilist' "
+        "WHERE description IS NOT NULL AND trim(description)<>'' "
+        "AND (description_source IS NULL OR description_source='')")
+    # Rebuild upstream synopsis rows from the working `anime` table so the
+    # source label and the text cannot drift apart.
+    conn.execute("DELETE FROM descriptions WHERE kind='source_synopsis'")
     n = 0
     cur = conn.execute("select * from anime where title_canonical is not null or title_english is not null")
     for row in cur:
@@ -146,9 +159,23 @@ def run() -> int:
                 (aid, "record_summary", text, 1,
                  "generated from structured fields only; no plot facts invented"))
             n += 1
+
+    upstream = 0
+    for r in conn.execute(
+        "select anime_id, synopsis, synopsis_source from anime "
+        "where synopsis is not null and trim(synopsis)<>''"
+    ):
+        conn.execute(
+            "INSERT OR REPLACE INTO descriptions"
+            "(anime_id,kind,text,synthetic,provenance,source) VALUES(?,?,?,?,?,?)",
+            (r["anime_id"], "source_synopsis", r["synopsis"], 0,
+             "upstream synopsis; third-party text; see exports/attribution.json",
+             normalize_source(r["synopsis_source"])))
+        upstream += 1
+
     conn.commit()
     cp_set(conn, "descriptions_done", True)
-    log(conn, "descriptions", f"record_summary={n}")
-    print(f"record_summaries={n}")
+    log(conn, "descriptions", f"record_summary={n} source_synopsis={upstream}")
+    print(f"record_summaries={n} source_synopses={upstream}")
     conn.close()
     return 0

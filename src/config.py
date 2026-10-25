@@ -6,7 +6,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 # Single source of truth for the release version. Bumped in one place only;
 # the docs, the site pages and reports/summary.json all read it from here.
-VERSION = "2.0.0"
+VERSION = "2.1.0"
 
 # Environment overrides documented in config/.env.example. Values are coerced
 # to the type of the JSON value they replace, so `ATDS_SHIKIMORI_RPS=2.5`

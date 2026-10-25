@@ -28,7 +28,8 @@ def extract_from_anilist_full(conn) -> int:
             "duration_min=coalesce(duration_min,?), aired_from=coalesce(aired_from,?), aired_to=coalesce(aired_to,?), "
             "season=coalesce(season,?), year=coalesce(year,?), title_canonical=coalesce(title_canonical,?), "
             "title_english=coalesce(title_english,?), title_japanese=coalesce(title_japanese,?), "
-            "synopsis=coalesce(synopsis,?), mean_score=coalesce(mean_score,?), popularity=coalesce(popularity,?), "
+            "synopsis=coalesce(synopsis,?), synopsis_source=coalesce(synopsis_source,?), "
+            "mean_score=coalesce(mean_score,?), popularity=coalesce(popularity,?), "
             "favourites=coalesce(favourites,?), source_material=coalesce(source_material,?), "
             "age_rating=coalesce(age_rating,?) WHERE anime_id=?",
             (
@@ -40,7 +41,9 @@ def extract_from_anilist_full(conn) -> int:
                 (p.get("title") or {}).get("romaji"),
                 (p.get("title") or {}).get("english"),
                 (p.get("title") or {}).get("native"),
-                p.get("description"), p.get("averageScore"), p.get("popularity"), p.get("favourites"),
+                p.get("description"),
+                "anilist" if p.get("description") else None,
+                p.get("averageScore"), p.get("popularity"), p.get("favourites"),
                 p.get("source"), p.get("ageRating"), aid,
             ),
         )
@@ -60,8 +63,9 @@ def extract_from_anilist_full(conn) -> int:
             name = t.get("name")
             if name:
                 conn.execute("INSERT OR IGNORE INTO anime_themes(anime_id,theme) VALUES(?,?)", (aid, name))
-                conn.execute("INSERT OR IGNORE INTO themes(theme,description) VALUES(?,?)",
-                             (name, t.get("description")))
+                conn.execute(
+                    "INSERT OR IGNORE INTO themes(theme,description,description_source) "
+                    "VALUES(?,?,?)", (name, t.get("description"), "anilist"))
         for edge in (p.get("studios") or {}).get("edges") or []:
             st = edge.get("node") or {}
             name = st.get("name")
@@ -304,6 +308,8 @@ def extract_from_kitsu(conn) -> int:
 
 def run() -> int:
     conn = connect()
+    from .normalize import ensure_column
+    ensure_column(conn, "themes", "description_source", "TEXT")
     n1 = extract_from_anilist_full(conn)
     n2 = extract_from_shikimori(conn)
     n3 = extract_roles_from_payloads(conn)

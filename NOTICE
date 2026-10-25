@@ -5,30 +5,38 @@ Developer & maintainer: Muhammad Muqeet
 Contact: muqeet@animearray.site, muqeet@anitroves.com
 
 This product/package contains aggregated data sourced from the following
-providers. Underlying source content remains subject to each provider's
-terms as recorded in this repository's exports/sources.jsonl and
+providers. Underlying source content remains subject to each provider's terms
+as recorded in exports/sources.jsonl, exports/attribution.json and
 exports/provenance.jsonl.
 
-  - AniList           (https://anilist.co)
-  - Kitsu             (https://kitsu.io)            — public API, no redistribution grant
-  - Shikimori         (https://shikimori.one)
-  - Wikidata          (https://wikidata.org)        — CC0-1.0
+  - AniList           (https://anilist.co)            — terms: https://anilist.co/terms
+  - Kitsu             (https://kitsu.io)              — terms: https://kitsu.io/terms
+  - Shikimori         (https://shikimori.io)          — terms: https://shikimori.io/terms
+  - Wikidata          (https://wikidata.org)          — CC0-1.0
   - Anime News
     Network           (https://www.animenewsnetwork.com/encyclopedia/)
+  - MyAnimeList       (https://myanimelist.net)       — not collected
 
 License and use:
+
   - Original code, documentation, selection/arrangement and project-generated
     text are licensed under Creative Commons Attribution 4.0 International
     (CC-BY-4.0).
-  - Source-provided content is governed by each provider's terms; see
-    docs/LICENSE_NOTES.md before redistributing source-derived fields.
-  - No upstream plot synopsis, character biography or episode summary is
-    included. Those third-party texts are removed from every export rather
-    than paraphrased. LICENSE_AUDIT.md records this per artifact.
+  - Upstream prose (plot synopses, character biographies, episode summaries and
+    tag definitions) is retained in the release. It is excluded from the
+    CC-BY-4.0 grant and remains subject to the named source's terms. Each prose
+    row carries `prose_source` and `prose_license`.
+  - Attribution is not permission. AniList and Kitsu require permission for
+    redistribution; Shikimori's status is unresolved; only Wikidata content is
+    CC0-1.0.
+  - Only `cc0_only` rows (969 of 35,766) are free of an outstanding upstream
+    permission request. See LICENSE_AUDIT.md before redistributing or using the
+    dataset commercially.
 
 Attribution, per-entity provenance and license notes are embedded in:
-  exports/provenance.jsonl   (per-entity source, license note, URL)
-  exports/sources.jsonl      (per-source terms, retrieval date/method)
+  exports/attribution.json  (per-source owner, terms URL, prose fields, status)
+  exports/provenance.jsonl  (per-entity source, license note, URL)
+  exports/sources.jsonl     (per-source terms, retrieval date/method)
 
 See ACKNOWLEDGMENTS.md for human-readable attribution and LICENSE_AUDIT.md
 for the artifact-by-artifact rights inventory.

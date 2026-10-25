@@ -43,6 +43,7 @@ FIELD_SQL = {
     "source_material": "a.source_material is not null",
     "title_english": "a.title_english is not null",
     "title_japanese": "a.title_japanese is not null",
+    "anime.synopsis": "a.synopsis is not null and trim(a.synopsis)<>''",
     "studios": "exists (select 1 from anime_studios x where x.anime_id=a.anime_id)",
     "genres": "exists (select 1 from anime_genres x where x.anime_id=a.anime_id)",
     "themes": "exists (select 1 from anime_themes x where x.anime_id=a.anime_id)",
@@ -405,7 +406,8 @@ def check_rag_quality(conn) -> bool:
     n = conn.execute("select count(*) from rag_chunks").fetchone()[0]
     tiny = conn.execute("select count(*) from rag_chunks where length(text)<30").fetchone()[0]
     not_sentence = conn.execute(
-        "select count(*) from rag_chunks where trim(text) not like '%.'").fetchone()[0]
+        "select count(*) from rag_chunks where substr(trim(text), -1) not in "
+        "('.', '!', '?', '\"', '…', ')', '）', '」', '』')").fetchone()[0]
     no_refs = conn.execute("select count(*) from rag_chunks where source_refs is null "
                            "or source_refs='[]'").fetchone()[0]
     raw_json = conn.execute(
@@ -461,14 +463,16 @@ def check_required_fields(conn) -> bool:
     return ok
 
 
-# Upstream prose fields that must never reach a release artifact. The pipeline
-# deletes them before writing; this list guards against a regression.
-BANNED_EXPORT_KEYS = {
-    "anime.jsonl": ("synopsis", "synopsis_source"),
-    "characters.jsonl": ("description",),
-    "episodes.jsonl": ("synopsis",),
-    "themes.jsonl": ("description",),
-    "genres.jsonl": ("description",),
+# Prose fields that ship with field-level attribution. The tuple is
+# (prose column, source column) for each release file.
+PROSE_EXPORT_KEYS = {
+    "anime.jsonl": ("synopsis", "prose_source"),
+    "characters.jsonl": ("description", "prose_source"),
+    "episodes.jsonl": ("synopsis", "prose_source"),
+    "themes.jsonl": ("description", "prose_source"),
+    "descriptions.jsonl": ("text", "prose_source"),
+    "qa.jsonl": ("answer", "prose_source"),
+    "rag_chunks.jsonl": ("text", "prose_source"),
 }
 
 
@@ -476,21 +480,24 @@ def check_export_columns(conn) -> bool:
     from ..pipeline import export as export_mod
     export_dir = export_mod.EXPORT_DIR
     required = {
-        "anime.jsonl": ("split", "license_tier", "genres", "studios"),
-        "characters.jsonl": ("split", "license_tier"),
+        "anime.jsonl": ("split", "license_tier", "genres", "studios",
+                        "synopsis", "synopsis_source"),
+        "characters.jsonl": ("split", "license_tier", "description", "prose_source"),
         "staff.jsonl": ("split", "license_tier"),
-        "episodes.jsonl": ("split", "license_tier"),
+        "episodes.jsonl": ("split", "license_tier", "synopsis", "prose_source"),
         "relationships.jsonl": ("split", "license_tier"),
-        "descriptions.jsonl": ("split", "license_tier"),
-        "qa.jsonl": ("split", "license_tier"),
+        "descriptions.jsonl": ("split", "license_tier", "prose_source"),
+        "qa.jsonl": ("split", "license_tier", "prose_source"),
         "instructions.jsonl": ("split", "license_tier"),
-        "rag_chunks.jsonl": ("split", "license_tier", "kind"),
+        "rag_chunks.jsonl": ("split", "license_tier", "kind", "prose_source"),
+        "themes.jsonl": ("description", "prose_source"),
     }
     table_of = {
         "anime.jsonl": "anime", "characters.jsonl": "characters", "staff.jsonl": "staff",
         "episodes.jsonl": "episodes", "relationships.jsonl": "relationships",
         "descriptions.jsonl": "descriptions", "qa.jsonl": "qa_pairs",
         "instructions.jsonl": "instructions", "rag_chunks.jsonl": "rag_chunks",
+        "themes.jsonl": "themes",
     }
     missing_files = []
     missing_cols = []
@@ -512,51 +519,167 @@ def check_export_columns(conn) -> bool:
         if absent:
             missing_cols.append(f"{name}: {absent}")
 
-    # Content policy: no upstream prose in any shipped artifact.
-    banned_hits = []
-    for name, keys in BANNED_EXPORT_KEYS.items():
-        path = export_dir / name
-        if not path.exists():
-            continue
-        blob = path.read_text(encoding="utf-8", errors="ignore")
-        banned_hits.extend(f"{name}:{k}" for k in keys if f'"{k}":' in blob)
-    prose_descriptions = conn.execute(
-        "select count(*) from descriptions where kind<>'record_summary'").fetchone()[0]
-    prose_chunks = conn.execute(
-        "select count(*) from rag_chunks where kind='source_synopsis'").fetchone()[0]
-    synopsis_qa = conn.execute(
-        "select count(*) from qa_pairs where qtype='synopsis'").fetchone()[0]
-    if prose_descriptions:
-        banned_hits.append(f"descriptions.non_summary={prose_descriptions}")
-    if prose_chunks:
-        banned_hits.append(f"rag_chunks.source_synopsis={prose_chunks}")
-    if synopsis_qa:
-        banned_hits.append(f"qa_pairs.synopsis={synopsis_qa}")
-
-    db_path = export_dir / "anime.db"
+    # Prose must survive the export, not just the working database. Compare the
+    # release SQLite copy against the source database so a future stripping
+    # regression is caught instead of silently shipping empty columns.
+    prose_mismatch = []
+    db_path = export_dir / "anime_dataset.sqlite"
     if db_path.exists():
         conn.execute("ATTACH DATABASE ? AS exp", (str(db_path),))
         try:
-            for table, col in (("anime", "synopsis"), ("anime", "synopsis_source"),
-                               ("characters", "description"), ("episodes", "synopsis"),
-                               ("themes", "description"), ("genres", "description")):
-                n = conn.execute(
+            for table, col in (("anime", "synopsis"), ("characters", "description"),
+                               ("episodes", "synopsis"), ("themes", "description"),
+                               ("genres", "description")):
+                main_n = conn.execute(
+                    f"select count(*) from main.{table} "
+                    f"where {col} is not null and trim({col})<>''").fetchone()[0]
+                exp_n = conn.execute(
                     f"select count(*) from exp.{table} "
                     f"where {col} is not null and trim({col})<>''").fetchone()[0]
-                if n:
-                    banned_hits.append(f"anime.db:{table}.{col}={n}")
-            n = conn.execute(
+                if main_n != exp_n:
+                    prose_mismatch.append(f"{table}.{col}: {exp_n}/{main_n}")
+            main_desc = conn.execute(
+                "select count(*) from main.descriptions "
+                "where kind='source_synopsis'").fetchone()[0]
+            exp_desc = conn.execute(
                 "select count(*) from exp.descriptions "
-                "where kind is null or kind<>'record_summary'").fetchone()[0]
-            if n:
-                banned_hits.append(f"anime.db:descriptions.non_summary={n}")
+                "where kind='source_synopsis'").fetchone()[0]
+            if main_desc != exp_desc:
+                prose_mismatch.append(
+                    f"descriptions.source_synopsis: {exp_desc}/{main_desc}")
         finally:
             conn.execute("DETACH DATABASE exp")
 
-    ok = not missing_files and not missing_cols and not empty_unexpected and not banned_hits
+    ok = not missing_files and not missing_cols and not empty_unexpected and not prose_mismatch
     record(conn, "export_schema", "pass" if ok else "fail",
            f"missing files={missing_files[:3]} missing columns={missing_cols[:5]} "
-           f"empty despite source rows={empty_unexpected[:3]} upstream prose={banned_hits[:5]}")
+           f"empty despite source rows={empty_unexpected[:3]} prose export={prose_mismatch[:5]}")
+    return ok
+
+
+def check_prose_attribution(conn) -> bool:
+    """Every shipped prose field must name a source and a redistribution status."""
+    from ..pipeline import export as export_mod
+    from ..pipeline.export import source_status
+
+    export_dir = export_mod.EXPORT_DIR
+    registry = {s["source_id"] for s in source_status()} | {"unknown"}
+    problems = []
+
+    # A work whose metadata is CC0 must not ship Kitsu/Shikimori prose under a
+    # cc0_only tier. The tier script folds prose sources in; this is the guard.
+    cc0_conflicts = 0
+    for sql in (
+        "select count(*) from anime a join license_tiers lt on lt.anime_id=a.anime_id "
+        "where a.synopsis is not null and trim(a.synopsis)<>'' and lt.tier='cc0_only'",
+        "select count(*) from characters c join license_tiers lt on lt.anime_id=c.anime_id "
+        "where c.description is not null and trim(c.description)<>'' and lt.tier='cc0_only'",
+        "select count(*) from episodes e join license_tiers lt on lt.anime_id=e.anime_id "
+        "where e.synopsis is not null and trim(e.synopsis)<>'' and lt.tier='cc0_only'",
+        "select count(*) from descriptions d join license_tiers lt on lt.anime_id=d.anime_id "
+        "where d.kind='source_synopsis' and lt.tier='cc0_only'",
+        "select count(*) from qa_pairs q join license_tiers lt on lt.anime_id=q.anime_id "
+        "where q.qtype='synopsis' and lt.tier='cc0_only'",
+        "select count(*) from rag_chunks r join license_tiers lt on lt.anime_id=r.anime_id "
+        "where r.kind='source_synopsis' and lt.tier='cc0_only'",
+    ):
+        cc0_conflicts += conn.execute(sql).fetchone()[0]
+    if cc0_conflicts:
+        problems.append(f"cc0_only rows with non-CC0 prose={cc0_conflicts}")
+
+    # Null source labels are exported as `unknown` and tiered `unresolved`.
+    # They are counted so the gap stays visible rather than looking clean.
+    unlabelled = 0
+    for sql in (
+        "select count(*) from anime where synopsis is not null and trim(synopsis)<>'' "
+        "and (synopsis_source is null or trim(synopsis_source)='')",
+        "select count(*) from characters where description is not null "
+        "and trim(description)<>'' and (source is null or trim(source)='')",
+        "select count(*) from episodes where synopsis is not null "
+        "and trim(synopsis)<>'' and (source is null or trim(source)='')",
+        "select count(*) from descriptions where kind='source_synopsis' "
+        "and (source is null or trim(source)='')",
+        "select count(*) from qa_pairs where qtype='synopsis' "
+        "and (prose_source is null or trim(prose_source)='')",
+        "select count(*) from rag_chunks where kind='source_synopsis' "
+        "and (prose_source is null or trim(prose_source)='')",
+    ):
+        unlabelled += conn.execute(sql).fetchone()[0]
+
+    # Exported rows must carry both the source and the license status.
+    missing_fields = []
+    for name, (prose_key, source_key) in PROSE_EXPORT_KEYS.items():
+        path = export_dir / name
+        if not path.exists():
+            continue
+        with open(path, encoding="utf-8") as fh:
+            for _ in range(200):
+                line = fh.readline()
+                if not line:
+                    break
+                d = json.loads(line)
+                is_prose = bool(d.get(prose_key))
+                if name == "descriptions.jsonl":
+                    is_prose = d.get("kind") == "source_synopsis"
+                elif name == "qa.jsonl":
+                    is_prose = d.get("qtype") == "synopsis"
+                elif name == "rag_chunks.jsonl":
+                    is_prose = d.get("kind") == "source_synopsis"
+                if is_prose and (not d.get(source_key) or not d.get("prose_license")):
+                    missing_fields.append(f"{name}:{d.get('anime_id')}")
+                    break
+                if is_prose and d.get(source_key) not in registry:
+                    missing_fields.append(f"{name}:{d.get(source_key)}")
+                    break
+    if missing_fields:
+        problems.append(f"export rows without attribution={missing_fields[:5]}")
+
+    attr_path = export_dir / "attribution.json"
+    if not attr_path.exists():
+        problems.append("attribution.json missing")
+    else:
+        attr = json.loads(attr_path.read_text(encoding="utf-8"))
+        ids = {s["source_id"] for s in attr.get("sources", [])}
+        for required_id in ("anilist", "kitsu", "shikimori", "unknown"):
+            if required_id not in ids:
+                problems.append(f"attribution.json missing {required_id}")
+
+    prose_rows = conn.execute(
+        "select "
+        "(select count(*) from anime where synopsis is not null and trim(synopsis)<>'') + "
+        "(select count(*) from characters where description is not null "
+        "and trim(description)<>'') + "
+        "(select count(*) from episodes where synopsis is not null and trim(synopsis)<>'') + "
+        "(select count(*) from descriptions where kind='source_synopsis')"
+    ).fetchone()[0]
+
+    # The SQLite release copy must expose the same attribution contract as the
+    # JSONL files, not just carry the prose.
+    sqlite_db = export_dir / "anime_dataset.sqlite"
+    if sqlite_db.exists():
+        conn.execute("ATTACH DATABASE ? AS exp", (str(sqlite_db),))
+        try:
+            for table, cond in (
+                ("anime", "synopsis is not null and trim(synopsis)<>''"),
+                ("characters", "description is not null and trim(description)<>''"),
+                ("episodes", "synopsis is not null and trim(synopsis)<>''"),
+                ("themes", "description is not null and trim(description)<>''"),
+                ("descriptions", "kind='source_synopsis'"),
+                ("qa_pairs", "qtype='synopsis'"),
+                ("rag_chunks", "kind='source_synopsis'"),
+            ):
+                n = conn.execute(
+                    f"select count(*) from exp.{table} where {cond} "
+                    f"and (prose_source is null or prose_license is null)").fetchone()[0]
+                if n:
+                    problems.append(f"sqlite {table}: {n} prose rows without attribution")
+        finally:
+            conn.execute("DETACH DATABASE exp")
+
+    ok = not problems
+    record(conn, "prose_attribution", "pass" if ok else "fail",
+           f"{prose_rows:,} prose rows; unlabelled={unlabelled}; "
+           f"cc0 conflicts={cc0_conflicts}; problems={problems[:5]}")
     return ok
 
 
@@ -585,6 +708,7 @@ def run_validation() -> dict:
         "license_coverage": check_license_coverage(conn),
         "provenance_coverage": check_provenance_coverage(conn),
         "required_fields": check_required_fields(conn),
+        "prose_attribution": check_prose_attribution(conn),
         "export_schema": check_export_columns(conn),
     }
     failed = [k for k, v in results.items() if not v]

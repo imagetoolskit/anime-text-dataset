@@ -30,7 +30,7 @@
     "@type": "Dataset",
     "name": "Large Anime Text Dataset",
     "version": "{{v:version}}",
-    "description": "A text-only dataset of {{n:unique_titles}} unique anime works with {{n:characters}} characters, {{n:staff}} staff records, {{n:episodes}} episodes, {{n:qa_pairs}} grounded question-answer pairs, {{n:instructions}} instruction-tuning examples and {{n:rag_chunks}} RAG chunks, exported as JSONL, SQLite, Parquet and CSV. Original code, structure and generated text are CC-BY-4.0; source-provided metadata keeps its own terms (see LICENSE_AUDIT.md).",
+    "description": "A text-only dataset of {{n:unique_titles}} unique anime works with {{n:characters}} characters, {{n:staff}} staff records, {{n:episodes}} episodes, {{n:qa_pairs}} grounded question-answer pairs, {{n:instructions}} instruction-tuning examples and {{n:rag_chunks}} RAG chunks, exported as JSONL, SQLite, Parquet and CSV. Original code, structure and generated text are CC-BY-4.0; source metadata and retained upstream prose keep their own terms (see LICENSE_AUDIT.md).",
     "keywords": ["anime", "LLM fine-tuning", "QA dataset", "instruction tuning", "RAG", "entity linking", "recommendation", "natural language processing"],
     "license": "https://creativecommons.org/licenses/by/4.0/",
     "inLanguage": "en",
@@ -80,7 +80,7 @@
         </div>
         <p style="margin:0;color:var(--ink-soft);font-size:13.5px">
           Primary language: en (ja/romaji titles labeled)&nbsp;·&nbsp;
-          License: code &amp; generated text <a href="../LICENSE" style="color:var(--teal)">CC-BY-4.0</a>; source metadata per tier
+          License: code &amp; generated text <a href="../LICENSE" style="color:var(--teal)">CC-BY-4.0</a>; source metadata and retained prose per source terms
         </p>
       </div>
       <div class="float-stack" aria-hidden="true">
@@ -134,7 +134,7 @@
       <article class="card"><span class="tag">Identity</span><h3>Titles &amp; metadata</h3><p>Canonical, English and Japanese titles plus {{n:alt_titles}} alternative titles; type, status, episode counts, air dates, season, year, scores, popularity, favourites, source material and age rating per work.</p></article>
       <article class="card"><span class="tag">Narrative</span><h3>Episodes &amp; relations</h3><p>{{n:episodes_compact}} episodes with titles and dates; {{n:relationships}} relationship edges (sequel, prequel, side story, adaptation) and {{n:franchises}} franchise clusters built from them.</p></article>
       <article class="card"><span class="tag">People</span><h3>Cast &amp; crew</h3><p>{{n:characters}} characters and {{n:staff}} staff rows with roles — the raw material for character Q&amp;A, dialogue-style data, and voice-actor modelling.</p></article>
-      <article class="card"><span class="tag">Text</span><h3>Record summaries</h3><p>{{n:descriptions}} project-written summaries, assembled from each work's own structured fields, for summarisation, retrieval and domain pretraining.</p></article>
+      <article class="card"><span class="tag">Text</span><h3>Record summaries</h3><p>{{n:descriptions}} description rows: project-written summaries assembled from each work's own structured fields, plus the upstream synopsis where one was published, carrying its source and licence status.</p></article>
       <article class="card"><span class="tag">Training</span><h3>QA &amp; instructions</h3><p>{{n:qa_pairs}} grounded QA pairs and {{n:instructions}} instruction examples — chat-style, ready to shard for SFT, LoRA/QLoRA and DPO.</p></article>
       <article class="card"><span class="tag">Retrieval</span><h3>RAG chunks</h3><p>{{n:rag_chunks}} semantic chunks, each with source references, sized for embedding models and retrieval-augmented generation.</p></article>
       <article class="card"><span class="tag">Knowledge graph</span><h3>Entity links</h3><p>{{n:entity_links}} records mapping every internal anime ID to external source IDs with method and confidence — for entity linking and KG construction.</p></article>
@@ -180,7 +180,7 @@
       </table>
     </div>
     <div class="callout">
-      <strong>License note:</strong> original code, structure and generated text are <a href="../LICENSE" style="color:var(--teal)">CC-BY-4.0</a>. Every anime row carries one <code>license_tier</code> — <code>cc0_only</code>, <code>permission_required</code> or <code>unresolved</code> — set by its strictest contributing source. <code>exports/license_manifest.json</code> states what each tier permits; <code>exports/license_commercial_clear.csv</code> lists the rows with no permission request outstanding. Tiers describe this dataset's provenance obligation, not the copyright status of the underlying works.
+      <strong>License note:</strong> original code, structure and generated text are <a href="../LICENSE" style="color:var(--teal)">CC-BY-4.0</a>. Retained upstream synopses, biographies and tag definitions are excluded from that grant: every prose row carries <code>prose_source</code> and <code>prose_license</code>, and <code>exports/attribution.json</code> names each owner and terms URL. Every anime row also carries one <code>license_tier</code> — <code>cc0_only</code>, <code>permission_required</code> or <code>unresolved</code> — set by its strictest contributing metadata or prose source. <code>exports/license_manifest.json</code> states what each tier permits; <code>exports/license_commercial_clear.csv</code> lists the rows with no permission request outstanding. Tiers describe this dataset's provenance obligation, not the copyright status of the underlying works.
     </div>
   </section>
 
@@ -284,7 +284,7 @@ python -c "import sqlite3; con=sqlite3.connect('exports/anime_dataset.sqlite'); 
 <footer>
   <div class="wrap cols">
     <div>
-      <div><strong>Large Anime Text Dataset</strong> · release 2.0.0 · <a href="../CHANGELOG.md">changelog</a></div>
+      <div><strong>Large Anime Text Dataset</strong> · release {{v:version}} · <a href="../CHANGELOG.md">changelog</a></div>
       <div style="margin-top:6px">Original code &amp; generated text: <a href="../LICENSE">CC-BY-4.0</a> · Source content: per-source terms (see <a href="LICENSE_NOTES.md">license notes</a>).</div>
       <div style="margin-top:6px">Developer: Muhammad Muqeet · <a href="mailto:muqeet@animearray.site">muqeet@animearray.site</a> · <a href="mailto:muqeet@anitroves.com">muqeet@anitroves.com</a></div>
     </div>

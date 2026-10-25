@@ -17,6 +17,7 @@ import random
 
 from ..config import load
 from ..db import connect, cp_set, log
+from .attribution import normalize_source
 from .facts import DIRECTOR_EXCLUDE, MUSIC_EXCLUDE, WRITER_EXCLUDE
 
 TYPE_LABEL = {
@@ -139,7 +140,7 @@ def build_pairs(facts: dict, children: dict, titles: dict, rng: random.Random) -
     title = facts["title"]
     out: list[dict] = []
 
-    def add(qtype, question, answer, template, fields):
+    def add(qtype, question, answer, template, fields, prose_source=None):
         if not question or not answer:
             return
         clean_q = question.strip()
@@ -147,7 +148,8 @@ def build_pairs(facts: dict, children: dict, titles: dict, rng: random.Random) -
         if len(clean_a) < 12 or clean_q.count("{") or clean_a.count("{"):
             return
         out.append({"qtype": qtype, "question": clean_q, "answer": clean_a,
-                    "template": template, "fields": fields})
+                    "template": template, "fields": fields,
+                    "prose_source": prose_source})
 
     type_label = TYPE_LABEL.get(facts["type"] or "", None)
     if type_label:
@@ -229,6 +231,26 @@ def build_pairs(facts: dict, children: dict, titles: dict, rng: random.Random) -
                 f"Was {title} adapted from another work?",
                 f"What source material does {title} adapt?"]),
                 f"{title} is based on {label}.", "source:v2", ["source_material"])
+
+    # Upstream synopsis. The answer is the source text, not a paraphrase, so the
+    # pair carries `prose_source` and is excluded from the project's CC-BY grant.
+    synopsis = (facts.get("synopsis") or "").strip()
+    if len(synopsis) >= 80:
+        answer = synopsis
+        if len(answer) > 1200:
+            cut = answer[:1200]
+            for sep in (". ", "! ", "? "):
+                pos = cut.rfind(sep)
+                if pos > 600:
+                    cut = cut[:pos + 1]
+                    break
+            answer = cut
+        add("synopsis", pick(rng, [
+            f"What is the premise of {title}?",
+            f"Summarize the story of {title}.",
+            f"What happens in {title}?"]),
+            answer, "synopsis:v2", ["anime.synopsis"],
+            prose_source=normalize_source(facts.get("synopsis_source")))
 
     if facts["mean_score"]:
         score = fmt_score(facts["mean_score"])
@@ -398,6 +420,8 @@ def run() -> int:
     cfg = load()
     rng = random.Random(cfg["seed"])
     conn = connect()
+    from .normalize import ensure_column
+    ensure_column(conn, "qa_pairs", "prose_source", "TEXT")
     conn.execute("DELETE FROM qa_pairs")
     children = _load_children(conn)
     titles = _titles(conn)
@@ -408,7 +432,8 @@ def run() -> int:
 
     rows = conn.execute(
         "select anime_id, title_canonical, title_english, title_japanese, type, status, year, "
-        "aired_from, aired_to, episodes, duration_min, mean_score, favourites, source_material "
+        "aired_from, aired_to, episodes, duration_min, mean_score, favourites, source_material, "
+        "synopsis, synopsis_source "
         "from anime "
         "where title_canonical is not null or title_english is not null").fetchall()
 
@@ -438,12 +463,18 @@ def run() -> int:
         lo = min(per_anime_min, len(unique))
         hi = min(per_anime_max, len(unique))
         keep = rng.randint(lo, hi)
-        for p in unique[:keep]:
+        selected = unique[:keep]
+        # Sampling must not silently drop the one synopsis pair: it is the only
+        # record of the upstream text and it carries the attribution field.
+        synopsis_pair = next((p for p in unique if p["qtype"] == "synopsis"), None)
+        if synopsis_pair and synopsis_pair not in selected:
+            selected.append(synopsis_pair)
+        for p in selected:
             conn.execute(
-                "INSERT INTO qa_pairs(anime_id,qtype,question,answer,template,grounded_fields) "
-                "VALUES(?,?,?,?,?,?)",
+                "INSERT INTO qa_pairs(anime_id,qtype,question,answer,template,grounded_fields,"
+                "prose_source) VALUES(?,?,?,?,?,?,?)",
                 (aid, p["qtype"], p["question"], p["answer"],
-                 p["template"], json.dumps(p["fields"])))
+                 p["template"], json.dumps(p["fields"]), p.get("prose_source")))
             n += 1
     conn.commit()
     cp_set(conn, "qa_done", n)

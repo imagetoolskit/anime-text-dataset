@@ -11,6 +11,7 @@ import pathlib
 
 from ..config import load
 from ..db import ROOT, connect, cp_set, log, now
+from .attribution import PROSE_FIELDS, normalize_source
 
 EXPORT_DIR = ROOT / "exports"
 
@@ -35,7 +36,7 @@ def _jsonl(path: pathlib.Path, records) -> int:
     return n
 
 
-def _jsonl_table(conn, path, sql, arrays=(), split=True, tier=True) -> int:
+def _jsonl_table(conn, path, sql, arrays=(), split=True, tier=True, table=None) -> int:
     split_of = dict(conn.execute("select anime_id, split from splits"))
     tier_of = {}
     if tier:
@@ -56,9 +57,38 @@ def _jsonl_table(conn, path, sql, arrays=(), split=True, tier=True) -> int:
                 d["split"] = split_of.get(d["anime_id"])
             if tier and "anime_id" in d:
                 d["license_tier"] = tier_of.get(d["anime_id"])
+            if table:
+                field, source_field = PROSE_FIELDS.get(table, (None, None))
+                if field:
+                    is_prose = bool(d.get(field))
+                    if table == "descriptions":
+                        is_prose = d.get("kind") == "source_synopsis"
+                    elif table == "qa_pairs":
+                        is_prose = d.get("qtype") == "synopsis"
+                    elif table == "rag_chunks":
+                        is_prose = d.get("kind") == "source_synopsis"
+                    if is_prose:
+                        source = normalize_source(d.get(source_field))
+                        d["prose_source"] = source
+                        d["prose_license"] = _prose_license(source)
+                    else:
+                        d["prose_source"] = None
+                        d["prose_license"] = None
             fh.write(json.dumps(d, ensure_ascii=False) + "\n")
             n += 1
     return n
+
+
+_PROSE_LICENSE: dict[str, str] | None = None
+
+
+def _prose_license(source: str) -> str:
+    """Redistribution status for one prose source, from the shared registry."""
+    global _PROSE_LICENSE
+    if _PROSE_LICENSE is None:
+        _PROSE_LICENSE = {s["source_id"]: s["redistribution"] for s in source_status()}
+        _PROSE_LICENSE["unknown"] = "unresolved"
+    return _PROSE_LICENSE.get(source, "unresolved")
 
 
 def _anime_records(conn) -> list[dict]:
@@ -91,11 +121,16 @@ def _anime_records(conn) -> list[dict]:
     for row in conn.execute("select * from anime order by anime_id"):
         d = dict(row)
         aid = row["anime_id"]
-        # Upstream prose is never exported. The columns remain in the local
-        # working database for QA, but every shipped artifact carries only
-        # factual fields and project-generated text.
-        d.pop("synopsis", None)
-        d.pop("synopsis_source", None)
+        # Upstream prose ships only with its source attached. Attribution does
+        # not make the text CC-BY: `prose_license` carries the source's actual
+        # redistribution status so a consumer can filter it out.
+        if d.get("synopsis"):
+            source = normalize_source(d.get("synopsis_source"))
+            d["prose_source"] = source
+            d["prose_license"] = _prose_license(source)
+        else:
+            d["prose_source"] = None
+            d["prose_license"] = None
         d["alt_titles"] = alt.get(aid, [])
         d["genres"] = genres.get(aid, [])
         d["themes"] = themes.get(aid, [])
@@ -118,35 +153,68 @@ def source_status() -> list[dict]:
     """
     cfg = load()
     return [
-        {"source_id": "anilist", "name": "AniList", "url": cfg["anilist"]["url"],
+        {"source_id": "anilist", "name": "AniList", "owner": "AniList",
+         "url": cfg["anilist"]["url"], "terms_url": "https://anilist.co/terms",
          "source_type": "graphql_api",
-         "license": "AniList content is copyright its respective providers and licensed to "
-                    "AniList; API use per AniList terms",
+         "data_license": "AniList Terms of Service; content remains copyright its providers",
+         "license": "AniList terms of service; no redistribution grant",
+         "redistribution": "permission_required",
+         "attribution_text": "AniList (anilist.co)",
+         "prose_fields": ["anime.synopsis", "characters.description", "themes.description"],
          "permission_status": "public_api_no_auth",
          "retrieval_method": "GraphQL light+full batches", "retrieval_date": now(),
          "notes": "primary discovery and enrichment source"},
-        {"source_id": "kitsu", "name": "Kitsu", "url": cfg["kitsu"]["url"],
+        {"source_id": "kitsu", "name": "Kitsu", "owner": "Kitsu",
+         "url": cfg["kitsu"]["url"], "terms_url": "https://kitsu.io/terms",
          "source_type": "json_api",
+         "data_license": "Kitsu Terms of Service; no data redistribution grant located",
          "license": "Kitsu terms of service; no redistribution grant located",
+         "redistribution": "permission_required",
+         "attribution_text": "Kitsu (kitsu.io)",
+         "prose_fields": ["anime.synopsis", "episodes.synopsis"],
          "permission_status": "public_api_terms", "retrieval_method": "paginated index + episodes",
          "retrieval_date": now(), "notes": "secondary source and only episode-list provider"},
-        {"source_id": "shikimori", "name": "Shikimori", "url": cfg["shikimori"]["url"],
-         "source_type": "json_api", "license": "unspecified",
+        {"source_id": "shikimori", "name": "Shikimori", "owner": "Shikimori",
+         "url": cfg["shikimori"]["url"], "terms_url": "https://shikimori.io/terms",
+         "source_type": "json_api",
+         "data_license": "Shikimori user agreement (2012); no data-reuse or redistribution "
+                         "grant located",
+         "license": "user agreement found; no data-reuse grant",
+         "redistribution": "unresolved",
+         "attribution_text": "Shikimori (shikimori.io)",
+         "prose_fields": ["anime.synopsis", "characters.description"],
          "permission_status": "public_api_uncertain",
          "retrieval_method": "paginated index + detail + roles + related",
          "retrieval_date": now(),
-         "notes": "license_uncertain; recorded as such and never labelled reusable"},
-        {"source_id": "wikidata", "name": "Wikidata", "url": "https://wikidata.org/wiki/Q1107",
-         "source_type": "sparql", "license": "CC0-1.0", "permission_status": "public_domain_cc0",
+         "notes": "terms page located at shikimori.io/terms; it is a general user agreement, "
+                  "not a data licence, so redistribution is unresolved"},
+        {"source_id": "wikidata", "name": "Wikidata",
+         "owner": "Wikimedia Foundation / Wikidata contributors",
+         "url": "https://wikidata.org/wiki/Q1107",
+         "terms_url": "https://www.wikidata.org/wiki/Wikidata:Licensing",
+         "source_type": "sparql", "data_license": "CC0-1.0",
+         "license": "CC0-1.0", "redistribution": "allowed",
+         "attribution_text": "Wikidata contributors (CC0-1.0)",
+         "prose_fields": [],
+         "permission_status": "public_domain_cc0",
          "retrieval_method": "SPARQL query on Q1107 subclasses", "retrieval_date": now(),
          "notes": "supplementary title source"},
-        {"source_id": "ann", "name": "Anime News Network Encyclopedia", "url": cfg["ann"]["base"],
-         "source_type": "html", "license": "copyrighted",
+        {"source_id": "ann", "name": "Anime News Network Encyclopedia",
+         "owner": "Anime News Network", "url": cfg["ann"]["base"], "terms_url": None,
+         "source_type": "html", "data_license": "copyrighted; no terms page located",
+         "license": "copyrighted", "redistribution": "unresolved",
+         "attribution_text": "Anime News Network (animenewsnetwork.com)",
+         "prose_fields": [],
          "permission_status": "collected_but_not_integrated",
          "retrieval_method": "sample of individual anime.php?id pages", "retrieval_date": now(),
          "notes": "789 sample pages retained in raw storage; zero rows linked into exports"},
-        {"source_id": "mal", "name": "MyAnimeList / Jikan", "url": "https://myanimelist.net",
-         "source_type": "json_api", "license": "see myanimelist.net",
+        {"source_id": "mal", "name": "MyAnimeList / Jikan", "owner": "MyAnimeList",
+         "url": "https://myanimelist.net",
+         "terms_url": "https://myanimelist.net/about/terms_of_use",
+         "source_type": "json_api", "data_license": "not collected",
+         "license": "see myanimelist.net", "redistribution": "blocked",
+         "attribution_text": "MyAnimeList (myanimelist.net)",
+         "prose_fields": [],
          "permission_status": "blocked", "retrieval_method": "none", "retrieval_date": now(),
          "notes": "network-blocked from the collection environment; excluded"},
     ]
@@ -178,14 +246,52 @@ def _write_sqlite(conn) -> int:
     for table in SYSTEM_TABLES:
         conn.execute(f"CREATE TABLE exp.{table} AS SELECT * FROM main.{table}")
 
-    # The SQLite release copy gets the same content policy as the JSONL files:
-    # no upstream synopses, character bios, or episode summaries.
-    conn.execute("UPDATE exp.anime SET synopsis=NULL, synopsis_source=NULL")
-    conn.execute("UPDATE exp.characters SET description=NULL")
-    conn.execute("UPDATE exp.episodes SET synopsis=NULL")
-    conn.execute("UPDATE exp.themes SET description=NULL")
-    conn.execute("UPDATE exp.genres SET description=NULL")
-    conn.execute("DELETE FROM exp.descriptions WHERE kind<>'record_summary'")
+    # Prose is retained in the SQLite copy. Its native source columns travel
+    # with it, and normalised `prose_source` / `prose_license` columns are added
+    # so the SQLite contract matches the JSONL files.
+    for table in ("anime", "characters", "episodes", "themes", "descriptions"):
+        conn.execute(f"ALTER TABLE exp.{table} ADD COLUMN prose_source TEXT")
+        conn.execute(f"ALTER TABLE exp.{table} ADD COLUMN prose_license TEXT")
+    # qa_pairs and rag_chunks already carry `prose_source` from the pipeline;
+    # only the licence status needs adding.
+    for table in ("qa_pairs", "rag_chunks"):
+        conn.execute(f"ALTER TABLE exp.{table} ADD COLUMN prose_license TEXT")
+
+    def source_expr(column: str) -> str:
+        return (
+            f"CASE WHEN {column} IS NULL OR trim({column})='' THEN 'unknown' "
+            f"WHEN {column} LIKE 'kitsu%' THEN 'kitsu' "
+            f"WHEN {column} LIKE 'anilist%' THEN 'anilist' "
+            f"WHEN {column} LIKE 'shikimori%' THEN 'shikimori' "
+            f"WHEN {column} LIKE 'wikidata%' THEN 'wikidata' "
+            f"ELSE 'unknown' END")
+
+    def license_expr(expr: str) -> str:
+        return (
+            f"CASE WHEN {expr} IN ('anilist','kitsu') THEN 'permission_required' "
+            f"WHEN {expr} = 'wikidata' THEN 'allowed' "
+            f"ELSE 'unresolved' END")
+
+    prose_updates = (
+        ("anime", "synopsis", "synopsis_source"),
+        ("characters", "description", "source"),
+        ("episodes", "synopsis", "source"),
+        ("themes", "description", "description_source"),
+    )
+    for table, prose_col, source_col in prose_updates:
+        src = source_expr(source_col)
+        conn.execute(
+            f"UPDATE exp.{table} SET prose_source={src}, prose_license={license_expr(src)} "
+            f"WHERE {prose_col} IS NOT NULL AND trim({prose_col})<>''")
+    conn.execute(
+        "UPDATE exp.descriptions SET prose_source=" + source_expr("source") +
+        ", prose_license=" + license_expr(source_expr("source")) +
+        " WHERE kind='source_synopsis'")
+    for table, prose_kind in (("qa_pairs", "qtype='synopsis'"),
+                              ("rag_chunks", "kind='source_synopsis'")):
+        conn.execute(
+            f"UPDATE exp.{table} SET prose_source=coalesce(nullif(prose_source,''),'unknown'), "
+            f"prose_license={license_expr('prose_source')} WHERE {prose_kind}")
 
     for table in ("anime", "characters", "staff", "episodes", "relationships"):
         conn.execute(f"CREATE INDEX exp.idx_{table}_anime ON {table}(anime_id)")
@@ -235,6 +341,46 @@ def _write_parquet(paths: dict[str, pathlib.Path]) -> int:
     return n
 
 
+def write_attribution() -> int:
+    """Write the field-level attribution registry.
+
+    `unknown` is a first-class entry, not an omission: if a prose row ever ships
+    without a source label it is exported as `unknown` and tiered `unresolved`,
+    and consumers need a record to point at.
+    """
+    sources = [
+        {k: s[k] for k in ("source_id", "name", "owner", "url", "terms_url",
+                           "data_license", "redistribution", "attribution_text",
+                           "prose_fields", "notes")}
+        for s in source_status()
+    ]
+    sources.append({
+        "source_id": "unknown",
+        "name": "Unrecorded upstream source",
+        "owner": "unknown",
+        "url": None,
+        "terms_url": None,
+        "data_license": "no source label recorded",
+        "redistribution": "unresolved",
+        "attribution_text": "source unknown",
+        "prose_fields": ["anime.synopsis", "characters.description",
+                         "episodes.synopsis", "themes.description"],
+        "notes": "Rows in this bucket have upstream prose but no verified source label. "
+                 "They are exported as `unknown` and must not be treated as reusable.",
+    })
+    attribution = {
+        "generated_at": now(),
+        "notice": (
+            "Upstream prose is excluded from the project's CC-BY-4.0 grant. Each field "
+            "remains subject to the named source's terms; attribution is not permission."
+        ),
+        "sources": sources,
+    }
+    (EXPORT_DIR / "attribution.json").write_text(
+        json.dumps(attribution, indent=2, ensure_ascii=False), encoding="utf-8")
+    return len(sources)
+
+
 def main(argv=None) -> int:
     EXPORT_DIR.mkdir(parents=True, exist_ok=True)
     conn = connect()
@@ -246,8 +392,8 @@ def main(argv=None) -> int:
     counts["characters"] = _jsonl_table(
         conn, EXPORT_DIR / "characters.jsonl",
         "select id, anime_id, source, remote_id, name, name_native, name_ru, role, "
-        "voice_actors, source_refs from characters order by id",
-        arrays=("voice_actors", "source_refs"))
+        "description, voice_actors, source_refs from characters order by id",
+        arrays=("voice_actors", "source_refs"), table="characters")
     counts["staff"] = _jsonl_table(
         conn, EXPORT_DIR / "staff.jsonl",
         "select id, anime_id, source, remote_id, name, name_native, name_ru, roles, source_refs "
@@ -258,37 +404,39 @@ def main(argv=None) -> int:
     counts["genres"] = _jsonl(EXPORT_DIR / "genres.jsonl",
         [{"genre": r[0]} for r in conn.execute(
             "select genre from genres order by genre")])
-    # Theme definitions are AniList tag prose, so only the label ships.
-    counts["themes"] = _jsonl(EXPORT_DIR / "themes.jsonl",
-        [{"theme": r[0]} for r in conn.execute(
-            "select theme from themes order by theme")])
+    counts["themes"] = _jsonl_table(
+        conn, EXPORT_DIR / "themes.jsonl",
+        "select theme, description, description_source from themes order by theme",
+        split=False, tier=False, table="themes")
     counts["episodes"] = _jsonl_table(
         conn, EXPORT_DIR / "episodes.jsonl",
-        "select id, anime_id, source, remote_id, number, title, aired, length_min "
-        "from episodes order by id")
+        "select id, anime_id, source, remote_id, number, title, synopsis, aired, length_min "
+        "from episodes order by id", table="episodes")
     counts["relationships"] = _jsonl_table(
         conn, EXPORT_DIR / "relationships.jsonl",
         "select anime_id, other_anime_id, other_source, other_remote_id, relation, source "
         "from relationships order by anime_id")
     counts["qa"] = _jsonl_table(
         conn, EXPORT_DIR / "qa.jsonl",
-        "select id, anime_id, qtype, question, answer, template, grounded_fields "
-        "from qa_pairs order by id", arrays=("grounded_fields",))
+        "select id, anime_id, qtype, question, answer, template, grounded_fields, prose_source "
+        "from qa_pairs order by id", arrays=("grounded_fields",), table="qa_pairs")
     counts["instructions"] = _jsonl_table(
         conn, EXPORT_DIR / "instructions.jsonl",
         "select id, anime_id, itype, instruction, input, output, synthetic, source_record_ids, "
         "purpose, validation from instructions order by id", arrays=("source_record_ids",))
     counts["rag_chunks"] = _jsonl_table(
         conn, EXPORT_DIR / "rag_chunks.jsonl",
-        "select id, anime_id, chunk_index, kind, text, source_refs from rag_chunks order by id",
-        arrays=("source_refs",))
+        "select id, anime_id, chunk_index, kind, text, source_refs, prose_source "
+        "from rag_chunks order by id",
+        arrays=("source_refs",), table="rag_chunks")
     counts["alt_titles"] = _jsonl_table(
         conn, EXPORT_DIR / "alt_titles.jsonl",
         "select anime_id, source, lang, kind, title, sources from alt_titles order by anime_id",
         arrays=("sources",))
     counts["descriptions"] = _jsonl_table(
         conn, EXPORT_DIR / "descriptions.jsonl",
-        "select anime_id, kind, text, synthetic, provenance from descriptions order by anime_id")
+        "select anime_id, kind, text, synthetic, provenance, source from descriptions "
+        "order by anime_id", table="descriptions")
     counts["entity_links"] = _jsonl_table(
         conn, EXPORT_DIR / "entity_links.jsonl",
         "select anime_id, source, remote_id, url, link_method, confidence "
@@ -306,6 +454,7 @@ def main(argv=None) -> int:
             "select entity, entity_id, source, url, retrieved_at, license_note, confidence "
             "from provenance order by id")])
     counts["sources"] = sources_registry(EXPORT_DIR / "sources.jsonl")
+    counts["attribution"] = write_attribution()
     try:
         counts["license_tiers"] = _jsonl(EXPORT_DIR / "license_tiers.jsonl",
             [dict(zip(("anime_id", "tier", "sources", "reason"), r)) for r in conn.execute(

@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-25T16:36:24Z",
-  "version": "2.0.0",
+  "generated_at": "2026-10-25T18:14:46Z",
+  "version": "2.1.0",
   "anime": {
     "count": 35766,
     "splits": {
@@ -607,125 +607,125 @@
     "genres_per_anime_mean": 2.093
   },
   "qa": {
-    "count": 305175,
+    "count": 317907,
     "question_len_chars": {
-      "count": 305175,
+      "count": 317907,
       "min": 14,
-      "q1": 43.0,
-      "median": 53.0,
-      "q3": 66.0,
+      "q1": 42.0,
+      "median": 52.0,
+      "q3": 65.0,
       "max": 311,
-      "mean": 56.4651
+      "mean": 55.7872
     },
     "answer_len_chars": {
-      "count": 305175,
+      "count": 317907,
       "min": 12,
-      "q1": 49.0,
-      "median": 64.0,
-      "q3": 85.0,
-      "max": 732,
-      "mean": 71.4085
+      "q1": 50.0,
+      "median": 66.0,
+      "q3": 92.0,
+      "max": 1200,
+      "mean": 93.367
     },
     "types": [
       {
         "value": "type",
-        "count": 25141
+        "count": 24430
       },
       {
         "value": "air_date",
-        "count": 23329
+        "count": 22797
       },
       {
         "value": "episode_count",
-        "count": 23246
+        "count": 22779
       },
       {
         "value": "japanese_title",
-        "count": 22976
+        "count": 22452
+      },
+      {
+        "value": "synopsis",
+        "count": 21521
       },
       {
         "value": "runtime",
-        "count": 21107
+        "count": 20705
       },
       {
         "value": "alt_titles",
-        "count": 20943
+        "count": 20300
       },
       {
         "value": "genres",
-        "count": 17795
+        "count": 17347
       },
       {
         "value": "studio",
-        "count": 13581
+        "count": 13204
       },
       {
         "value": "score",
-        "count": 12619
+        "count": 12436
       },
       {
         "value": "source",
-        "count": 11780
+        "count": 11449
       },
       {
         "value": "english_title",
-        "count": 11015
+        "count": 10438
       },
       {
         "value": "favourites",
-        "count": 10183
+        "count": 9735
       },
       {
         "value": "themes",
-        "count": 10054
-      },
-      {
-        "value": "character_role",
-        "count": 9850
+        "count": 9586
       },
       {
         "value": "characters",
-        "count": 9730
+        "count": 9428
+      },
+      {
+        "value": "character_role",
+        "count": 9265
       },
       {
         "value": "director",
-        "count": 9277
+        "count": 8989
       },
       {
         "value": "franchise",
-        "count": 8333
-      },
-      {
-        "value": "relationship",
-        "count": 8151
+        "count": 8131
       },
       {
         "value": "relationship_reverse",
-        "count": 8080
+        "count": 8027
+      },
+      {
+        "value": "relationship",
+        "count": 7956
       },
       {
         "value": "multi_hop_episodes",
-        "count": 7988
+        "count": 7749
       },
       {
         "value": "multi_hop_studio",
-        "count": 6681
+        "count": 6310
       },
       {
         "value": "composer",
-        "count": 5483
+        "count": 5268
       },
       {
         "value": "writer",
-        "count": 5285
+        "count": 5173
       },
       {
         "value": "episode_title",
-        "count": 1744
-      },
-      {
-        "value": "unknown_score",
-        "count": 389
+        "count": 1691
       }
     ],
     "contains_grounded_fields_pct": 100.0
@@ -862,15 +862,15 @@
     "validated_pct": 100.0
   },
   "rag": {
-    "count": 179792,
+    "count": 206906,
     "chunk_len_chars": {
-      "count": 179792,
+      "count": 206906,
       "min": 30,
       "q1": 96.0,
-      "median": 181.0,
-      "q3": 379.0,
-      "max": 3040,
-      "mean": 263.3695
+      "median": 188.0,
+      "q3": 391.0,
+      "max": 8764,
+      "mean": 272.5687
     },
     "kinds": [
       {
@@ -894,6 +894,10 @@
         "count": 28809
       },
       {
+        "value": "source_synopsis",
+        "count": 27114
+      },
+      {
         "value": "voice_cast",
         "count": 11709
       },
@@ -905,21 +909,25 @@
     "with_source_refs_pct": 100.0
   },
   "descriptions": {
-    "count": 35766,
+    "count": 63396,
     "kinds": [
       {
         "value": "record_summary",
         "count": 35766
+      },
+      {
+        "value": "source_synopsis",
+        "count": 27630
       }
     ],
     "text_len_chars": {
-      "count": 35766,
-      "min": 18,
-      "q1": 137.0,
-      "median": 266.0,
-      "q3": 389.0,
-      "max": 619,
-      "mean": 263.3581
+      "count": 63396,
+      "min": 3,
+      "q1": 116.0,
+      "median": 258.0,
+      "q3": 410.0,
+      "max": 8763,
+      "mean": 291.2581
     }
   },
   "characters": {
@@ -938,7 +946,15 @@
         "count": 4356
       }
     ],
-    "description_len_chars": null,
+    "description_len_chars": {
+      "count": 84329,
+      "min": 3,
+      "q1": 170.0,
+      "median": 367.0,
+      "q3": 729.0,
+      "max": 10240,
+      "mean": 554.5514
+    },
     "name_len_chars": {
       "count": 283477,
       "min": 1,
@@ -1132,8 +1148,8 @@
     "count": 2966
   },
   "exports": {
-    "file_count": 74,
-    "bytes_total": 1874195582,
+    "file_count": 76,
+    "bytes_total": 2207670065,
     "files": {
       "alt_titles.jsonl": 27320378,
       "alt_titles.jsonl.sha256": 83,
@@ -1141,29 +1157,31 @@
       "alt_titles.parquet.sha256": 85,
       "anime.csv": 8728566,
       "anime.csv.sha256": 76,
-      "anime.jsonl": 40738308,
+      "anime.jsonl": 54320304,
       "anime.jsonl.sha256": 78,
-      "anime.parquet": 7776141,
+      "anime.parquet": 13937121,
       "anime.parquet.sha256": 80,
-      "anime_dataset.sqlite": 776011776,
+      "anime_dataset.sqlite": 850472960,
       "anime_dataset.sqlite.sha256": 87,
-      "characters.jsonl": 98668408,
+      "attribution.json": 4012,
+      "attribution.json.sha256": 83,
+      "characters.jsonl": 165678426,
       "characters.jsonl.sha256": 83,
-      "characters.parquet": 11716981,
+      "characters.parquet": 38654722,
       "characters.parquet.sha256": 85,
-      "checksums.json": 5713,
+      "checksums.json": 5867,
       "checksums.json.sha256": 82,
       "dedup_merge_log.jsonl": 8945480,
       "dedup_merge_log.jsonl.sha256": 88,
-      "descriptions.jsonl": 16731811,
+      "descriptions.jsonl": 36693295,
       "descriptions.jsonl.sha256": 85,
-      "descriptions.parquet": 3329091,
+      "descriptions.parquet": 9964575,
       "descriptions.parquet.sha256": 87,
       "entity_links.jsonl": 15764729,
       "entity_links.jsonl.sha256": 85,
-      "episodes.jsonl": 53971605,
+      "episodes.jsonl": 90612196,
       "episodes.jsonl.sha256": 81,
-      "episodes.parquet": 4908588,
+      "episodes.parquet": 15564995,
       "episodes.parquet.sha256": 83,
       "franchises.jsonl": 3348879,
       "franchises.jsonl.sha256": 83,
@@ -1175,7 +1193,7 @@
       "instructions.parquet.sha256": 87,
       "license_commercial_clear.csv": 15519,
       "license_commercial_clear.csv.sha256": 95,
-      "license_manifest.json": 5923,
+      "license_manifest.json": 9968,
       "license_manifest.json.sha256": 88,
       "license_tier_cc0_only.csv": 6793,
       "license_tier_cc0_only.csv.sha256": 92,
@@ -1183,23 +1201,23 @@
       "license_tier_permission_required.csv.sha256": 103,
       "license_tier_unresolved.csv": 155792,
       "license_tier_unresolved.csv.sha256": 94,
-      "license_tiers.jsonl": 12623230,
+      "license_tiers.jsonl": 12113555,
       "license_tiers.jsonl.sha256": 86,
       "provenance.jsonl": 42427164,
       "provenance.jsonl.sha256": 83,
-      "qa.jsonl": 101750898,
+      "qa.jsonl": 127975780,
       "qa.jsonl.sha256": 75,
-      "qa.parquet": 15191003,
+      "qa.parquet": 21588499,
       "qa.parquet.sha256": 77,
-      "rag_chunks.jsonl": 137417311,
+      "rag_chunks.jsonl": 169193869,
       "rag_chunks.jsonl.sha256": 83,
-      "rag_chunks.parquet": 23674618,
+      "rag_chunks.parquet": 31121398,
       "rag_chunks.parquet.sha256": 85,
       "relationships.jsonl": 7808854,
       "relationships.jsonl.sha256": 86,
       "relationships.parquet": 491571,
       "relationships.parquet.sha256": 88,
-      "sources.jsonl": 2238,
+      "sources.jsonl": 3862,
       "sources.jsonl.sha256": 80,
       "staff.jsonl": 168857087,
       "staff.jsonl.sha256": 78,
@@ -1207,7 +1225,7 @@
       "staff.parquet.sha256": 80,
       "studios.jsonl": 238955,
       "studios.jsonl.sha256": 80,
-      "themes.jsonl": 10271,
+      "themes.jsonl": 92910,
       "themes.jsonl.sha256": 79
     }
   },

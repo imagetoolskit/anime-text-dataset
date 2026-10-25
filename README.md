@@ -2,7 +2,7 @@
 
 > **Text-only anime dataset** built for fine-tuning large language models (LLM), instruction tuning, retrieval-augmented generation (RAG), question answering (QA), entity linking, recommendation systems, and evaluation benchmarks. The headline unit is **unique anime works** — one work expands into many records: characters, staff, episodes, QA pairs, RAG chunks, and relationship edges.
 
-![version](https://img.shields.io/badge/version-2.0.0-blue)
+![version](https://img.shields.io/badge/version-2.1.0-blue)
 ![rows](https://img.shields.io/badge/unique%20anime-35k%2B-success)
 ![formats](https://img.shields.io/badge/formats-JSONL%20%7C%20SQLite%20%7C%20Parquet%20%7C%20CSV-lightgrey)
 ![license](https://img.shields.io/badge/license-per--record%20tiers-orange)
@@ -45,10 +45,10 @@
 | Alternative titles | 135,425 |
 | Relationship edges | 39,226 |
 | Franchise clusters | 23,980 |
-| Record summaries | 35,766 |
-| Question/answer pairs | 305,175 |
+| Descriptions (summaries + synopses) | 63,396 |
+| Question/answer pairs | 317,907 |
 | Instruction-tuning examples | 235,395 |
-| RAG chunks | 179,792 |
+| RAG chunks | 206,906 |
 | Split: train / val / test | 32,189 / 1,788 / 1,789 |
 
 Coverage of the anime table (share of rows carrying a value):
@@ -86,7 +86,7 @@ Each anime work includes:
 
 - **Identity and titles** — canonical, English, Japanese, and up to dozens of alternative titles per work.
 - **Discovery metadata** — format, status, episode count, duration, air dates, season bucket, year.
-- **Text content** — a generated record summary built from the work's own structured fields. Upstream synopses are not included (see `LICENSE_AUDIT.md`).
+- **Text content** — a generated record summary built from the work's own structured fields, plus the upstream synopsis where one was published, carrying `prose_source` and `prose_license` (see `LICENSE_AUDIT.md`).
 - **Scores and popularity** — mean score normalised to a single 0–100 scale, popularity, favourites.
 - **Taxonomy** — genre and theme labels, source material, age rating.
 - **Cast and crew** — characters with roles and voice actors, staff with per-record credit roles.
@@ -99,10 +99,10 @@ Each anime work includes:
 
 | Collection | Rows per anime | What it teaches |
 | --- | --- | --- |
-| `qa.jsonl` | 6–14 | Direct question answering over one work: metadata, cast, crew, episodes, relations, franchise, multi-hop, comparison |
+| `qa.jsonl` | 6–14 | Direct question answering over one work: metadata, cast, crew, episodes, relations, franchise, multi-hop, comparison, synopsis |
 | `instructions.jsonl` | 0–12 | Task formats: extraction, summarisation, JSON repair, title normalisation, entity resolution, abstention |
 | `rag_chunks.jsonl` | 4–10 | Retrieval units written as prose, each with `source_refs` and a `kind` label |
-| `descriptions.jsonl` | 1 | `record_summary`, generated from structured fields only |
+| `descriptions.jsonl` | 2 | `record_summary` generated from structured fields, plus `source_synopsis` with its source |
 
 **QA pairs** are emitted only when every value in the answer exists in the
 database for that work. Each question type has several phrasings chosen
@@ -116,19 +116,20 @@ for a transformation of exactly those facts. This is checked at validation time
 by re-reading the input and confirming each output value appears in it.
 
 **RAG chunks** are prose, not JSON dumps, and are labelled by family
-(`record_summary`, `title_aliases`, `characters`, `voice_cast`,
-`staff`, `episodes`, `relations`).
+(`record_summary`, `source_synopsis`, `title_aliases`, `characters`,
+`voice_cast`, `staff`, `episodes`, `relations`). `source_synopsis` chunks are
+upstream text and carry `prose_source` + `prose_license`.
 
 ### What it is NOT
 
 - No images, posters, audio, subtitles, or lyrics.
-- No upstream plot synopses, character biographies or episode summaries.
-  Those are third-party expression, so they are excluded from every export
-  rather than paraphrased. See `LICENSE_AUDIT.md`.
 - No full scripts or long copyrighted passages.
 - No human-written question/answer pairs: the QA and instruction corpora are
   template-generated from structured fields. They are supervision for
   extraction and grounding, not a source of new facts.
+- Not uniformly licensed: retained synopses, biographies, episode summaries and
+  tag definitions are third-party prose, excluded from the project's CC-BY-4.0
+  grant. See `LICENSE_AUDIT.md`.
 
 ---
 
@@ -254,14 +255,18 @@ Machine-readable: `exports/license_tiers.jsonl` (per anime),
 Human-readable: [docs/LICENSE_NOTES.md](docs/LICENSE_NOTES.md), [NOTICE](NOTICE),
 [ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md).
 
-The repository code, pipeline and generated text are released under
+The repository code, pipeline and project-generated text are released under
 **[CC-BY-4.0](LICENSE)**. That license covers the code and the text this project
 generates; it cannot and does not relicense upstream source content.
 
-**No upstream prose ships.** Plot synopses, character biographies and episode
-summaries are third-party expression and no source terms grant redistribution,
-so those fields are dropped from every export rather than paraphrased. Every
-artifact and its rights status is listed in [LICENSE_AUDIT.md](LICENSE_AUDIT.md).
+**Upstream prose is retained, attributed, and excluded from that grant.** Plot
+synopses, character biographies, episode summaries and tag definitions are
+third-party expression. Every prose row carries `prose_source` and
+`prose_license`; per-source owners and terms are in
+[exports/attribution.json](exports/attribution.json) and the
+`prose_attribution` block of `exports/license_manifest.json`. Attribution is not
+permission. Every artifact and its rights status is listed in
+[LICENSE_AUDIT.md](LICENSE_AUDIT.md).
 
 ---
 
@@ -269,21 +274,21 @@ artifact and its rights status is listed in [LICENSE_AUDIT.md](LICENSE_AUDIT.md)
 
 | Object | Export file | Content |
 | --- | --- | --- |
-| Anime | `anime.jsonl` | canonical record per unique work, with nested titles/genres/themes/studios/sources |
-| Characters | `characters.jsonl` | name, native name, localized name, role, voice actors |
+| Anime | `anime.jsonl` | canonical record per unique work, with nested titles/genres/themes/studios/sources and attributed synopsis |
+| Characters | `characters.jsonl` | name, native name, localized name, role, voice actors, attributed biography |
 | Staff | `staff.jsonl` | person, credit roles, source references |
 | Studios | `studios.jsonl` | studio names + identifiers |
-| Genres / themes | `genres.jsonl`, `themes.jsonl` | controlled vocabulary |
-| Episodes | `episodes.jsonl` | number, title, air date, runtime |
+| Genres / themes | `genres.jsonl`, `themes.jsonl` | controlled vocabulary; theme definitions attributed |
+| Episodes | `episodes.jsonl` | number, title, air date, runtime, attributed summary |
 | Relationships | `relationships.jsonl` | typed edges between works |
 | Alternative titles | `alt_titles.jsonl` | language, kind, and the sources that supplied it |
-| Descriptions | `descriptions.jsonl` | `record_summary` only, with provenance |
-| QA pairs | `qa.jsonl` | question, answer, type, template, grounded fields |
+| Descriptions | `descriptions.jsonl` | `record_summary` plus attributed `source_synopsis` |
+| QA pairs | `qa.jsonl` | question, answer, type, template, grounded fields, prose source |
 | Instructions | `instructions.jsonl` | instruction, input, output, type, purpose |
-| RAG chunks | `rag_chunks.jsonl` | prose chunk, `kind`, `source_refs` |
+| RAG chunks | `rag_chunks.jsonl` | prose chunk, `kind`, `source_refs`, prose source |
 | Entity links | `entity_links.jsonl` | internal → external IDs, method, confidence |
 | Franchises | `franchises.jsonl` | anime → franchise cluster id |
-| Provenance | `provenance.jsonl` + `sources.jsonl` | per-record + source registry |
+| Provenance | `provenance.jsonl` + `sources.jsonl` + `attribution.json` | per-record, per-source, and per-prose-owner registry |
 | License tiers | `license_tiers.jsonl` | per-anime redistribution tier and reason |
 
 ### The `anime` record schema
@@ -301,6 +306,7 @@ artifact and its rights status is listed in [LICENSE_AUDIT.md](LICENSE_AUDIT.md)
 | `source_material`, `age_rating` | enum | e.g. `MANGA`, `PG-13` |
 | `quality_tier` | string | A / B / C |
 | `confidence` | string | high/medium/low |
+| `synopsis`, `synopsis_source` | string | upstream synopsis and its registry id; `prose_source`/`prose_license` are added on export |
 | `alt_titles`, `genres`, `themes`, `studios`, `sources`, `franchise_id`, `license_tier`, `split` | list/string | enriched record |
 
 Full field-level reference: [`docs/DATA_DICTIONARY.md`](docs/DATA_DICTIONARY.md) and [`docs/SCHEMAS.md`](docs/SCHEMAS.md).
@@ -472,7 +478,9 @@ for line in open("exports/qa.jsonl", encoding="utf-8"):
 
 **Is there leakage across train/test?** No — splits are assigned per anime, so all records of one work stay in one bucket.
 
-**Can I publish a model trained on this?** Check the `license_tier` column first. Only `cc0_only` rows have no upstream permission outstanding; `permission_required` and `unresolved` rows carry obligations that this project cannot discharge for you. This is an organisational aid, not legal advice.
+**Can I publish a model trained on this?** Check the `license_tier` and `prose_license` columns first. Only `cc0_only` rows have no upstream permission outstanding; `permission_required` and `unresolved` rows carry obligations that this project cannot discharge for you. This is an organisational aid, not legal advice.
+
+**Is the upstream prose licensed?** No. Synopses, biographies, episode summaries and tag definitions are retained with a recorded source and are excluded from the CC-BY-4.0 grant. Attribution is not permission; check `exports/attribution.json` for the owner and terms of each source.
 
 **Why are some answers "not recorded"?** About one QA pair in twenty is a deliberate abstention for a field that is genuinely absent, so a model can learn to decline rather than guess.
 
@@ -485,7 +493,7 @@ for line in open("exports/qa.jsonl", encoding="utf-8"):
   author    = {Muhammad Muqeet},
   title     = {Large Anime Text Dataset},
   year      = {2026},
-  version   = {2.0.0},
+  version   = {2.1.0},
   note      = {Large anime text dataset; see reports/summary.json for exact row counts. Contact: muqeet@animearray.site; muqeet@anitroves.com}
 }
 ```
@@ -498,7 +506,8 @@ Machine-readable: [`CITATION.cff`](CITATION.cff).
 
 The repository code, pipeline, and generated text are licensed under
 **[CC-BY-4.0](LICENSE)**. Upstream source content is not relicensed by that
-license: every anime row carries a `license_tier` derived from the sources that
-contributed to it, and `exports/license_manifest.json` states what each tier
-permits. No upstream prose is shipped; the per-artifact audit is
-[LICENSE_AUDIT.md](LICENSE_AUDIT.md).
+license: every anime row carries a `license_tier` derived from the metadata and
+prose sources that contributed to it, and `exports/license_manifest.json` states
+what each tier permits. Retained prose also carries `prose_source` and
+`prose_license`; owners and terms are in `exports/attribution.json`. The
+per-artifact audit is [LICENSE_AUDIT.md](LICENSE_AUDIT.md).

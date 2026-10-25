@@ -12,14 +12,16 @@ Chunk families per anime:
   staff            production credits grouped by role
   episodes         the episode list
   relations        sequels, prequels, side stories, franchise neighbours
+  source_synopsis  the upstream synopsis, kept verbatim and attributed
 
-No upstream prose is chunked. Synopses and character bios are third-party
-text, so the release ships only text assembled from factual fields.
+`source_synopsis` is third-party text. It carries a `prose_source` and is
+excluded from the project's CC-BY-4.0 grant; see `exports/attribution.json`.
 """
 
 import json
 
 from ..db import connect, cp_set, log
+from .attribution import normalize_source
 from .facts import (DIRECTOR_EXCLUDE, MUSIC_EXCLUDE, WRITER_EXCLUDE, find_staff,
                     load_children, load_titles)
 
@@ -53,6 +55,9 @@ def build_chunks(title, row, children, refs, franchise_titles) -> list[tuple[str
 
     if row["summary"]:
         out.append(("record_summary", row["summary"], ["descriptions.record_summary"]))
+
+    if row.get("synopsis"):
+        out.append(("source_synopsis", row["synopsis"], ["anime.synopsis"]))
 
     aliases = [a["title"] for a in children["alts"].get(aid, []) if a["title"] != title][:8]
     lead = f"{title} is an anime work"
@@ -148,6 +153,7 @@ def run() -> int:
     conn = connect()
     from .normalize import ensure_column
     ensure_column(conn, "rag_chunks", "kind", "TEXT")
+    ensure_column(conn, "rag_chunks", "prose_source", "TEXT")
     conn.execute("DELETE FROM rag_chunks")
     children = load_children(conn)
     titles = load_titles(conn)
@@ -156,8 +162,8 @@ def run() -> int:
         "select anime_id, text from descriptions where kind='record_summary'")}
 
     rows = conn.execute(
-        "select anime_id, title_canonical, title_english, type, year from anime "
-        "where title_canonical is not null or title_english is not null").fetchall()
+        "select anime_id, title_canonical, title_english, type, year, synopsis, synopsis_source "
+        "from anime where title_canonical is not null or title_english is not null").fetchall()
 
     n = 0
     per_kind: dict[str, int] = {}
@@ -182,10 +188,13 @@ def run() -> int:
                 r["fields"] = fields
             if not chunk_refs:
                 chunk_refs = [{"source": "derived", "fields": fields}]
+            prose_source = (normalize_source(row["synopsis_source"])
+                            if kind == "source_synopsis" else None)
             conn.execute(
-                "INSERT INTO rag_chunks(anime_id, chunk_index, kind, text, source_refs) "
-                "VALUES(?,?,?,?,?)",
-                (aid, idx, kind, text, json.dumps(chunk_refs, ensure_ascii=False)))
+                "INSERT INTO rag_chunks(anime_id, chunk_index, kind, text, source_refs, "
+                "prose_source) VALUES(?,?,?,?,?,?)",
+                (aid, idx, kind, text, json.dumps(chunk_refs, ensure_ascii=False),
+                 prose_source))
             idx += 1
             n += 1
             per_kind[kind] = per_kind.get(kind, 0) + 1

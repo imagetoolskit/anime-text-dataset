@@ -243,7 +243,7 @@ duplicate-title validation failing.
 ```bash
 python -m src.cli relationships   # anime-to-anime edges only
 python -m src.cli franchise       # strong-relation franchise clusters
-python -m src.cli descriptions    # record_summary only
+python -m src.cli descriptions    # record summaries + attributed upstream synopses
 python -m src.cli qa              # grounded QA pairs (~30 question types)
 python -m src.cli instructions    # instruction examples (12 task types)
 python -m src.cli rag             # prose RAG chunks with kind + source_refs
@@ -389,7 +389,7 @@ sha256sum -c *.sha256
 ### Download release assets with the GitHub CLI
 
 ```bash
-gh release download v2.0.0 -D exports     # fetch the full exported dataset
+gh release download v2.1.0 -D exports     # fetch the full exported dataset
 ```
 
 ---
@@ -505,7 +505,7 @@ python examples/finetune_lora.py \
 | Count anime | `python -c "import json;print(sum(1 for _ in open('exports/anime.jsonl',encoding='utf-8')))"` |
 | Normalize after entities | `python -m src.cli normalize` |
 | Enrich everything (slow) | `python -m src.cli enrich anilist --all` |
-| Download the dataset | `gh release download v2.0.0 -D exports` |
+| Download the dataset | `gh release download v2.1.0 -D exports` |
 | Regenerate data profile | `python scripts/data_profile.py` |
 | Dry-run HF publish | `python scripts/upload_hf.py --repo <hf-user>/large-anime-text-dataset --dry-run` |
 | Fine-tune with LoRA | `python examples/finetune_lora.py --data exports/instructions.jsonl` |

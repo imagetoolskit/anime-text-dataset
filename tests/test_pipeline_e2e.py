@@ -188,26 +188,52 @@ def main():
     assert (ex / "license_manifest.json").exists()
     assert (ex / "license_commercial_clear.csv").exists()
 
-    # Content policy: no upstream prose in any shipped file.
-    assert all("synopsis" not in a and "synopsis_source" not in a for a in anime_export)
+    # Content policy: upstream prose ships, but only with a source and a
+    # redistribution status attached. The project's CC-BY grant does not cover it.
+    assert all("synopsis" in a and "synopsis_source" in a for a in anime_export)
+    for a in anime_export:
+        if a.get("synopsis"):
+            assert a.get("prose_source") and a.get("prose_license"), a.get("anime_id")
     char_export = [json.loads(line) for line in
                    (ex / "characters.jsonl").read_text(encoding="utf-8").splitlines()]
-    assert all("description" not in c for c in char_export)
-    for name in ("themes.jsonl", "genres.jsonl"):
-        rows = [json.loads(line) for line in
-                (ex / name).read_text(encoding="utf-8").splitlines()]
-        assert all("description" not in r for r in rows)
+    for c in char_export:
+        if c.get("description"):
+            assert c.get("prose_source") and c.get("prose_license"), c.get("id")
+    theme_export = [json.loads(line) for line in
+                    (ex / "themes.jsonl").read_text(encoding="utf-8").splitlines()]
+    assert all(r.get("prose_source") and r.get("prose_license")
+               for r in theme_export if r.get("description"))
+    genre_export = [json.loads(line) for line in
+                    (ex / "genres.jsonl").read_text(encoding="utf-8").splitlines()]
+    assert all("description" not in r for r in genre_export)
     desc_export = [json.loads(line) for line in
                    (ex / "descriptions.jsonl").read_text(encoding="utf-8").splitlines()]
-    assert desc_export and all(d["kind"] == "record_summary" for d in desc_export)
+    assert desc_export and all(d["kind"] in ("record_summary", "source_synopsis")
+                               for d in desc_export)
+    assert all(d.get("prose_source") and d.get("prose_license")
+               for d in desc_export if d["kind"] == "source_synopsis")
     rag_export = [json.loads(line) for line in
                   (ex / "rag_chunks.jsonl").read_text(encoding="utf-8").splitlines()]
-    assert all(r["kind"] != "source_synopsis" for r in rag_export)
+    assert all(r.get("prose_source") and r.get("prose_license")
+               for r in rag_export if r["kind"] == "source_synopsis")
     qa_export = [json.loads(line) for line in
                  (ex / "qa.jsonl").read_text(encoding="utf-8").splitlines()]
-    assert all(q["qtype"] != "synopsis" for q in qa_export)
+    assert all(q.get("prose_source") and q.get("prose_license")
+               for q in qa_export if q["qtype"] == "synopsis")
     manifest = json.loads((ex / "license_manifest.json").read_text(encoding="utf-8"))
-    assert manifest["content_policy"]["upstream_prose"] == "removed"
+    assert manifest["content_policy"]["upstream_prose"] == "retained_with_attribution"
+    assert manifest["content_policy"]["upstream_text_license"].startswith("not granted")
+    attribution = {s["source_id"]: s for s in manifest["prose_attribution"]}
+    assert {"anilist", "kitsu", "shikimori", "unknown"} <= set(attribution)
+    for source in attribution.values():
+        assert source["owner"] and source["redistribution"]
+    attr_file = json.loads((ex / "attribution.json").read_text(encoding="utf-8"))
+    assert {"anilist", "kitsu", "shikimori", "unknown"} <= {
+        s["source_id"] for s in attr_file["sources"]}
+    assert (ex / "sources.jsonl").exists()
+    sources = [json.loads(line) for line in
+               (ex / "sources.jsonl").read_text(encoding="utf-8").splitlines()]
+    assert all(s.get("owner") and s.get("redistribution") for s in sources)
     scale_checks = {"min_titles", "split_proportions"}
     scaled_failures = [c for c in res["failed"] if c not in scale_checks]
     assert not scaled_failures, scaled_failures

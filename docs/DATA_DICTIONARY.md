@@ -1,4 +1,4 @@
-# Data dictionary — Large Anime Text Dataset v2.0.0
+# Data dictionary - Large Anime Text Dataset v2.1.0
 
 All JSONL exports are UTF-8, one JSON object per line, stable IDs. `null` means
 unavailable — never guessed. Language labels follow the source's own vocabulary
@@ -90,15 +90,17 @@ credit should match on the role string and exclude the near-miss credit types �
 
 ## genres.jsonl / themes.jsonl
 
-`genre` / `theme` (primary key only). Theme definitions were upstream tag
-prose, so only the label ships.
+`genre` / `theme` (primary key). `themes.jsonl` also carries `description` and
+`description_source`: the definition is upstream AniList tag prose, retained with
+attribution and excluded from the project's CC-BY-4.0 grant.
 
 ## episodes.jsonl
 
-`id`, `anime_id`, `source`, `remote_id`, `number`, `title`, `aired`,
-`length_min`. Unique on `(source, anime_id, number)`. Episode summaries are
-upstream prose and are not exported; `title_native` stays in the working
-database but is not part of the release file.
+`id`, `anime_id`, `source`, `remote_id`, `number`, `title`, `synopsis`, `aired`,
+`length_min`, plus `prose_source` and `prose_license`. Unique on
+`(source, anime_id, number)`. Episode summaries are upstream Kitsu prose and are
+retained with attribution; `title_native` stays in the working database but is
+not part of the release file.
 
 Episode lists come from Kitsu. Works without a Kitsu match have an episode
 count on `anime.jsonl` but no rows here.
@@ -123,28 +125,38 @@ deduplicated on a normalized title key per anime.
 
 | Field | Value |
 | --- | --- |
-| `kind` | `record_summary` (the only kind shipped) |
-| `synthetic` | always `1` |
-| `provenance` | "generated from structured fields only; no plot facts invented" |
+| `kind` | `record_summary` or `source_synopsis` |
+| `synthetic` | `1` for `record_summary`, `0` for `source_synopsis` |
+| `provenance` | generation note, or the upstream-attribution note |
+| `source` | registry id for `source_synopsis` rows |
+| `prose_source`, `prose_license` | added on export for `source_synopsis` rows |
 
 `record_summary` is assembled from structured fields of the same record — format,
 year, episode count, studios, directors, source material, genres, themes, cast,
-score — in one of several sentence orders. It contains no plot detail.
-Upstream synopses are not stored in this file; see `LICENSE_AUDIT.md`.
+score — in one of several sentence orders. It contains no plot detail and is
+covered by the project's CC-BY-4.0 grant.
+
+`source_synopsis` is the upstream synopsis verbatim. It is third-party text,
+excluded from the CC-BY-4.0 grant, and carries its source and licence status.
+See `LICENSE_AUDIT.md`.
 
 ## qa.jsonl — grounded question/answer pairs
 
 `id`, `anime_id`, `qtype`, `question`, `answer`, `template`, `grounded_fields`
-(array of database fields the answer is computed from), `split`,
-`license_tier`.
+(array of database fields the answer is computed from), `prose_source`,
+`split`, `license_tier`.
 
 Current question types: `type`, `air_date`, `episode_count`, `runtime`,
 `studio`, `genres`, `themes`, `source`, `score`, `favourites`, `english_title`,
 `japanese_title`, `alt_titles`, `characters`, `voice_actor`,
 `character_role`, `director`, `composer`, `writer`, `episode_title`,
 `relationship`, `relationship_reverse`, `franchise`, `multi_hop_studio`,
-`multi_hop_episodes`, `comparison`, `unknown_episodes`, `unknown_studio`,
-`unknown_score`.
+`multi_hop_episodes`, `comparison`, `synopsis`, `unknown_episodes`,
+`unknown_studio`, `unknown_score`.
+
+`synopsis` answers are the upstream synopsis, not a paraphrase. They carry
+`prose_source` and `prose_license` and are excluded from the project's
+CC-BY-4.0 grant.
 
 `unknown_*` questions are deliberate abstentions: the answer states that the
 field is not recorded for that work. They are capped at roughly one pair in
@@ -173,17 +185,19 @@ appears in the input.
 
 ## rag_chunks.jsonl
 
-`id`, `anime_id`, `chunk_index`, `kind`, `text`, `source_refs`, `split`,
-`license_tier`.
+`id`, `anime_id`, `chunk_index`, `kind`, `text`, `source_refs`, `prose_source`,
+`split`, `license_tier`.
 
-`kind` is one of `record_summary`, `title_aliases`, `characters`,
-`voice_cast`, `staff`, `episodes`, `relations`. `source_refs` is an
+`kind` is one of `record_summary`, `source_synopsis`, `title_aliases`,
+`characters`, `voice_cast`, `staff`, `episodes`, `relations`. `source_refs` is an
 array of `{source, remote_id, url?, fields}` naming the records and fields the
 chunk was assembled from.
 
-Chunks are prose sentences assembled from factual fields, not JSON dumps, and
-every chunk ends in sentence punctuation so a retriever never returns a
-fragment. No upstream synopsis or biography text is chunked.
+Most chunks are prose sentences assembled from factual fields, not JSON dumps.
+`source_synopsis` chunks are the upstream synopsis verbatim; they carry
+`prose_source` and `prose_license` and are excluded from the project's
+CC-BY-4.0 grant. Every chunk ends in sentence punctuation so a retriever never
+returns a fragment.
 
 ## entity_links.jsonl
 

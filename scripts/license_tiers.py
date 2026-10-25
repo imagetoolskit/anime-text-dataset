@@ -1,16 +1,18 @@
 """License tier classification and manifest generation.
 
 Each anime row is assigned the strictest tier implied by the sources that
-contributed to it. The tier names describe the actual obligation rather than
-implying that attribution alone makes a record reusable:
+contributed to it, including upstream prose fields. The tier names describe the
+actual obligation rather than implying that attribution alone makes a record
+reusable:
 
   cc0_only             only CC0 (Wikidata) content contributed. Reusable with
                        no copyright obligation; attribution is courtesy.
-  permission_required  AniList or Kitsu content contributed. Neither source's
-                       terms grant redistribution of the content; permission is
-                       required before publishing derived records.
-  unresolved           Shikimori (terms not located) or ANN (copyrighted)
-                       contributed. No permission basis; do not redistribute.
+  permission_required  AniList or Kitsu content (metadata or prose) contributed.
+                       Neither source's terms grant redistribution of the
+                       content; permission is required before publishing.
+  unresolved           Shikimori (user agreement, no data grant), ANN
+                       (copyrighted), or an unrecorded prose source contributed.
+                       No permission basis; do not redistribute.
 
 Writes:
   data/anime.db          license_tiers table (anime_id, tier, sources, reason)
@@ -33,6 +35,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+
+from src.pipeline.attribution import normalize_source
 
 SOURCE_TIER = {
     "anilist": "permission_required",
@@ -81,11 +85,14 @@ def get_sources(exports: Path | None = None) -> list[dict]:
 
 
 def load_source_reasons(exports: Path | None = None) -> dict[str, str]:
-    return {
+    reasons = {
         s["source_id"]: (f"{s['name']}: {s['license']} [{s['permission_status']}] "
                          f"(recorded {s['retrieval_date']})")
         for s in get_sources(exports)
     }
+    reasons["unknown_prose_source"] = (
+        "unrecorded upstream prose source: the row has no source label [unresolved]")
+    return reasons
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -124,6 +131,33 @@ def main(argv: list[str] | None = None) -> int:
                 "title": r["title_canonical"] or r["title_english"],
             }
 
+    # A work can be CC0 in its metadata and still ship Kitsu or Shikimori
+    # prose. The prose source is part of the obligation, so it participates in
+    # the strictest-tier decision instead of being ignored.
+    prose_queries = [
+        "select anime_id, synopsis_source as source from anime "
+        "where synopsis is not null and trim(synopsis)<>''",
+        "select anime_id, source from characters "
+        "where description is not null and trim(description)<>''",
+        "select anime_id, source from episodes "
+        "where synopsis is not null and trim(synopsis)<>''",
+        "select anime_id, source from descriptions where kind='source_synopsis'",
+    ]
+    for sql in prose_queries:
+        for r in conn.execute(sql):
+            entry = agg.get(r["anime_id"])
+            if not entry:
+                continue
+            source = normalize_source(r["source"])
+            label = source if source != "unknown" else "unknown_prose_source"
+            tier = "unresolved" if source == "unknown" else SOURCE_TIER.get(source, "unresolved")
+            idx = PRECEDENCE.index(tier)
+            if idx < entry["tier_idx"]:
+                entry["tier_idx"] = idx
+                entry["tier"] = tier
+            if label not in entry["sources"]:
+                entry["sources"].append(label)
+
     rows = []
     by_tier = {t: 0 for t in PRECEDENCE}
     for aid, e in sorted(agg.items()):
@@ -160,7 +194,7 @@ def main(argv: list[str] | None = None) -> int:
     manifest = {
         "generated_at": datetime.datetime.now(datetime.timezone.utc)
                         .isoformat(timespec="seconds"),
-        "scope": "one tier per anime row; the strictest contributing source wins",
+        "scope": "one tier per anime row; the strictest contributing metadata or prose source wins",
         "precedence": PRECEDENCE,
         "tier_definitions": TIER_DEFINITIONS,
         "counts": {
@@ -171,33 +205,57 @@ def main(argv: list[str] | None = None) -> int:
         },
         "source_status": get_sources(exports),
         "content_policy": {
-            "upstream_prose": "removed",
-            "removed_fields": [
-                "anime.synopsis",
-                "anime.synopsis_source",
-                "characters.description",
-                "episodes.synopsis",
-                "themes.description",
-                "genres.description",
-                "descriptions.kind=source_synopsis",
-                "rag_chunks.kind=source_synopsis",
-                "qa_pairs.qtype=synopsis",
-            ],
-            "shipped_text": "factual fields, short names and titles, and project-generated text",
+            "upstream_prose": "retained_with_attribution",
+            "prose_fields": {
+                "anime.synopsis": "upstream synopsis; source in anime.synopsis_source",
+                "characters.description": "upstream biography; source in characters.source",
+                "episodes.synopsis": "upstream episode summary; source in episodes.source",
+                "themes.description": "upstream tag definition; source in themes.description_source",
+                "descriptions.kind=source_synopsis": "upstream synopsis; source in descriptions.source",
+                "rag_chunks.kind=source_synopsis": "upstream synopsis chunk; source in rag_chunks.prose_source",
+                "qa_pairs.qtype=synopsis": "upstream synopsis answer; source in qa_pairs.prose_source",
+            },
+            "shipped_text": "factual fields, project-generated text, and attributed upstream prose",
             "reason": (
-                "Upstream synopses and character bios are third-party expression. No source "
-                "terms grant redistribution, and a close paraphrase would still be a "
-                "derivative work, so the fields are dropped instead of rewritten."
+                "Upstream synopses and character bios are retained because they carry real "
+                "training signal, but they are third-party expression. They are excluded from "
+                "the project's CC-BY-4.0 grant and remain subject to the named source's terms; "
+                "attribution is not permission."
             ),
             "project_text_license": "CC-BY-4.0, Muhammad Muqeet",
+            "upstream_text_license": "not granted by this repository; see prose_attribution",
             "not_shipped": ["data/anime.db", "data/cache", "raw_payload payload column"],
         },
+        "prose_attribution": [
+            {
+                "source_id": s["source_id"],
+                "name": s["name"],
+                "owner": s["owner"],
+                "terms_url": s["terms_url"],
+                "data_license": s["data_license"],
+                "redistribution": s["redistribution"],
+                "fields": s["prose_fields"],
+            }
+            for s in get_sources(exports) if s["prose_fields"]
+        ] + [
+            {
+                "source_id": "unknown",
+                "name": "Unrecorded upstream source",
+                "owner": "unknown",
+                "terms_url": None,
+                "data_license": "source label missing",
+                "redistribution": "unresolved",
+                "fields": ["anime.synopsis"],
+            }
+        ],
         "known_gaps": [
-            "Shikimori publishes no located license or terms for API data.",
+            "Shikimori's user agreement was located at shikimori.io/terms but grants no "
+            "data-reuse right; redistribution remains unresolved.",
             "AniList terms do not grant redistribution and prohibit hoarding or mass collection; "
             "permission is required.",
             "Kitsu's terms do not grant redistribution of API data; permission is required.",
-            "ANN sample pages are retained in raw storage but linked to zero exported rows.",
+            "ANN sample pages are retained in raw storage but linked to zero exported rows; "
+            "no ANN terms page was located.",
             "MAL/Jikan is unreachable from the collection environment and was excluded.",
             "Tiers describe the dataset's own provenance, not the copyright status of the "
             "underlying anime works, which remain with their rights holders.",

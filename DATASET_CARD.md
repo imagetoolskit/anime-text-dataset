@@ -1,14 +1,14 @@
 # DATASET_CARD
 
 **Dataset name:** Large Anime Text Dataset
-**Version:** 2.0.0
+**Version:** 2.1.0
 **Primary language:** en (titles and localized names also span ja/romaji/ru and others, labelled per field)
 **Text-only:** yes — no images, video, audio, subtitles, lyrics, or artwork
 **Collection date:** see `exports/sources.jsonl` (`retrieval_date` per source); the
 collection was refreshed on 2026-10-25
 **Data cutoff:** the retrieval date of each source, recorded per source
-**Statement:** factual metadata corpus with per-record provenance, confidence and a
-redistribution tier.
+**Statement:** factual metadata corpus with per-record provenance, confidence, a
+redistribution tier, and field-level attribution for retained upstream prose.
 **Developer:** Muhammad Muqeet
 **Contact:** muqeet@animearray.site, muqeet@anitroves.com
 
@@ -22,9 +22,9 @@ redistribution tier.
 | Unique anime works | **35,766** |
 | Characters / staff credits | 283,477 / 535,642 |
 | Episodes | 276,763 |
-| QA pairs / instructions / RAG chunks | 305,175 / 235,395 / 179,792 |
+| QA pairs / instructions / RAG chunks | 317,907 / 235,395 / 206,906 |
 | Alternative titles / relationship edges | 135,425 / 39,226 |
-| Descriptions | 35,766 |
+| Descriptions (summaries + attributed synopses) | 63,396 |
 | License tiers | 35,766 |
 | Split | train 32,189 / val 1,788 / test 1,789 |
 | Formats | JSONL (canonical), SQLite, Parquet, CSV |
@@ -48,6 +48,13 @@ Per-anime tables (`anime`, `characters`, `staff`, `episodes`, `relationships`,
 `descriptions`, `qa_pairs`, `instructions`, `rag_chunks`, `franchises`,
 `alt_titles`) each carry `split` and `license_tier` columns in the SQLite and
 Parquet exports, so a consumer can filter a training set without a join.
+
+Retained upstream prose is marked at field level. `anime.synopsis`,
+`characters.description`, `episodes.synopsis`, `themes.description`,
+`descriptions` rows of kind `source_synopsis`, `qa_pairs` rows of type
+`synopsis`, and `rag_chunks` rows of kind `source_synopsis` carry
+`prose_source` and `prose_license`. That prose is excluded from the project's
+CC-BY-4.0 grant.
 
 Reference tables (`genres`, `themes`, `studios`, `license_tiers`) and system
 tables (`splits`, `dedup_log`, `provenance`, `quality_validation`, `checkpoint`,
@@ -92,14 +99,14 @@ and machine-readable in `reports/summary.json` (`field_coverage`).
 
 ## Sources of data
 
-| Source | Contribution | Terms | Tier |
+| Source | Contribution | Owner / terms | Tier |
 | --- | --- | --- | --- |
-| AniList (GraphQL) | discovery, scores, characters, staff, relations | public API; redistribution not granted | `permission_required` |
-| Kitsu (JSON:API) | discovery, episode lists | public API; redistribution not granted | `permission_required` |
-| Shikimori (JSON) | discovery, cast, crew, relations | no licence located | `unresolved` |
-| Wikidata (SPARQL) | supplementary titles | CC0-1.0 | `cc0_only` |
-| ANN encyclopedia | 789 sample pages, raw storage only | copyrighted | not linked |
-| MyAnimeList / Jikan | none | — | unreachable, excluded |
+| AniList (GraphQL) | discovery, scores, characters, staff, relations, synopses, tag definitions | AniList; https://anilist.co/terms; redistribution not granted | `permission_required` |
+| Kitsu (JSON:API) | discovery, episode lists and summaries, synopses | Kitsu; https://kitsu.io/terms; redistribution not granted | `permission_required` |
+| Shikimori (JSON) | discovery, cast, crew, relations, biographies | Shikimori; https://shikimori.io/terms; user agreement, no data-reuse grant | `unresolved` |
+| Wikidata (SPARQL) | supplementary titles | Wikimedia Foundation / contributors; CC0-1.0 | `cc0_only` |
+| ANN encyclopedia | 789 sample pages, raw storage only | Anime News Network; copyrighted | not linked |
+| MyAnimeList / Jikan | none | MyAnimeList; https://myanimelist.net/about/terms_of_use | unreachable, excluded |
 
 ## Personal and sensitive data
 
@@ -109,23 +116,28 @@ data are collected. All text is public metadata from the listed sources.
 ## Copyright considerations
 
 No copyrighted long-form text (scripts, transcripts, manga chapters, lyrics,
-review articles) is shipped. Upstream plot synopses, character biographies and
-episode summaries are third-party expression, so they are removed from every
-export instead of paraphrased; the local working database retains them and is
-not distributed. Generated `record_summary` text is assembled only from
-structured fields of the same record and never adds plot detail.
+review articles) is shipped. Upstream plot synopses, character biographies,
+episode summaries and tag definitions are third-party expression. They are
+retained in the release for their training value, but they are excluded from the
+project's CC-BY-4.0 grant and remain subject to the named source's terms; every
+prose row carries `prose_source` and `prose_license`. Generated
+`record_summary` text is assembled only from structured fields of the same
+record and never adds plot detail.
 
 `LICENSE_AUDIT.md` lists each artifact, its origin and its rights status.
 Everything original — code, schemas, documentation, generated text — is
-CC-BY-4.0 by Muhammad Muqeet. Factual metadata and short names remain
-third-party material that this repository does not claim to own.
+CC-BY-4.0 by Muhammad Muqeet. Factual metadata, short names and retained prose
+remain third-party material that this repository does not claim to own.
 
 Redistribution obligations are recorded per anime row as a license tier
 (`cc0_only`, `permission_required`, `unresolved`) with the strictest
-contributing source winning. `exports/license_manifest.json` defines each tier,
-reports counts, and lists the known gaps. The tier describes the dataset's own
-provenance obligation; it does not settle the copyright status of the underlying
-anime, which remains with its rights holders.
+contributing metadata or prose source winning. `exports/license_manifest.json`
+defines each tier, reports counts, and lists the known gaps;
+`exports/attribution.json` names each source's owner, terms URL and prose
+fields. The tier describes the dataset's own provenance obligation; it does not
+settle the copyright status of the underlying anime, which remains with its
+rights holders. Only 969 of 35,766 rows (2.7%) are tiered `cc0_only`; the
+dataset as a whole must not be sold or offered commercially without permission.
 
 ## Limitations and biases
 
@@ -145,6 +157,9 @@ anime, which remains with its rights holders.
   chunks are produced from structured fields. They are grounded and machine
   verifiable, but they are not human-authored and should not be treated as
   independent evidence about a work.
+- **Mixed licensing.** Retained prose is not cleared for redistribution. Filter
+  on `prose_license` or use the `license_tier` column before publishing or
+  training commercially.
 
 ## Intended uses
 
@@ -160,16 +175,24 @@ anime, which remains with its rights holders.
 - High-stakes factual claims without cross-checking against live sources
 - Recreating whole works from record summaries (not possible, not intended)
 - Copyrighted-content generation or reproduction of scripts/transcripts
-- Treating a `license_tier` as legal clearance for the underlying work
+- Selling or commercially redistributing the dataset as a whole without
+  permission from the named source owners
+- Treating a `license_tier` or a `prose_source` label as legal clearance for the
+  underlying work or for the upstream prose
 
 ## Quality controls
 
-- 21 automated checks in `src/validate/validators.py`, run with
+- 22 automated checks in `src/validate/validators.py`, run with
   `python -m src.cli validate`. They cover title uniqueness, referential
   integrity, enum conformance, value ranges, entity duplicates, name-field
   semantics, relationship integrity, split coverage and proportions, QA answer
   grounding, QA and instruction diversity, instruction input-grounding, RAG
-  chunk quality, license-tier coverage, provenance coverage, and export schema.
+  chunk quality, license-tier coverage, provenance coverage, prose attribution,
+  and export schema.
+- Prose attribution is checked per field: every exported prose row must carry a
+  `prose_source` and `prose_license`, no `cc0_only` row may carry non-CC0
+  prose, and the SQLite release copy must contain the same prose row counts as
+  the working database.
 - Answer grounding is verified by re-reading each QA row's `grounded_fields`
   against the database, and instruction grounding by confirming every output
   value appears in that row's input.

@@ -15,8 +15,9 @@ plus `raw_payload`, `checkpoint` and `run_log`.
   episodes, duration_min, aired_from, aired_to, season, year, mean_score,
   popularity, favourites, source_material, age_rating, quality_tier, confidence.
   JSONL adds nested `alt_titles`, `genres`, `themes`, `studios`, `sources`,
-  `franchise_id`, `license_tier`, `split`. The two synopsis columns exist only
-  in the working database; the release nulls them and drops them from JSONL.
+  `franchise_id`, `license_tier`, `split`, and normalised `prose_source` /
+  `prose_license` for the synopsis. The release SQLite copy carries those two
+  attribution columns too.
 - **anime_source** — entity-linking map (internal ↔ external). Columns: source,
   remote_id, anime_id, url, link_method, confidence. PK (source, remote_id);
   index on anime_id.
@@ -29,24 +30,25 @@ plus `raw_payload`, `checkpoint` and `run_log`.
 - **characters** — id, anime_id, source, remote_id, name, name_native, name_ru,
   role, description, voice_actors (JSON array), source_refs (JSON array of
   `{source, remote_id}`); UNIQUE(source, anime_id, remote_id). `description` is
-  working-only: it is nulled in the release SQLite and absent from JSONL.
+  upstream biography text, retained with `prose_source` and `prose_license` in
+  the release.
 - **staff** — id, anime_id, source, remote_id, name, name_native, name_ru,
   roles (JSON array), source_refs (JSON array); UNIQUE(source, anime_id,
   remote_id).
 - **episodes** — id, anime_id, source, remote_id, number, title, title_native,
   synopsis, aired, length_min; UNIQUE(source, anime_id, number). `synopsis` is
-  working-only and never exported.
+  upstream Kitsu prose, retained with `prose_source` and `prose_license`.
 - **relationships** — anime_id, other_anime_id, other_source, other_remote_id,
   relation, source (a `+`-joined list when several sources agree); index on
   anime_id.
-- **descriptions** — anime_id, kind (`record_summary` only in the release),
-  text, synthetic, provenance; PK (anime_id, kind).
+- **descriptions** — anime_id, kind (`record_summary` or `source_synopsis`),
+  text, synthetic, provenance, source; PK (anime_id, kind).
 - **qa_pairs** — id, anime_id, qtype, question, answer, template,
-  grounded_fields (JSON array); index on anime_id.
+  grounded_fields (JSON array), prose_source; index on anime_id.
 - **instructions** — id, anime_id, itype, instruction, input, output, synthetic,
   source_record_ids, purpose, validation; index on anime_id.
 - **rag_chunks** — id, anime_id, chunk_index, kind, text, source_refs (JSON
-  array); index on anime_id.
+  array), prose_source; index on anime_id.
 - **franchises** — anime_id primary key, franchise_id; index on franchise_id.
 - **license_tiers** — anime_id primary key, tier, sources (JSON array), reason.
 - **dedup_log** — cluster_id, canonical_anime_id, method, members, created_at.
@@ -71,14 +73,18 @@ in `docs/TRAINING.md` rely on.
 
 ## Content policy in the release copy
 
-Before `exports/anime_dataset.sqlite` is written, the exporter sets these
-columns to NULL: `anime.synopsis`, `anime.synopsis_source`,
-`characters.description`, `episodes.synopsis`, `themes.description` and
-`genres.description`. It also deletes every `descriptions` row whose `kind` is
-not `record_summary`. The JSONL, CSV and Parquet files omit those columns
-entirely rather than shipping empty ones.
+Upstream prose is retained, not stripped. `exports/anime_dataset.sqlite` keeps
+`anime.synopsis`, `characters.description`, `episodes.synopsis`,
+`themes.description` and `descriptions.kind = 'source_synopsis'`, and adds
+normalised `prose_source` / `prose_license` columns to every table that carries
+prose. The JSONL files carry the same two columns.
 
-`python -m src.cli validate` enforces this: the `export_schema` check fails if a
-banned key reappears in an export, if a prose description or synopsis chunk
-survives, or if the SQLite copy has a non-empty prose column. See
+The prose is excluded from the project's CC-BY-4.0 grant and remains subject to
+the named source's terms. `exports/attribution.json` records each owner, terms
+URL and redistribution status.
+
+`python -m src.cli validate` enforces this: the `prose_attribution` check fails
+if a prose row lacks a source or licence, if a `cc0_only` row carries non-CC0
+prose, or if the SQLite copy is missing attribution. The `export_schema` check
+fails if prose counts in the SQLite copy differ from the working database. See
 `LICENSE_AUDIT.md` for the reasoning.
