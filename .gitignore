@@ -1,6 +1,7 @@
 # Local working data — never committed
 /data/
 /exports/
+/exports_open/
 /logs/
 *.db
 *.db-wal
