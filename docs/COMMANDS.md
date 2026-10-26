@@ -53,10 +53,10 @@ Eight gateways into the same data. Pick the one that matches what you build.
 
 | # | Method | What you get | How |
 | --- | --- | --- | --- |
-| 1 | **Clone the repository** | code, schemas, docs, pipeline | `git clone <repo-url>` |
-| 2 | **Download release assets** | the full `exports/` tree (JSONL, SQLite, Parquet, CSV) | browser: repo Releases page, or `gh release download` |
+| 1 | **Clone the repository** | code, schemas, docs, pipeline | `git clone https://github.com/muqeet-1138/anime-text-dataset.git` |
+| 2 | **Download the full data** | the full `exports/` tree (JSONL, SQLite, Parquet, CSV) | request access to the gated [Hugging Face dataset](https://huggingface.co/datasets/muqeet-1138/anime-text-dataset) |
 | 3 | **Stream JSONL in Python** | train-ready rows without loading everything | line loop over `exports/*.jsonl` |
-| 4 | **Hugging Face `datasets` loader** | a sharded, streamable HF `Dataset` | `load_dataset("json", data_files=...)` |
+| 4 | **Hugging Face `datasets` loader** | a sharded, streamable HF `Dataset` | `load_dataset("muqeet-1138/anime-text-dataset", "qa")` |
 | 5 | **SQLite database** | joins and referential queries | `sqlite3` CLI or Python stdlib |
 | 6 | **Parquet + DuckDB / pandas** | fast analytics | `duckdb -c "..."` or `pd.read_parquet` |
 | 7 | **CSV** | spreadsheet-friendly flat view | open `exports/anime.csv` |
@@ -113,7 +113,7 @@ pip install duckdb           # Parquet analytics
 │   └── LICENSE_NOTES.md    #   licensing and tiers
 ├── docs_src/               # editable HTML source with {{n:…}} count tokens
 ├── examples/               # runnable training scripts
-├── exports/                # generated dataset (release assets)
+├── exports/                # generated dataset (Hugging Face, git-ignored)
 ├── logs/                   # run logs
 ├── reports/                # final report + summary.json
 ├── scripts/                # data_profile, license_tiers, sync_docs, upload_hf
@@ -386,10 +386,11 @@ cd exports
 sha256sum -c *.sha256
 ```
 
-### Download release assets with the GitHub CLI
+### Download the dataset from Hugging Face
 
 ```bash
-gh release download v2.1.0 -D exports     # fetch the full exported dataset
+huggingface-cli download muqeet-1138/anime-text-dataset \
+  --repo-type dataset --local-dir exports     # gated: request access first
 ```
 
 ---
@@ -434,15 +435,18 @@ the database. Editing them by hand is pointless — the next run overwrites them
 
 ### Publish the release to Hugging Face Hub
 
-Uploads JSONL/Parquet/CSV/SQLite plus checksums, `NOTICE`, `LICENSE` and a
-generated dataset card into a dataset repo:
+Two dataset repos: the full mixed-rights release is gated with manual approval;
+the CC0-only subset is public.
 
 ```bash
-# list what would be uploaded (no network side effects)
-python scripts/upload_hf.py --repo <hf-user>/large-anime-text-dataset --dry-run
+# full release: verify, then upload to a gated repo
+python scripts/upload_hf.py --repo muqeet-1138/anime-text-dataset --gated manual --dry-run
+python scripts/upload_hf.py --repo muqeet-1138/anime-text-dataset --gated manual
 
-# upload for real (token from $HF_TOKEN or --token)
-python scripts/upload_hf.py --repo <hf-user>/large-anime-text-dataset --private
+# public CC0-only subset
+python scripts/build_open_subset.py
+python scripts/upload_hf.py --repo muqeet-1138/anime-text-dataset-open --source exports_open --dry-run
+python scripts/upload_hf.py --repo muqeet-1138/anime-text-dataset-open --source exports_open
 ```
 
 `huggingface_hub` is needed only for the real upload:
@@ -505,8 +509,8 @@ python examples/finetune_lora.py \
 | Count anime | `python -c "import json;print(sum(1 for _ in open('exports/anime.jsonl',encoding='utf-8')))"` |
 | Normalize after entities | `python -m src.cli normalize` |
 | Enrich everything (slow) | `python -m src.cli enrich anilist --all` |
-| Download the dataset | `gh release download v2.1.0 -D exports` |
+| Download the dataset | `huggingface-cli download muqeet-1138/anime-text-dataset --repo-type dataset --local-dir exports` |
 | Regenerate data profile | `python scripts/data_profile.py` |
-| Dry-run HF publish | `python scripts/upload_hf.py --repo <hf-user>/large-anime-text-dataset --dry-run` |
+| Dry-run HF publish | `python scripts/upload_hf.py --repo muqeet-1138/anime-text-dataset --gated manual --dry-run` |
 | Fine-tune with LoRA | `python examples/finetune_lora.py --data exports/instructions.jsonl` |
 | Run the test suite | `python -m pytest -q` |

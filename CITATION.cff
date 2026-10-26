@@ -11,6 +11,8 @@ authors:
 type: dataset
 date-released: 2026-10-25
 license: CC-BY-4.0
+url: https://github.com/muqeet-1138/anime-text-dataset
+repository-code: https://github.com/muqeet-1138/anime-text-dataset
 keywords:
   - anime
   - dataset

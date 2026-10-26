@@ -46,4 +46,4 @@ scripts.
 ## Releases
 
 Follow the release checklist in `reports/final_report.md` and update
-`CHANGELOG.md`. Include checksums in the release assets.
+`CHANGELOG.md`. Include checksums with the Hugging Face release.

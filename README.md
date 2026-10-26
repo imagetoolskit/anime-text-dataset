@@ -164,10 +164,10 @@ Eight ready-to-use gateways into the same data:
 
 | # | Method | What you get | How |
 | --- | --- | --- | --- |
-| 1 | **Clone the repository** | code, schemas, docs, pipeline | `git clone <repo-url>` |
-| 2 | **Download release assets** | the full `exports/` tree | GitHub Releases (browser or `gh release download`) |
+| 1 | **Clone the repository** | code, schemas, docs, pipeline | `git clone https://github.com/muqeet-1138/anime-text-dataset.git` |
+| 2 | **Download the full data** | the complete `exports/` tree, 2.2 GB | request access on the gated [Hugging Face dataset](https://huggingface.co/datasets/muqeet-1138/anime-text-dataset) |
 | 3 | **Stream JSONL in Python** | train-ready rows without loading everything | loop over `open("exports/qa.jsonl", encoding="utf-8")` |
-| 4 | **Hugging Face `datasets` loader** | a sharded HF `Dataset` | `load_dataset("json", data_files=...)` |
+| 4 | **Hugging Face `datasets` loader** | a sharded HF `Dataset` | `load_dataset("muqeet-1138/anime-text-dataset", "qa", split="train")` |
 | 5 | **SQLite database** | joins and referential queries | `sqlite3 exports/anime_dataset.sqlite` or Python stdlib |
 | 6 | **Parquet + DuckDB / pandas** | fast analytics | `duckdb -c "select ..."` or `pd.read_parquet` |
 | 7 | **CSV** | spreadsheet-friendly flat view | open `exports/anime.csv` |
@@ -195,7 +195,7 @@ Every per-anime table carries `split` and `license_tier` as columns, so a
 training script can filter without joining anything. JSON arrays are real
 arrays in JSONL and Parquet, not encoded strings.
 
-> **Git note**: the multi-hundred-MB generated dataset ships as **release assets**, not commit payloads. Clone the repository for code, docs, and schemas; download the dataset archive from the GitHub Release for the full `exports/` tree. Every release publishes SHA-256 checksums.
+> **Hosting note**: GitHub holds the code, schemas and documentation (0.7 MB). The 2.2 GB generated dataset is hosted on **Hugging Face**, not in Git and not as GitHub Release assets. The full mixed-rights release is **gated with manual approval**; the public [CC0-only subset](https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-open) is ungated. Every release publishes SHA-256 checksums.
 
 Verified checksum verification (any shell):
 
@@ -222,9 +222,10 @@ Two ways to browse before training:
   `python scripts/data_profile.py`.
 - **EDA notebook** — [`examples/notebooks/EDA.ipynb`](examples/notebooks/EDA.ipynb)
   walks the same numbers in Jupyter with charts.
-- **Publish to Hugging Face Hub** — `python scripts/upload_hf.py --repo <hf-user>/large-anime-text-dataset`
-  uploads the release as a dataset repo with a generated card
-  (`--dry-run` first, token via `HF_TOKEN`).
+- **Publish to Hugging Face Hub** — `python scripts/upload_hf.py --repo muqeet-1138/anime-text-dataset --gated manual`
+  uploads the full release to a gated dataset repo. `python scripts/build_open_subset.py`
+  then `python scripts/upload_hf.py --repo muqeet-1138/anime-text-dataset-open --source exports_open`
+  publishes the public CC0 subset. Run with `--dry-run` first; token via `HF_TOKEN`.
 
 ---
 

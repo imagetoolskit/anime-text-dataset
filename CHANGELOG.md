@@ -1,7 +1,7 @@
 # Changelog
 
 All notable changes to this dataset project are recorded here. Large data
-files ship as release assets, not through Git history.
+files ship through Hugging Face, not through Git history.
 
 ## [2.1.0] — 2026-10-25
 
