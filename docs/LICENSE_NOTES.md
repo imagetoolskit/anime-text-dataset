@@ -9,6 +9,25 @@ rely on.
 
 ---
 
+## Who can access what
+
+| Release | Works | Who can use it | How |
+| --- | ---: | --- | --- |
+| Full mixed-rights release | 35,766 | research and education | gated on Hugging Face, manual approval |
+| 30% free preview | 10,729 | anyone with a Hugging Face account | gated, automatic approval — free |
+| CC0-only subset | 969 | anyone, no account | public download |
+
+- Full: https://huggingface.co/datasets/muqeet-1138/anime-text-dataset
+- 30% preview: https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-preview
+- CC0 subset: https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-open
+
+The preview is a stratified 30% sample by `(license_tier, split)`, seed 42, with
+all child rows retained. It is free and does not require access to the full
+release. It is **not** a public-domain release: 291 of its works are `cc0_only`,
+and the rest carry upstream obligations. Gating is access control, not a licence.
+
+---
+
 ## What the repository license covers
 
 The repository is released as **CC-BY-4.0** (`LICENSE`). That covers the code
@@ -142,3 +161,8 @@ status of the underlying anime, which remains with its rights holders.
 - `exports/license_manifest.json` — tier definitions, counts, gaps and
   `prose_attribution`.
 - `LICENSE_AUDIT.md` — artifact-by-artifact rights inventory.
+
+## Contact
+
+Muhammad Muqeet — contact@animearray.site, muqeet@animearray.site,
+muqeet@anitroves.com

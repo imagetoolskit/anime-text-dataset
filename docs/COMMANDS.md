@@ -435,22 +435,35 @@ the database. Editing them by hand is pointless — the next run overwrites them
 
 ### Publish the release to Hugging Face Hub
 
-Two dataset repos: the full mixed-rights release is gated with manual approval;
-the CC0-only subset is public.
+Three dataset repos share one schema: the full mixed-rights release is gated with
+manual approval, the free 30% preview is gated with automatic approval, and the
+CC0-only subset is public.
 
 ```bash
 # full release: verify, then upload to a gated repo
 python scripts/upload_hf.py --repo muqeet-1138/anime-text-dataset --gated manual --dry-run
 python scripts/upload_hf.py --repo muqeet-1138/anime-text-dataset --gated manual
 
+# free 30% preview: stratified sample, automatic approval
+python scripts/build_preview_subset.py
+python scripts/upload_hf.py --repo muqeet-1138/anime-text-dataset-preview --source exports_preview --gated auto --dry-run
+python scripts/upload_hf.py --repo muqeet-1138/anime-text-dataset-preview --source exports_preview --gated auto
+
 # public CC0-only subset
 python scripts/build_open_subset.py
 python scripts/upload_hf.py --repo muqeet-1138/anime-text-dataset-open --source exports_open --dry-run
 python scripts/upload_hf.py --repo muqeet-1138/anime-text-dataset-open --source exports_open
+
+# refresh only the card and citation docs on an existing repo
+python scripts/upload_hf.py --repo muqeet-1138/anime-text-dataset --card-only
 ```
 
 `huggingface_hub` is needed only for the real upload:
-`pip install "huggingface_hub[cli]"`. The script never prints the token.
+`pip install "huggingface_hub[cli]"`. The script never prints the token. The
+preview is free but not public-domain: it keeps every licence tier, and only 291
+of its 10,729 works are `cc0_only`.
+
+Contact for access or licensing questions: contact@animearray.site.
 
 ---
 
@@ -509,7 +522,8 @@ python examples/finetune_lora.py \
 | Count anime | `python -c "import json;print(sum(1 for _ in open('exports/anime.jsonl',encoding='utf-8')))"` |
 | Normalize after entities | `python -m src.cli normalize` |
 | Enrich everything (slow) | `python -m src.cli enrich anilist --all` |
-| Download the dataset | `huggingface-cli download muqeet-1138/anime-text-dataset --repo-type dataset --local-dir exports` |
+| Download the free 30% preview | `hf download muqeet-1138/anime-text-dataset-preview --repo-type dataset --local-dir exports_preview` |
+| Download the full release (after approval) | `hf download muqeet-1138/anime-text-dataset --repo-type dataset --local-dir exports` |
 | Regenerate data profile | `python scripts/data_profile.py` |
 | Dry-run HF publish | `python scripts/upload_hf.py --repo muqeet-1138/anime-text-dataset --gated manual --dry-run` |
 | Fine-tune with LoRA | `python examples/finetune_lora.py --data exports/instructions.jsonl` |

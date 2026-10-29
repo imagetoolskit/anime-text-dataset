@@ -6,7 +6,7 @@ retained, and what the maintainer does **not** claim. It is written to be
 checkable against the tree, not to be taken on trust.
 
 Audit owner: Muhammad Muqeet  
-Contact: muqeet@animearray.site, muqeet@anitroves.com  
+Contact: contact@animearray.site, muqeet@animearray.site, muqeet@anitroves.com  
 Last reviewed: 2026-10-25 (dataset version 2.1.0)
 
 ## The claim, stated precisely

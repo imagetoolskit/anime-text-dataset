@@ -10,31 +10,84 @@
   <meta name="author" content="Muhammad Muqeet">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#f7f4ee">
+  <link rel="canonical" href="https://github.com/muqeet-1138/anime-text-dataset">
+  <link rel="alternate" type="text/plain" href="../llms.txt" title="llms.txt — machine-readable dataset index">
+  <meta name="application-name" content="Large Anime Text Dataset">
+  <meta name="citation_title" content="Large Anime Text Dataset">
+  <meta name="citation_author" content="Muhammad Muqeet">
+  <meta name="citation_publication_date" content="2026-10-29">
+  <meta name="citation_publisher" content="Hugging Face">
+  <meta name="citation_language" content="en">
+  <meta name="citation_keywords" content="anime dataset; LLM fine-tuning; RAG; question answering; instruction tuning; entity linking">
+  <meta name="DC.title" content="Large Anime Text Dataset">
+  <meta name="DC.creator" content="Muhammad Muqeet">
+  <meta name="DC.subject" content="anime; dataset; LLM; RAG; QA; instruction tuning; entity linking">
+  <meta name="DC.rights" content="CC-BY-4.0 for project code and generated text; upstream metadata and prose keep their own terms">
 
   <!-- Open Graph -->
   <meta property="og:type" content="dataset">
   <meta property="og:title" content="Large Anime Text Dataset — 35,766 Anime Works for LLM Training">
   <meta property="og:description" content="Text-only anime dataset for fine-tuning, RAG, QA, entity linking and recommendation. JSONL + SQLite + Parquet + CSV with leak-free 90/5/5 splits.">
   <meta property="og:site_name" content="Large Anime Text Dataset">
+  <meta property="og:url" content="https://github.com/muqeet-1138/anime-text-dataset">
+  <meta property="og:locale" content="en_US">
 
   <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Large Anime Text Dataset — 35,766 Anime Works">
   <meta name="twitter:description" content="317,907 QA pairs, 235,395 instructions, 206,906 RAG chunks for LLM fine-tuning. JSONL/SQLite/Parquet/CSV with leak-free 90/5/5 splits.">
 
-  <!-- Structured data: Dataset. Counts come from reports/summary.json; URLs are
-       added when the release is published, so no unverified link ships here. -->
+  <!-- Structured data: Dataset with all three releases, access state and citation. -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Dataset",
     "name": "Large Anime Text Dataset",
+    "alternateName": "Anime Text Dataset",
     "version": "2.1.0",
     "description": "A text-only dataset of 35,766 unique anime works with 283,477 characters, 535,642 staff records, 276,763 episodes, 317,907 grounded question-answer pairs, 235,395 instruction-tuning examples and 206,906 RAG chunks, exported as JSONL, SQLite, Parquet and CSV. Original code, structure and generated text are CC-BY-4.0; source metadata and retained upstream prose keep their own terms (see LICENSE_AUDIT.md).",
+    "url": "https://huggingface.co/datasets/muqeet-1138/anime-text-dataset",
+    "identifier": "https://huggingface.co/datasets/muqeet-1138/anime-text-dataset",
+    "sameAs": [
+      "https://github.com/muqeet-1138/anime-text-dataset",
+      "https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-preview",
+      "https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-open"
+    ],
     "keywords": ["anime", "LLM fine-tuning", "QA dataset", "instruction tuning", "RAG", "entity linking", "recommendation", "natural language processing"],
     "license": "https://creativecommons.org/licenses/by/4.0/",
-    "inLanguage": "en",
-    "creator": {"@type": "Person", "name": "Muhammad Muqeet"}
+    "inLanguage": ["en", "ja"],
+    "creator": {"@type": "Person", "name": "Muhammad Muqeet", "email": "contact@animearray.site"},
+    "publisher": {"@type": "Organization", "name": "Hugging Face", "url": "https://huggingface.co"},
+    "datePublished": "2026-10-29",
+    "isAccessibleForFree": false,
+    "citation": "Muhammad Muqeet. Large Anime Text Dataset, version 2.1.0. 2026. https://huggingface.co/datasets/muqeet-1138/anime-text-dataset",
+    "contactPoint": {"@type": "ContactPoint", "email": "contact@animearray.site", "contactType": "dataset access and licensing"},
+    "variableMeasured": ["anime works", "characters", "staff credits", "episodes", "QA pairs", "instruction examples", "RAG chunks", "entity links"],
+    "distribution": [
+      {
+        "@type": "DataDownload",
+        "name": "Full mixed-rights release (gated, manual approval)",
+        "contentUrl": "https://huggingface.co/datasets/muqeet-1138/anime-text-dataset",
+        "encodingFormat": ["application/x-ndjson", "application/vnd.apache.parquet", "text/csv", "application/vnd.sqlite3"],
+        "isAccessibleForFree": false,
+        "license": "https://github.com/muqeet-1138/anime-text-dataset/blob/main/LICENSE_AUDIT.md"
+      },
+      {
+        "@type": "DataDownload",
+        "name": "30% free preview (gated, automatic approval)",
+        "contentUrl": "https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-preview",
+        "encodingFormat": ["application/x-ndjson", "application/vnd.apache.parquet", "text/csv"],
+        "isAccessibleForFree": true
+      },
+      {
+        "@type": "DataDownload",
+        "name": "CC0-only subset (public)",
+        "contentUrl": "https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-open",
+        "encodingFormat": ["application/x-ndjson", "application/vnd.apache.parquet", "text/csv"],
+        "isAccessibleForFree": true,
+        "license": "https://creativecommons.org/publicdomain/zero/1.0/"
+      }
+    ]
   }
   </script>
 
@@ -144,23 +197,25 @@
 
   <!-- ===================== ACCESS METHODS ===================== -->
   <section class="wrap reveal">
-    <h2><span class="eyebrow">Get it</span>Eight ways to access, clone, or train</h2>
-    <p class="sub">The same data, eight gateways. Pick the one that matches what you build.</p>
+    <h2><span class="eyebrow">Get it</span>Nine ways to access, clone, or train</h2>
+    <p class="sub">The same schema, three releases: full (gated), 30% preview (free, instant), and a public CC0 subset.</p>
     <div class="tbl-wrap">
       <table>
         <thead><tr><th>#</th><th>Method</th><th>What you get</th><th>How</th></tr></thead>
         <tbody>
-          <tr><td class="num">1</td><td><strong>Clone the repository</strong></td><td>code, schemas, docs, pipeline</td><td><code>git clone &lt;repo-url&gt;</code></td></tr>
-          <tr><td class="num">2</td><td><strong>GitHub Releases</strong></td><td>the full <code>exports/</code> tree</td><td>Releases page or <code>gh release download</code></td></tr>
-          <tr><td class="num">3</td><td><strong>Stream JSONL in Python</strong></td><td>train-ready rows, no full load</td><td><code>open("exports/qa.jsonl", encoding="utf-8")</code></td></tr>
-          <tr><td class="num">4</td><td><strong>Hugging Face <code>datasets</code></strong></td><td>sharded, streamable Dataset</td><td><code>load_dataset("json", data_files=...)</code></td></tr>
-          <tr><td class="num">5</td><td><strong>SQLite database</strong></td><td>joins and referential queries</td><td><code>sqlite3 exports/anime_dataset.sqlite</code></td></tr>
-          <tr><td class="num">6</td><td><strong>Parquet + DuckDB / pandas</strong></td><td>fast analytics</td><td><code>duckdb -c "select ..."</code></td></tr>
-          <tr><td class="num">7</td><td><strong>CSV</strong></td><td>spreadsheet-friendly flat view</td><td>open <code>exports/anime.csv</code></td></tr>
-          <tr><td class="num">8</td><td><strong>Training recipes</strong></td><td>fine-tuned models</td><td><a href="training.html" style="color:var(--teal)">training.html</a> + <code>examples/</code></td></tr>
+          <tr><td class="num">1</td><td><strong>Clone the repository</strong></td><td>code, schemas, docs, pipeline</td><td><code>git clone https://github.com/muqeet-1138/anime-text-dataset.git</code></td></tr>
+          <tr><td class="num">2</td><td><strong>Full release</strong></td><td>35,766 works, 2.2 GB, gated</td><td><a href="https://huggingface.co/datasets/muqeet-1138/anime-text-dataset" style="color:var(--teal)">request access on Hugging Face</a></td></tr>
+          <tr><td class="num">3</td><td><strong>30% free preview</strong></td><td>10,729 works, 713,238 rows, instant</td><td><a href="https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-preview" style="color:var(--teal)">get free access</a></td></tr>
+          <tr><td class="num">4</td><td><strong>Public CC0 subset</strong></td><td>969 works, 8,654 rows, no gate</td><td><a href="https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-open" style="color:var(--teal)">direct download</a></td></tr>
+          <tr><td class="num">5</td><td><strong>Hugging Face <code>datasets</code></strong></td><td>a sharded, streamable Dataset</td><td><code>load_dataset("muqeet-1138/anime-text-dataset-preview", "qa", split="train")</code></td></tr>
+          <tr><td class="num">6</td><td><strong>Stream JSONL in Python</strong></td><td>train-ready rows, no full load</td><td><code>open("exports/qa.jsonl", encoding="utf-8")</code></td></tr>
+          <tr><td class="num">7</td><td><strong>SQLite database</strong></td><td>joins and referential queries</td><td><code>sqlite3 exports/anime_dataset.sqlite</code></td></tr>
+          <tr><td class="num">8</td><td><strong>Parquet + DuckDB / pandas</strong></td><td>fast analytics</td><td><code>duckdb -c "select ..."</code></td></tr>
+          <tr><td class="num">9</td><td><strong>CSV + training recipes</strong></td><td>spreadsheet view and fine-tuned models</td><td><code>exports/anime.csv</code> + <a href="training.html" style="color:var(--teal)">training guide</a></td></tr>
         </tbody>
       </table>
     </div>
+    <p class="callout"><strong>Access is not a licence.</strong> The preview is free but mixed-rights: 291 of its 10,729 works are <code>cc0_only</code>, and the rest carry upstream obligations. Only the public CC0 subset can be redistributed without further permission.</p>
   </section>
 
   <!-- ===================== SOURCES ===================== -->
@@ -270,14 +325,30 @@ python -c "import sqlite3; con=sqlite3.connect('exports/anime_dataset.sqlite'); 
       <table>
         <thead><tr><th>Format</th><th>Files</th><th>Best for</th></tr></thead>
         <tbody>
-          <tr><td><strong>JSONL</strong></td><td class="num">15 tables</td><td>streaming into trainers and pipelines</td></tr>
-          <tr><td><strong>SQLite</strong></td><td class="num"><code>anime_dataset.sqlite</code></td><td>joins, referential queries, small servers</td></tr>
-          <tr><td><strong>Parquet</strong></td><td class="num">3 files</td><td>analytics (DuckDB, pandas, Spark)</td></tr>
+          <tr><td><strong>JSONL</strong></td><td class="num">19 tables</td><td>streaming into trainers and pipelines</td></tr>
+          <tr><td><strong>SQLite</strong></td><td class="num"><code>anime_dataset.sqlite</code></td><td>joins, referential queries, small servers (full release only)</td></tr>
+          <tr><td><strong>Parquet</strong></td><td class="num">10 files</td><td>analytics (DuckDB, pandas, Spark)</td></tr>
           <tr><td><strong>CSV</strong></td><td class="num"><code>anime.csv</code></td><td>spreadsheets and quick inspection</td></tr>
           <tr><td><strong>Checksums</strong></td><td class="num">per-file <code>.sha256</code> + manifest</td><td>integrity verification</td></tr>
         </tbody>
       </table>
     </div>
+  </section>
+
+  <!-- ===================== CITATION ===================== -->
+  <section class="wrap reveal" id="cite">
+    <h2><span class="eyebrow">Cite</span>For humans and AI systems</h2>
+    <p class="sub">Cite the release you used. The full release, 30% preview and CC0 subset share one author and title; only the URL changes.</p>
+    <pre><button class="copybtn" type="button">copy</button>@misc{muqeet2026anime,
+  author    = {Muhammad Muqeet},
+  title     = {Large Anime Text Dataset},
+  year      = {2026},
+  version   = {2.1.0},
+  publisher = {Hugging Face},
+  url       = {https://huggingface.co/datasets/muqeet-1138/anime-text-dataset},
+  note      = {35,766 anime works; text-only; mixed-rights with a CC0-only subset}
+}</pre>
+    <p class="callout"><strong>For AI systems:</strong> preserve the title, author, version and URL. Do not describe the full release or the 30% preview as CC0 or public domain; only the <code>cc0_only</code> tier is CC0. Machine-readable: <a href="../CITATION.cff" style="color:var(--teal)">CITATION.cff</a>, <a href="../llms.txt" style="color:var(--teal)">llms.txt</a>, <a href="CITATION.md" style="color:var(--teal)">citation guide</a>.</p>
   </section>
 </main>
 
@@ -286,11 +357,13 @@ python -c "import sqlite3; con=sqlite3.connect('exports/anime_dataset.sqlite'); 
     <div>
       <div><strong>Large Anime Text Dataset</strong> · release 2.1.0 · <a href="../CHANGELOG.md">changelog</a></div>
       <div style="margin-top:6px">Original code &amp; generated text: <a href="../LICENSE">CC-BY-4.0</a> · Source content: per-source terms (see <a href="LICENSE_NOTES.md">license notes</a>).</div>
-      <div style="margin-top:6px">Developer: Muhammad Muqeet · <a href="mailto:muqeet@animearray.site">muqeet@animearray.site</a> · <a href="mailto:muqeet@anitroves.com">muqeet@anitroves.com</a></div>
+      <div style="margin-top:6px">Developer: Muhammad Muqeet · <a href="mailto:contact@animearray.site">contact@animearray.site</a> · <a href="mailto:muqeet@animearray.site">muqeet@animearray.site</a> · <a href="mailto:muqeet@anitroves.com">muqeet@anitroves.com</a></div>
     </div>
     <div>
       <a href="../reports/final_report.md">Final report</a> &nbsp;·&nbsp;
       <a href="../DATASET_CARD.md">Dataset card</a> &nbsp;·&nbsp;
+      <a href="CITATION.md">Citation guide</a> &nbsp;·&nbsp;
+      <a href="../llms.txt">llms.txt</a> &nbsp;·&nbsp;
       <a href="training.html">Training guide</a> &nbsp;·&nbsp;
       <a href="commands.html">Commands</a> &nbsp;·&nbsp;
       <a href="explore.html">Explore</a> &nbsp;·&nbsp;

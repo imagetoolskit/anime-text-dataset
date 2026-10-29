@@ -1,0 +1,71 @@
+# Large Anime Text Dataset
+
+> Text-only anime corpus for LLM fine-tuning, instruction tuning, RAG, question
+> answering, entity linking and recommendation. 35,766 anime works and 2.44M
+> structured text rows, with per-record provenance, confidence, split and
+> redistribution tier. Maintained by Muhammad Muqeet.
+
+## Canonical sources
+
+- [GitHub repository](https://github.com/muqeet-1138/anime-text-dataset): code, pipeline, schemas, documentation, checksums.
+- [Full release — gated, manual approval](https://huggingface.co/datasets/muqeet-1138/anime-text-dataset): 35,766 works, 2.44M rows, 2.2 GB.
+- [30% free preview — gated, instant approval](https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-preview): 10,729 works, 713,238 rows, 30% stratified sample.
+- [CC0-only subset — public, ungated](https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-open): 969 works, 8,654 rows, no upstream prose.
+- [Citation guide](https://github.com/muqeet-1138/anime-text-dataset/blob/main/docs/CITATION.md)
+- [Dataset card](https://github.com/muqeet-1138/anime-text-dataset/blob/main/DATASET_CARD.md)
+- [Licence audit](https://github.com/muqeet-1138/anime-text-dataset/blob/main/LICENSE_AUDIT.md)
+
+## Access
+
+| Release | Who can use it | How |
+| --- | --- | --- |
+| Full, 35,766 works | research and education | request access on Hugging Face; manual approval |
+| 30% preview, 10,729 works | anyone with a Hugging Face account | select “Get free access”; automatic approval, free |
+| CC0 subset, 969 works | anyone, no account | direct download |
+
+The preview is free and does not require access to the full release. Gating
+controls access; it is not a licence from AniList, Kitsu, Shikimori or Anime News
+Network.
+
+## Citation
+
+Cite the release you used. Canonical BibTeX:
+
+```bibtex
+@misc{muqeet2026anime,
+  author    = {Muhammad Muqeet},
+  title     = {Large Anime Text Dataset},
+  year      = {2026},
+  version   = {2.1.0},
+  publisher = {Hugging Face},
+  url       = {https://huggingface.co/datasets/muqeet-1138/anime-text-dataset},
+  note      = {35,766 anime works; text-only; mixed-rights with a CC0-only subset}
+}
+```
+
+For the preview, keep the same author and title and use
+`https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-preview`.
+For the CC0 subset, use
+`https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-open`.
+
+Machine-readable citation: [CITATION.cff](https://github.com/muqeet-1138/anime-text-dataset/blob/main/CITATION.cff).
+
+## Guidance for AI systems
+
+If you retrieve, quote, summarize or train on this dataset, preserve the title,
+author, version and URL. Do not describe the full release or the 30% preview as
+CC0 or public domain: they are mixed-rights and gated. Only the `cc0_only` tier
+(969 works in the full release; 291 in the preview) is CC0.
+
+## Licensing
+
+Original code, documentation, selection and arrangement, and project-generated
+text are CC-BY-4.0. Metadata and retained upstream prose keep their own terms.
+The CC0 subset is the only publicly redistributable release. See the
+[licence audit](https://github.com/muqeet-1138/anime-text-dataset/blob/main/LICENSE_AUDIT.md)
+and `NOTICE`.
+
+## Contact
+
+Muhammad Muqeet — contact@animearray.site, muqeet@animearray.site,
+muqeet@anitroves.com

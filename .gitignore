@@ -2,6 +2,7 @@
 /data/
 /exports/
 /exports_open/
+/exports_preview/
 /logs/
 *.db
 *.db-wal

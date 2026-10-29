@@ -1,33 +1,54 @@
 ﻿cff-version: 1.2.0
 message: >-
-  If you use this dataset, please cite it with the exact counts from
-  reports/summary.json and the version below.
+  If you use this dataset, cite the release you used and preserve the
+  attribution to Muhammad Muqeet and the upstream source owners.
 title: Large Anime Text Dataset
 version: 2.1.0
+abstract: >-
+  A text-only anime corpus of 35,766 works and 2.44M structured rows for LLM
+  fine-tuning, instruction tuning, RAG, question answering, entity linking and
+  recommendation. Every row carries provenance, confidence, split and a
+  redistribution tier. The full mixed-rights release is gated with manual
+  approval; a free 30% preview is gated with automatic approval; a 969-work
+  CC0-only subset is public.
 authors:
   - family-names: Muqeet
     given-names: Muhammad
-    email: muqeet@animearray.site
+    email: contact@animearray.site
 type: dataset
-date-released: 2026-10-25
-license: CC-BY-4.0
-url: https://github.com/muqeet-1138/anime-text-dataset
+date-released: 2026-10-29
+license: other
+license-url: https://github.com/muqeet-1138/anime-text-dataset/blob/main/LICENSE_AUDIT.md
+url: https://huggingface.co/datasets/muqeet-1138/anime-text-dataset
 repository-code: https://github.com/muqeet-1138/anime-text-dataset
 keywords:
   - anime
   - dataset
   - metadata
-  - qa
+  - question-answering
   - rag
+  - instruction-tuning
   - llm
   - nlp
+  - entity-linking
+identifiers:
+  - type: url
+    value: https://huggingface.co/datasets/muqeet-1138/anime-text-dataset
+    description: Full mixed-rights release (gated, manual approval)
+  - type: url
+    value: https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-preview
+    description: Free 30% preview (gated, automatic approval)
+  - type: url
+    value: https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-open
+    description: Public CC0-only subset
 preferred-citation:
   type: dataset
   title: Large Anime Text Dataset
   authors:
     - family-names: Muqeet
       given-names: Muhammad
-      email: muqeet@animearray.site
+      email: contact@animearray.site
   version: 2.1.0
-  date-released: 2026-10-25
-  license: CC-BY-4.0
+  date-released: 2026-10-29
+  license: other
+  url: https://huggingface.co/datasets/muqeet-1138/anime-text-dataset

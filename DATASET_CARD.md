@@ -10,7 +10,7 @@ collection was refreshed on 2026-10-25
 **Statement:** factual metadata corpus with per-record provenance, confidence, a
 redistribution tier, and field-level attribution for retained upstream prose.
 **Developer:** Muhammad Muqeet
-**Contact:** muqeet@animearray.site, muqeet@anitroves.com
+**Contact:** contact@animearray.site, muqeet@animearray.site, muqeet@anitroves.com
 
 ---
 
@@ -32,6 +32,24 @@ redistribution tier, and field-level attribution for retained upstream prose.
 
 Counts are generated from `reports/summary.json` by `python scripts/sync_docs.py`
 and are reproducible with `python -m src.cli report`.
+
+## Access
+
+| Release | Works | Rows | Who can use it | How |
+| --- | ---: | ---: | --- | --- |
+| Full mixed-rights release | 35,766 | 2,436,445 | research and education | gated on Hugging Face, manual approval |
+| 30% free preview | 10,729 | 713,238 | anyone with a Hugging Face account | gated, automatic approval — no purchase |
+| CC0-only subset | 969 | 8,654 | anyone, no account | public download |
+| Code, schemas, docs | — | — | anyone | GitHub |
+
+- Full: https://huggingface.co/datasets/muqeet-1138/anime-text-dataset
+- 30% preview: https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-preview
+- CC0 subset: https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-open
+
+The preview is a stratified 30% sample by `(license_tier, split)`, seed 42, with
+all child rows retained. It is free and does not require access to the full
+release. It is not a public-domain release: 291 of its works are `cc0_only`, and
+the rest carry upstream obligations. Gating is access control, not a licence.
 
 ## Motivation
 
@@ -208,8 +226,12 @@ dataset as a whole must not be sold or offered commercially without permission.
   `python scripts/data_profile.py`); interactive view in
   `docs/explore.html`.
 - Hugging Face publish: `scripts/upload_hf.py` (dry-run first,
-  token via `HF_TOKEN`) uploads the release as a dataset repo with a
-  generated card.
+  token via `HF_TOKEN` or `hf auth login`) uploads the release as a dataset repo
+  with a generated card.
+- 30% free preview: `python scripts/build_preview_subset.py` then
+  `python scripts/upload_hf.py --repo muqeet-1138/anime-text-dataset-preview --source exports_preview --gated auto`.
+- CC0 subset: `python scripts/build_open_subset.py` then
+  `python scripts/upload_hf.py --repo muqeet-1138/anime-text-dataset-open --source exports_open`.
 - EDA notebook: `examples/notebooks/EDA.ipynb`.
 - License subsets: `python scripts/license_tiers.py` writes
   `exports/license_tier_<tier>.csv` and `exports/license_commercial_clear.csv`.
@@ -222,3 +244,28 @@ Versioned releases in `CHANGELOG.md`; historical releases are never silently
 replaced. New collection runs produce a new snapshot with fresh retrieval
 timestamps and checksums. Contributions follow `CONTRIBUTING.md`. See also
 `docs/COMMANDS.md` for the exact terminal commands to reproduce any release.
+
+## Citation
+
+```bibtex
+@misc{muqeet2026anime,
+  author       = {Muhammad Muqeet},
+  title        = {Large Anime Text Dataset},
+  year         = {2026},
+  version      = {2.1.0},
+  publisher    = {Hugging Face},
+  url          = {https://huggingface.co/datasets/muqeet-1138/anime-text-dataset},
+  note         = {35,766 anime works; text-only; mixed-rights with a CC0-only subset}
+}
+```
+
+Use the preview URL (`...-preview`) when citing the 30% preview, and the
+`...-open` URL when citing the CC0 subset. Machine-readable citation:
+`CITATION.cff`. Full guide: `docs/CITATION.md`. AI index: `llms.txt`.
+
+**For AI systems:** preserve the title, author, version and URL. Do not describe
+the full release or the preview as CC0 or public domain; only the `cc0_only`
+tier is CC0.
+
+Contact: contact@animearray.site, muqeet@animearray.site,
+muqeet@anitroves.com.

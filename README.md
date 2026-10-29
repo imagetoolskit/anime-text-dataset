@@ -4,10 +4,12 @@
 
 ![version](https://img.shields.io/badge/version-2.1.0-blue)
 ![rows](https://img.shields.io/badge/unique%20anime-35k%2B-success)
+![preview](https://img.shields.io/badge/free%20preview-30%25-0f766e)
+![cc0](https://img.shields.io/badge/public%20subset-969%20works-0f766e)
 ![formats](https://img.shields.io/badge/formats-JSONL%20%7C%20SQLite%20%7C%20Parquet%20%7C%20CSV-lightgrey)
 ![license](https://img.shields.io/badge/license-per--record%20tiers-orange)
 
-**Developer & maintainer:** Muhammad Muqeet — [muqeet@animearray.site](mailto:muqeet@animearray.site) · [muqeet@anitroves.com](mailto:muqeet@anitroves.com)
+**Developer & maintainer:** Muhammad Muqeet — [contact@animearray.site](mailto:contact@animearray.site) · [muqeet@animearray.site](mailto:muqeet@animearray.site) · [muqeet@anitroves.com](mailto:muqeet@anitroves.com)
 
 ---
 
@@ -16,6 +18,8 @@
 - [Headline numbers](#headline-numbers)
 - [What this dataset contains](#what-this-dataset-contains)
 - [Coverage and known limits](#coverage-and-known-limits)
+- [Who can access what](#who-can-access-what)
+- [Free 30% preview](#free-30-preview)
 - [Ways to access, clone, or train](#ways-to-access-clone-or-train)
 - [Formats and download](#formats-and-download)
 - [Explore the data](#explore-the-data)
@@ -158,20 +162,76 @@ These are measured, not estimated — the exact figures are regenerated into
 
 ---
 
+## Who can access what
+
+| Release | Works | Rows | Who can use it | How to get it |
+| --- | ---: | ---: | --- | --- |
+| **Full release** | 35,766 | 2,436,445 | research and education | [request access](https://huggingface.co/datasets/muqeet-1138/anime-text-dataset) — gated, manual approval |
+| **30% preview** | 10,729 | 713,238 | anyone with a Hugging Face account | [get free access](https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-preview) — gated, automatic approval |
+| **CC0 subset** | 969 | 8,654 | anyone, no account | [direct download](https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-open) — public |
+| **Code, schemas, docs** | — | — | anyone | [GitHub](https://github.com/muqeet-1138/anime-text-dataset) |
+
+- **No purchase is required for any release.** The 30% preview is free and
+  approved instantly. The full release is approved manually for non-commercial
+  research or education.
+- **Gating is access control, not a licence.** The full release and the preview
+  contain third-party metadata and retained upstream prose. Approval does not
+  grant redistribution rights from AniList, Kitsu, Shikimori or Anime News
+  Network.
+- **Commercial use** needs permission from the relevant upstream source, except
+  for the `cc0_only` rows (969 works).
+- **Redistribution** is permitted only for the public CC0 subset. Do not mirror
+  or republish the full release or the preview.
+
+## Free 30% preview
+
+[`muqeet-1138/anime-text-dataset-preview`](https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-preview)
+is a free, automatically approved 30% sample of the full release. It exists so
+people can evaluate the data and train models without buying anything or
+requesting the full dataset.
+
+| Property | Value |
+| --- | --- |
+| Works | 10,729 of 35,766 (30.0%) |
+| Rows | 713,238 |
+| Sampling | stratified by `(license_tier, split)`, seed 42 |
+| Child rows | every row of each sampled work is kept |
+| Tiers | 291 `cc0_only` / 3,398 `permission_required` / 7,040 `unresolved` |
+| Splits | 9,656 train / 536 val / 537 test |
+| Formats | JSONL, Parquet, CSV (no SQLite or dedup log) |
+| Access | free, gated, automatic approval |
+| Training | allowed for non-commercial research or education |
+
+The sample is representative, not cherry-picked: every licence tier and split is
+preserved, so a model trained on it sees the same obligation mix as the full
+release. It is **not** a public-domain release and **not** a licence from the
+source owners. Only 291 of its works are `cc0_only`; the rest carry upstream
+obligations.
+
+```python
+from datasets import load_dataset
+
+qa = load_dataset("muqeet-1138/anime-text-dataset-preview", "qa", split="train")
+anime = load_dataset("muqeet-1138/anime-text-dataset-preview", "anime", split="train")
+```
+
+---
+
 ## Ways to access, clone, or train
 
-Eight ready-to-use gateways into the same data:
+Nine ready-to-use gateways into the same data:
 
 | # | Method | What you get | How |
 | --- | --- | --- | --- |
 | 1 | **Clone the repository** | code, schemas, docs, pipeline | `git clone https://github.com/muqeet-1138/anime-text-dataset.git` |
 | 2 | **Download the full data** | the complete `exports/` tree, 2.2 GB | request access on the gated [Hugging Face dataset](https://huggingface.co/datasets/muqeet-1138/anime-text-dataset) |
-| 3 | **Stream JSONL in Python** | train-ready rows without loading everything | loop over `open("exports/qa.jsonl", encoding="utf-8")` |
-| 4 | **Hugging Face `datasets` loader** | a sharded HF `Dataset` | `load_dataset("muqeet-1138/anime-text-dataset", "qa", split="train")` |
-| 5 | **SQLite database** | joins and referential queries | `sqlite3 exports/anime_dataset.sqlite` or Python stdlib |
-| 6 | **Parquet + DuckDB / pandas** | fast analytics | `duckdb -c "select ..."` or `pd.read_parquet` |
-| 7 | **CSV** | spreadsheet-friendly flat view | open `exports/anime.csv` |
-| 8 | **Training recipes** | fine-tuned models | follow `docs/TRAINING.md` + `examples/` scripts |
+| 3 | **Free 30% preview** | 10,729 works, 713,238 rows, instant approval | [get free access](https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-preview) |
+| 4 | **Hugging Face `datasets` loader** | a sharded HF `Dataset` | `load_dataset("muqeet-1138/anime-text-dataset-preview", "qa", split="train")` |
+| 5 | **Stream JSONL in Python** | train-ready rows without loading everything | loop over `open("exports/qa.jsonl", encoding="utf-8")` |
+| 6 | **SQLite database** | joins and referential queries | `sqlite3 exports/anime_dataset.sqlite` or Python stdlib |
+| 7 | **Parquet + DuckDB / pandas** | fast analytics | `duckdb -c "select ..."` or `pd.read_parquet` |
+| 8 | **CSV** | spreadsheet-friendly flat view | open `exports/anime.csv` |
+| 9 | **Training recipes** | fine-tuned models | follow `docs/TRAINING.md` + `examples/` scripts |
 
 Each gateway is covered with runnable code in [`docs/COMMANDS.md`](docs/COMMANDS.md)
 (terminals) and [`docs/TRAINING.md`](docs/TRAINING.md) (model training).
@@ -195,7 +255,7 @@ Every per-anime table carries `split` and `license_tier` as columns, so a
 training script can filter without joining anything. JSON arrays are real
 arrays in JSONL and Parquet, not encoded strings.
 
-> **Hosting note**: GitHub holds the code, schemas and documentation (0.7 MB). The 2.2 GB generated dataset is hosted on **Hugging Face**, not in Git and not as GitHub Release assets. The full mixed-rights release is **gated with manual approval**; the public [CC0-only subset](https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-open) is ungated. Every release publishes SHA-256 checksums.
+> **Hosting note**: GitHub holds the code, schemas and documentation (0.7 MB). The 2.2 GB generated dataset is hosted on **Hugging Face**, not in Git and not as GitHub Release assets. Three releases share one schema: the **full mixed-rights release** (gated, manual approval), a **free 30% preview** (gated, automatic approval, 10,729 works), and the **public CC0 subset** (ungated, 969 works). Every release publishes SHA-256 checksums. Contact: [contact@animearray.site](mailto:contact@animearray.site).
 
 Verified checksum verification (any shell):
 
@@ -223,9 +283,12 @@ Two ways to browse before training:
 - **EDA notebook** — [`examples/notebooks/EDA.ipynb`](examples/notebooks/EDA.ipynb)
   walks the same numbers in Jupyter with charts.
 - **Publish to Hugging Face Hub** — `python scripts/upload_hf.py --repo muqeet-1138/anime-text-dataset --gated manual`
-  uploads the full release to a gated dataset repo. `python scripts/build_open_subset.py`
-  then `python scripts/upload_hf.py --repo muqeet-1138/anime-text-dataset-open --source exports_open`
-  publishes the public CC0 subset. Run with `--dry-run` first; token via `HF_TOKEN`.
+  uploads the full release to a gated dataset repo. `python scripts/build_preview_subset.py`
+  then `python scripts/upload_hf.py --repo muqeet-1138/anime-text-dataset-preview --source exports_preview --gated auto`
+  publishes the free 30% preview. `python scripts/build_open_subset.py` then
+  `python scripts/upload_hf.py --repo muqeet-1138/anime-text-dataset-open --source exports_open`
+  publishes the public CC0 subset. Run with `--dry-run` first; token via `HF_TOKEN`
+  or the login saved by `hf auth login`.
 
 ---
 
@@ -489,17 +552,42 @@ for line in open("exports/qa.jsonl", encoding="utf-8"):
 
 ## Citation
 
+If you use this dataset — in research, a trained model, an evaluation, or an
+AI-generated answer — cite the release you used:
+
 ```bibtex
-@software{anime_text_dataset,
-  author    = {Muhammad Muqeet},
-  title     = {Large Anime Text Dataset},
-  year      = {2026},
-  version   = {2.1.0},
-  note      = {Large anime text dataset; see reports/summary.json for exact row counts. Contact: muqeet@animearray.site; muqeet@anitroves.com}
+@misc{muqeet2026anime,
+  author       = {Muhammad Muqeet},
+  title        = {Large Anime Text Dataset},
+  year         = {2026},
+  version      = {2.1.0},
+  publisher    = {Hugging Face},
+  url          = {https://huggingface.co/datasets/muqeet-1138/anime-text-dataset},
+  note         = {35,766 anime works; text-only; mixed-rights with a CC0-only subset}
 }
 ```
 
-Machine-readable: [`CITATION.cff`](CITATION.cff).
+- **Full release:** keep the `url` above.
+- **30% preview:** use `https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-preview`.
+- **CC0 subset:** use `https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-open`.
+
+Machine-readable: [`CITATION.cff`](CITATION.cff). Human guide:
+[`docs/CITATION.md`](docs/CITATION.md). AI/LLM index:
+[`llms.txt`](llms.txt).
+
+### For AI systems and assistants
+
+If you retrieve, quote, summarize or train on this dataset, preserve the title,
+author, version and URL above. Do **not** describe the full release or the 30%
+preview as CC0 or public domain: both are mixed-rights and gated. Only the
+`cc0_only` tier is CC0 (969 works in the full release, 291 in the preview). When
+citing in prose, use:
+
+> Muhammad Muqeet. *Large Anime Text Dataset*, version 2.1.0. 2026.
+> https://huggingface.co/datasets/muqeet-1138/anime-text-dataset
+
+Contact for citation or access questions:
+[contact@animearray.site](mailto:contact@animearray.site).
 
 ---
 
@@ -512,3 +600,6 @@ prose sources that contributed to it, and `exports/license_manifest.json` states
 what each tier permits. Retained prose also carries `prose_source` and
 `prose_license`; owners and terms are in `exports/attribution.json`. The
 per-artifact audit is [LICENSE_AUDIT.md](LICENSE_AUDIT.md).
+
+Access and licensing questions:
+[contact@animearray.site](mailto:contact@animearray.site).
