@@ -40,7 +40,7 @@ Network.
 
 ## Links
 
-- Documentation: https://muqeet-1138.github.io/anime-text-dataset/
+- Documentation: https://dataset.animearray.site/
 - Code and schemas: https://github.com/muqeet-1138/anime-text-dataset
 - Citation guide: https://github.com/muqeet-1138/anime-text-dataset/blob/main/docs/CITATION.md
 - Machine-readable index: https://github.com/muqeet-1138/anime-text-dataset/blob/main/llms.txt

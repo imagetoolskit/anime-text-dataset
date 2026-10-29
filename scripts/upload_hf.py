@@ -432,7 +432,7 @@ size_categories:
 
 <div align="center">
 
-<img src="https://muqeet-1138.github.io/anime-text-dataset/og.png" alt="Large Anime Text Dataset — 35,766 anime works and 2,436,445 structured text rows" width="100%">
+<img src="https://dataset.animearray.site/og.png" alt="Large Anime Text Dataset — 35,766 anime works and 2,436,445 structured text rows" width="100%">
 
 # {title}
 
@@ -442,7 +442,7 @@ Built for LLM fine-tuning, instruction tuning, RAG, question answering, entity l
 
 {badges}
 
-[Docs site](https://muqeet-1138.github.io/anime-text-dataset/) · [Space](https://huggingface.co/spaces/muqeet-1138/anime-text-dataset) · [GitHub](https://github.com/muqeet-1138/anime-text-dataset) · [Full release](https://huggingface.co/datasets/muqeet-1138/anime-text-dataset) · [30% free preview](https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-preview) · [CC0 subset](https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-open) · [Contact](mailto:contact@animearray.site)
+[Docs site](https://dataset.animearray.site/) · [Space](https://huggingface.co/spaces/muqeet-1138/anime-text-dataset) · [GitHub](https://github.com/muqeet-1138/anime-text-dataset) · [Full release](https://huggingface.co/datasets/muqeet-1138/anime-text-dataset) · [30% free preview](https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-preview) · [CC0 subset](https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-open) · [Contact](mailto:contact@animearray.site)
 
 </div>
 

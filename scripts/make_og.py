@@ -89,7 +89,7 @@ def build(out: Path) -> None:
 
     # Footer.
     d.line((72, 588, 1128, 588), fill=LINE, width=2)
-    d.text((72, 600), "muqeet-1138.github.io/anime-text-dataset", font=font(SANS, 17), fill=SOFT)
+    d.text((72, 600), "dataset.animearray.site", font=font(SANS, 17), fill=SOFT)
     right = "Free 30% preview  ·  mixed-rights, CC0 subset"
     rw = d.textlength(right, font=font(SANS_BOLD, 17))
     d.text((1128 - rw, 600), right, font=font(SANS_BOLD, 17), fill=AMBER)

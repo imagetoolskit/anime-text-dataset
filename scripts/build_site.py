@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parent.parent
 DOCS = ROOT / "docs"
 OUT = ROOT / "_site"
 
-DEFAULT_BASE = "https://muqeet-1138.github.io/anime-text-dataset"
+DEFAULT_BASE = "https://dataset.animearray.site"
 
 # Files the rendered pages link to with ../<name>. They must sit at the site
 # root next to the copied pages.
