@@ -3,6 +3,7 @@
 /exports/
 /exports_open/
 /exports_preview/
+/_site/
 /logs/
 *.db
 *.db-wal

@@ -9,18 +9,39 @@
   <meta name="keywords" content="anime LLM fine-tuning, LoRA anime model, QLoRA tutorial, DPO training, transformer fine-tune, RAG fine-tuning, sentence transformer anime, anime classification model, entity linking, SFT anime assistant">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#f7f4ee">
+  <meta name="author" content="Muhammad Muqeet">
+  <link rel="canonical" href="https://muqeet-1138.github.io/anime-text-dataset/training.html">
+  <link rel="alternate" type="text/plain" href="../llms.txt" title="llms.txt — machine-readable dataset index">
+  <meta name="citation_title" content="How to Train LLMs on the Large Anime Text Dataset">
+  <meta name="citation_author" content="Muhammad Muqeet">
+  <meta name="citation_publication_date" content="2026-10-29">
+  <meta name="citation_publisher" content="Hugging Face">
+  <meta name="DC.title" content="How to Train LLMs on the Large Anime Text Dataset">
+  <meta name="DC.creator" content="Muhammad Muqeet">
+  <meta name="DC.subject" content="anime dataset; fine-tuning; LoRA; QLoRA; DPO; RAG; embeddings">
   <meta property="og:type" content="article">
   <meta property="og:title" content="How to Train LLMs on the Anime Text Dataset">
   <meta property="og:description" content="Nine recipes: SFT, LoRA/QLoRA, DPO, RAG, continued pretraining, embeddings, classification, entity linking, evaluation. Runnable code included.">
+  <meta property="og:site_name" content="Large Anime Text Dataset">
+  <meta property="og:url" content="https://muqeet-1138.github.io/anime-text-dataset/training.html">
+  <meta property="og:locale" content="en_US">
   <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="How to Train LLMs on the Anime Text Dataset">
+  <meta name="twitter:description" content="SFT, LoRA/QLoRA, DPO, RAG, embeddings and classification recipes with runnable code.">
 
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "TechArticle",
     "headline": "How to Train LLMs on the Large Anime Text Dataset",
+    "description": "Nine training recipes for the Large Anime Text Dataset: SFT, LoRA/QLoRA, DPO, RAG, continued pretraining, embeddings, classification, entity linking and evaluation.",
     "about": ["fine-tuning", "LoRA", "QLoRA", "DPO", "RAG", "embeddings", "classification", "entity linking"],
-    "inLanguage": "en"
+    "inLanguage": "en",
+    "url": "https://muqeet-1138.github.io/anime-text-dataset/training.html",
+    "author": {"@type": "Person", "name": "Muhammad Muqeet", "email": "contact@animearray.site"},
+    "publisher": {"@type": "Organization", "name": "Hugging Face", "url": "https://huggingface.co"},
+    "datePublished": "2026-10-29",
+    "license": "https://creativecommons.org/licenses/by/4.0/"
   }
   </script>
 
@@ -299,7 +320,7 @@ import json
 CLEAN = {"cc0_only"}
 rows = (json.loads(l) for l in open("exports/instructions.jsonl", encoding="utf-8"))
 train = [r for r in rows if r["split"] == "train" and r["license_tier"] in CLEAN]</pre>
-    <p style="margin-top:16px">The tier describes this dataset's provenance obligation, not the copyright status of the underlying work. Full definitions, counts and known gaps: <a href="../exports/license_manifest.json" style="color:var(--teal)">license_manifest.json</a> and <a href="LICENSE_NOTES.md" style="color:var(--teal)">LICENSE_NOTES.md</a>.</p>
+    <p style="margin-top:16px">The tier describes this dataset's provenance obligation, not the copyright status of the underlying work. Full definitions, counts and known gaps: <a href="LICENSE_NOTES.md" style="color:var(--teal)">license notes</a> and the <a href="../LICENSE_AUDIT.md" style="color:var(--teal)">licence audit</a>.</p>
     <p style="margin-top:10px">Upstream prose is retained with attribution, not relicensed. Plot synopses, character biographies, episode summaries and tag definitions are third-party expression: they carry <code>prose_source</code> and <code>prose_license</code>, are excluded from the project's CC-BY-4.0 grant, and remain subject to the named source's terms. Attribution is not permission. The artifact-by-artifact audit, including what the maintainer does not claim, is in <a href="../LICENSE_AUDIT.md" style="color:var(--teal)">LICENSE_AUDIT.md</a>.</p>
   </section>
 

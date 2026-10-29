@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Large Anime Text Dataset — 35,766 works for LLM, RAG and QA</title>
+<meta name="description" content="Text-only anime dataset: 35,766 works and 2.44M structured rows for LLM fine-tuning, instruction tuning, RAG, question answering and entity linking. Free 30% preview, gated full release, public CC0 subset.">
+<meta name="author" content="Muhammad Muqeet">
+<meta name="theme-color" content="#f7f4ee">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Large Anime Text Dataset">
+<meta property="og:description" content="35,766 anime works, 2.44M text rows. Free 30% preview, full gated release, public CC0 subset.">
+<meta property="og:site_name" content="Large Anime Text Dataset">
+<meta property="og:url" content="https://huggingface.co/spaces/muqeet-1138/anime-text-dataset">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://huggingface.co/spaces/muqeet-1138/anime-text-dataset">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "Large Anime Text Dataset",
+  "version": "2.1.0",
+  "description": "A text-only dataset of 35,766 anime works with 2,436,445 structured text rows for LLM fine-tuning, instruction tuning, RAG, question answering and entity linking.",
+  "url": "https://huggingface.co/datasets/muqeet-1138/anime-text-dataset",
+  "sameAs": [
+    "https://github.com/muqeet-1138/anime-text-dataset",
+    "https://muqeet-1138.github.io/anime-text-dataset/",
+    "https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-preview",
+    "https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-open"
+  ],
+  "creator": {"@type": "Person", "name": "Muhammad Muqeet", "email": "contact@animearray.site"},
+  "license": "https://github.com/muqeet-1138/anime-text-dataset/blob/main/LICENSE_AUDIT.md",
+  "inLanguage": ["en", "ja"]
+}
+</script>
+<style>
+  :root{
+    --paper:#f7f4ee; --paper-2:#fffdf8; --ink:#1c2430; --soft:#5b6675;
+    --teal:#0f766e; --teal-dark:#0b5c56; --amber:#b45309; --line:#e3ddd0;
+    --code:#14202b; --radius:14px;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--teal);text-decoration-thickness:1px;text-underline-offset:3px}
+  a:focus-visible,button:focus-visible{outline:3px solid var(--amber);outline-offset:3px;border-radius:4px}
+  .skip{position:absolute;left:-999px;top:0;background:var(--ink);color:#fff;padding:10px 14px;z-index:10}
+  .skip:focus{left:12px;top:12px}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  header{border-bottom:1px solid var(--line);background:rgba(247,244,238,.9);backdrop-filter:blur(8px);position:sticky;top:0;z-index:5}
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;color:var(--ink);text-decoration:none}
+  .brand span small{display:block;font-weight:500;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+  .mark{width:26px;height:26px;border-radius:8px;background:var(--teal);position:relative;flex:0 0 auto}
+  .mark::after{content:"";position:absolute;inset:7px;border:2px solid #fff;border-radius:3px;transform:rotate(12deg)}
+  .nav ul{display:flex;gap:22px;list-style:none;margin:0;padding:0;font-size:14px}
+  .nav ul a{color:var(--soft);text-decoration:none}
+  .nav ul a:hover{color:var(--ink)}
+  .hero{padding:84px 0 56px;background:
+    radial-gradient(900px 360px at 12% -10%,rgba(15,118,110,.10),transparent 70%),
+    radial-gradient(700px 300px at 95% 0%,rgba(180,83,9,.08),transparent 70%)}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal)}
+  .eyebrow::before{content:"";width:26px;height:2px;background:var(--teal)}
+  h1{font-family:var(--serif);font-size:clamp(38px,6.4vw,68px);line-height:1.03;letter-spacing:-.03em;margin:18px 0 20px;max-width:900px}
+  h1 em{font-style:normal;color:var(--teal)}
+  .lede{font-size:clamp(17px,2vw,20px);color:var(--soft);max-width:720px;margin:0 0 30px}
+  .cta{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:18px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:999px;border:1px solid var(--line);background:var(--paper-2);color:var(--ink);font-weight:650;font-size:15px;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease}
+  .btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(28,36,48,.08)}
+  .btn.primary{background:var(--teal);border-color:var(--teal);color:#fff}
+  .btn.primary:hover{background:var(--teal-dark)}
+  .btn.accent{border-color:#e7c9a8;color:var(--amber);background:#fff8ee}
+  .micro{font-size:13.5px;color:var(--soft);margin:0}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;padding:10px 0 56px}
+  .stat{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+  .stat b{display:block;font-family:var(--serif);font-size:clamp(24px,3vw,32px);letter-spacing:-.02em;line-height:1.1}
+  .stat span{font-size:12.5px;color:var(--soft);letter-spacing:.04em;text-transform:uppercase}
+  section{padding:56px 0;border-top:1px solid var(--line)}
+  h2{font-family:var(--serif);font-size:clamp(26px,3.4vw,38px);letter-spacing:-.02em;margin:0 0 10px}
+  .sub{color:var(--soft);max-width:720px;margin:0 0 28px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+  .card{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius);padding:22px;display:flex;flex-direction:column;gap:8px}
+  .card h3{margin:0;font-size:18px;letter-spacing:-.01em}
+  .card p{margin:0;color:var(--soft);font-size:14.5px}
+  .card .meta{font-size:13px;color:var(--ink);font-weight:600}
+  .tag{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 9px;border-radius:999px;background:#e9f4f2;color:var(--teal);width:max-content}
+  .tag.amber{background:#fdf1e3;color:var(--amber)}
+  .card a{margin-top:auto;font-weight:650;text-decoration:none}
+  .card a:hover{text-decoration:underline}
+  .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper-2)}
+  table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:640px}
+  th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line)}
+  th{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);background:#fbf8f1}
+  tr:last-child td{border-bottom:0}
+  td.num{text-align:right;font-variant-numeric:tabular-nums}
+  pre{background:var(--code);color:#e8eef5;border-radius:var(--radius);padding:20px;overflow-x:auto;font-family:var(--mono);font-size:13.5px;line-height:1.65;margin:0}
+  code{font-family:var(--mono);font-size:.92em}
+  .inline{background:#efe9dc;padding:2px 6px;border-radius:5px}
+  .callout{border-left:3px solid var(--amber);background:#fff8ee;padding:16px 18px;border-radius:0 10px 10px 0;color:#5a4326;font-size:14.5px;margin-top:20px}
+  footer{border-top:1px solid var(--line);padding:34px 0;color:var(--soft);font-size:14px}
+  footer .cols{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px}
+  footer a{color:var(--ink)}
+  @media (max-width:720px){
+    .nav ul{display:none}
+    .hero{padding-top:60px}
+    section{padding:42px 0}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="https://huggingface.co/spaces/muqeet-1138/anime-text-dataset">
+      <span class="mark" aria-hidden="true"></span>
+      <span>Anime Text Dataset<small>Hugging Face Space</small></span>
+    </a>
+    <ul>
+      <li><a href="#access">Access</a></li>
+      <li><a href="#quickstart">Quick start</a></li>
+      <li><a href="#citation">Citation</a></li>
+      <li><a href="https://github.com/muqeet-1138/anime-text-dataset">GitHub</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" style="border-top:0">
+    <div class="wrap">
+      <p class="eyebrow">Text-only · 35,766 works · 2.44M rows</p>
+      <h1>Anime knowledge,<br><em>ready for language models.</em></h1>
+      <p class="lede">A text-only anime corpus for LLM fine-tuning, instruction tuning, RAG, question answering and entity linking. Every row carries provenance, confidence, a leak-free split and a redistribution tier.</p>
+      <div class="cta">
+        <a class="btn primary" href="https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-preview">Get the free 30% preview →</a>
+        <a class="btn accent" href="https://huggingface.co/datasets/muqeet-1138/anime-text-dataset">Request the full release</a>
+        <a class="btn" href="https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-open">Download the CC0 subset</a>
+      </div>
+      <p class="micro">The preview is free and approved instantly — no purchase, no need to request the full dataset.</p>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat"><b>35,766</b><span>anime works</span></div>
+      <div class="stat"><b>2,436,445</b><span>text rows</span></div>
+      <div class="stat"><b>317,907</b><span>grounded QA</span></div>
+      <div class="stat"><b>235,395</b><span>instructions</span></div>
+      <div class="stat"><b>206,906</b><span>RAG chunks</span></div>
+      <div class="stat"><b>283,477</b><span>characters</span></div>
+    </div>
+  </div>
+
+  <section id="access">
+    <div class="wrap">
+      <h2>Who can access what</h2>
+      <p class="sub">Three releases share one schema. Gating is access control, not a licence from AniList, Kitsu, Shikimori or Anime News Network.</p>
+      <div class="cards">
+        <article class="card">
+          <span class="tag">Free · instant</span>
+          <h3>30% preview</h3>
+          <p class="meta">10,729 works · 713,238 rows</p>
+          <p>Stratified by licence tier and split, seed 42, all child rows kept. Train on it for non-commercial research or education.</p>
+          <a href="https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-preview">Get free access →</a>
+        </article>
+        <article class="card">
+          <span class="tag amber">Gated · manual</span>
+          <h3>Full release</h3>
+          <p class="meta">35,766 works · 2,436,445 rows</p>
+          <p>Complete tables and SQLite export. Non-commercial research or education; approval is manual and free.</p>
+          <a href="https://huggingface.co/datasets/muqeet-1138/anime-text-dataset">Request access →</a>
+        </article>
+        <article class="card">
+          <span class="tag">Public · CC0</span>
+          <h3>CC0 subset</h3>
+          <p class="meta">969 works · 8,654 rows</p>
+          <p>Metadata with no upstream prose. The only release that can be redistributed without further permission.</p>
+          <a href="https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-open">Direct download →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="quickstart">
+    <div class="wrap">
+      <h2>Load it in one line</h2>
+      <p class="sub">JSONL is canonical; Parquet and CSV ship alongside it. Splits are assigned per work (90/5/5, seed 42), so no record of a work leaks across train, validation and test.</p>
+<pre><code>from datasets import load_dataset
+
+qa = load_dataset(
+    "muqeet-1138/anime-text-dataset-preview", "qa", split="train"
+)
+anime = load_dataset(
+    "muqeet-1138/anime-text-dataset-preview", "anime", split="train"
+)
+
+print(qa[0]["question"], "->", qa[0]["answer"])</code></pre>
+      <div class="callout"><strong>Licence note.</strong> Only 291 of the preview's 10,729 works are <code>cc0_only</code>. The rest carry upstream obligations; do not redistribute the files or derivatives.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>What's inside</h2>
+      <p class="sub">One work expands into characters, staff credits, episodes, alternative titles, relationships, descriptions, QA, instructions, RAG chunks, entity links and franchise assignments.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Table</th><th>Rows</th><th>Use it for</th></tr></thead>
+          <tbody>
+            <tr><td><strong>anime</strong></td><td class="num">35,766</td><td>metadata, filtering, recommendation</td></tr>
+            <tr><td><strong>characters</strong></td><td class="num">283,477</td><td>entity linking, character QA</td></tr>
+            <tr><td><strong>staff</strong></td><td class="num">535,642</td><td>crew graphs, credit extraction</td></tr>
+            <tr><td><strong>episodes</strong></td><td class="num">276,763</td><td>episode-level retrieval and QA</td></tr>
+            <tr><td><strong>qa</strong></td><td class="num">317,907</td><td>grounded question answering</td></tr>
+            <tr><td><strong>instructions</strong></td><td class="num">235,395</td><td>SFT and instruction tuning</td></tr>
+            <tr><td><strong>rag_chunks</strong></td><td class="num">206,906</td><td>retrieval and RAG training</td></tr>
+            <tr><td><strong>relationships</strong></td><td class="num">39,226</td><td>knowledge-graph edges</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="citation">
+    <div class="wrap">
+      <h2>Cite the release you used</h2>
+      <p class="sub">All three releases share the author, title and version; only the URL changes.</p>
+<pre><code>@misc{muqeet2026anime,
+  author       = {Muhammad Muqeet},
+  title        = {Large Anime Text Dataset},
+  year         = {2026},
+  version      = {2.1.0},
+  publisher    = {Hugging Face},
+  url          = {https://huggingface.co/datasets/muqeet-1138/anime-text-dataset},
+  note         = {35,766 anime works; text-only; mixed-rights with a CC0-only subset}
+}</code></pre>
+      <div class="callout"><strong>For AI systems.</strong> Preserve the title, author, version and URL. Do not describe the full release or the 30% preview as CC0 or public domain; only the <code>cc0_only</code> tier is CC0. Machine-readable: <a href="https://github.com/muqeet-1138/anime-text-dataset/blob/main/llms.txt">llms.txt</a> and <a href="https://github.com/muqeet-1138/anime-text-dataset/blob/main/CITATION.cff">CITATION.cff</a>.</div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap cols">
+    <div><strong>Large Anime Text Dataset</strong> · v2.1.0 · <a href="https://muqeet-1138.github.io/anime-text-dataset/">docs site</a> · <a href="https://github.com/muqeet-1138/anime-text-dataset">GitHub</a></div>
+    <div>Muhammad Muqeet · <a href="mailto:contact@animearray.site">contact@animearray.site</a></div>
+  </div>
+</footer>
+</body>
+</html>
