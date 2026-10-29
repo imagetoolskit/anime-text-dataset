@@ -212,7 +212,7 @@ language:
 tags:
 {tags}
 task_categories:
-  - text2text-generation
+  - text-generation
   - question-answering
   - text-retrieval
 size_categories:
