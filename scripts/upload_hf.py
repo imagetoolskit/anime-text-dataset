@@ -9,7 +9,8 @@ Usage:
                                 [--gated manual] [--private] [--dry-run]
                                 [--tag v2.1.0] [--token $HF_TOKEN]
 
-The token is read from --token or HF_TOKEN and is never logged.
+The token is read from --token, HF_TOKEN, or the session saved by
+`huggingface-cli login`, and is never logged.
 """
 from __future__ import annotations
 
@@ -269,7 +270,8 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="Publish a release directory to the Hugging Face Hub.")
     ap.add_argument("--repo", required=True, help="target dataset repo, e.g. user/anime-text-dataset")
     ap.add_argument("--source", default=str(DEFAULT_SOURCE), help="release directory (default: exports)")
-    ap.add_argument("--token", default=os.environ.get("HF_TOKEN", ""), help="HF token (default: $HF_TOKEN)")
+    ap.add_argument("--token", default=os.environ.get("HF_TOKEN", ""),
+                    help="HF token (default: $HF_TOKEN, else stored login)")
     ap.add_argument("--dry-run", action="store_true", help="verify checksums and list files only")
     ap.add_argument("--private", action="store_true", help="create a private dataset repo")
     ap.add_argument("--gated", choices=("auto", "manual", "none"), default="none",
@@ -315,17 +317,20 @@ def main() -> int:
         print("dry-run: nothing uploaded")
         return 0
 
-    if not args.token:
-        print("error: no token; run `huggingface-cli login` or set HF_TOKEN")
-        return 2
-
     try:
         from huggingface_hub import CommitOperationAdd, HfApi
     except ImportError:
         print('error: missing dependency; run: pip install "huggingface_hub[cli]"')
         return 2
 
-    api = HfApi(token=args.token)
+    # An empty --token means "use the token saved by `huggingface-cli login`".
+    api = HfApi(token=args.token or None)
+    try:
+        api.whoami()
+    except Exception as exc:  # pragma: no cover - network
+        print(f"error: not authenticated ({exc}); run `huggingface-cli login` or set HF_TOKEN")
+        return 2
+
     try:
         info = api.create_repo(repo_id=args.repo, repo_type="dataset",
                                exist_ok=True, private=args.private)
