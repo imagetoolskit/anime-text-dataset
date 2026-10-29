@@ -2,7 +2,7 @@
 title: Large Anime Text Dataset
 emoji: 📚
 colorFrom: indigo
-colorTo: teal
+colorTo: blue
 sdk: static
 pinned: false
 license: cc-by-4.0
