@@ -432,6 +432,8 @@ size_categories:
 
 <div align="center">
 
+<img src="https://muqeet-1138.github.io/anime-text-dataset/og.png" alt="Large Anime Text Dataset — 35,766 anime works and 2,436,445 structured text rows" width="100%">
+
 # {title}
 
 **{anime:,} anime works · {rows:,} text rows · text-only · JSONL / Parquet / CSV**
