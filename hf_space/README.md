@@ -7,6 +7,16 @@ sdk: static
 pinned: false
 license: cc-by-4.0
 short_description: 35,766 anime works, 2.44M text rows for LLM, RAG and QA
+datasets:
+  - muqeet-1138/anime-text-dataset
+  - muqeet-1138/anime-text-dataset-preview
+  - muqeet-1138/anime-text-dataset-open
+tags:
+  - anime
+  - dataset
+  - llm
+  - rag
+  - fine-tuning
 ---
 
 # Large Anime Text Dataset
