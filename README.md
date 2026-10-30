@@ -11,7 +11,7 @@
 
 **Developer & maintainer:** Muhammad Muqeet — [contact@animearray.site](mailto:contact@animearray.site) · [muqeet@animearray.site](mailto:muqeet@animearray.site) · [muqeet@anitroves.com](mailto:muqeet@anitroves.com)
 
-**Live:** [dataset site](https://dataset.animearray.site/) · [Hugging Face Space](https://huggingface.co/spaces/muqeet-1138/anime-text-dataset) · [full release](https://huggingface.co/datasets/muqeet-1138/anime-text-dataset) · [free 30% preview](https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-preview) · [CC0 subset](https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-open)
+**Live:** [dataset site](https://dataset.animearray.site/) · [Hugging Face Space](https://huggingface.co/spaces/muqeet-1138/anime-text-dataset) · [full release](https://huggingface.co/datasets/muqeet-1138/anime-text-dataset) · [free 30% for LLM training](https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-preview) · [CC0 subset](https://huggingface.co/datasets/muqeet-1138/anime-text-dataset-open)
 
 ---
 
