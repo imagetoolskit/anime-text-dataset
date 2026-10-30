@@ -116,10 +116,11 @@ def main() -> int:
     ico.save(DOCS / "favicon.ico", format="ICO",
              sizes=[(16, 16), (32, 32), (48, 48), (64, 64)])
 
-    # The Space is a single page; it needs the SVG and the ICO only.
+    # The Space is a single page; it needs the SVG and the ICO only. The ICO is
+    # named differently because the static host serves its own /favicon.ico.
     SPACE.mkdir(exist_ok=True)
     shutil.copy2(DOCS / "favicon.svg", SPACE / "favicon.svg")
-    shutil.copy2(DOCS / "favicon.ico", SPACE / "favicon.ico")
+    shutil.copy2(DOCS / "favicon.ico", SPACE / "favicon-dataset.ico")
 
     for name in ("favicon.svg", "favicon.ico", "apple-touch-icon.png",
                  "icon-192.png", "icon-512.png", "site.webmanifest"):
